@@ -53,6 +53,14 @@ export default function Header() {
 
         {/* Right side */}
         <div className="ml-auto flex items-center gap-3">
+          {/* Become a Provider — shown to guests only */}
+          {!session && (
+            <Link href="/provider/register"
+              className="text-sm font-medium text-green-700 hover:text-green-800 border border-green-200 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-full transition-colors hidden md:block whitespace-nowrap">
+              🏫 Become a Provider
+            </Link>
+          )}
+
           {session ? (
             <div className="relative">
               <button
@@ -141,14 +149,20 @@ export default function Header() {
             ))}
           </div>
           {!session && (
-            <div className="flex gap-3 pt-2">
-              <Link href="/login" onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2 border border-indigo-600 text-indigo-600 rounded-full text-sm font-semibold">
-                Login
-              </Link>
-              <Link href="/register" onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2 bg-indigo-600 text-white rounded-full text-sm font-semibold">
-                Sign Up Free
+            <div className="flex flex-col gap-2 pt-2">
+              <div className="flex gap-3">
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 text-center py-2 border border-indigo-600 text-indigo-600 rounded-full text-sm font-semibold">
+                  Login
+                </Link>
+                <Link href="/register" onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 text-center py-2 bg-indigo-600 text-white rounded-full text-sm font-semibold">
+                  Sign Up Free
+                </Link>
+              </div>
+              <Link href="/provider/register" onClick={() => setMobileMenuOpen(false)}
+                className="text-center py-2 border border-green-500 text-green-700 bg-green-50 rounded-full text-sm font-semibold">
+                🏫 Become a Provider
               </Link>
             </div>
           )}
