@@ -82,34 +82,39 @@ export default async function ExamDetailPage({ params }: PageProps) {
       </div>
 
       {/* ── Hero ───────────────────────────────────────────────────────────────── */}
-      <div className="relative text-white overflow-hidden" style={{ minHeight: '260px' }}>
 
-        {/* Banner image — full width behind everything */}
-        {exam.bannerUrl ? (
-          <Image src={exam.bannerUrl} alt={exam.title} fill priority
-            className="object-cover object-center" sizes="100vw" />
-        ) : null}
+      {/* Banner strip — fixed height so Next.js Image fill works correctly */}
+      <div className="relative w-full h-48 md:h-64 overflow-hidden bg-indigo-900">
+        {exam.bannerUrl && (
+          <Image
+            src={exam.bannerUrl}
+            alt={exam.title}
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+        )}
+        {/* Bottom fade so the info section blends in smoothly */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-900/30 to-indigo-900/80" />
+      </div>
 
-        {/* Gradient overlay — ensures text is always readable */}
-        <div className={`absolute inset-0 ${
-          exam.bannerUrl
-            ? 'bg-gradient-to-r from-indigo-900/85 via-indigo-800/75 to-purple-900/70'
-            : 'bg-gradient-to-br from-indigo-700 via-indigo-800 to-purple-900'
-        }`} />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+      {/* Info section — always solid, sits below the banner */}
+      <div className="bg-gradient-to-br from-indigo-800 to-purple-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-10">
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center">
 
-            {/* Thumbnail / Logo — small icon on top of banner */}
-            <div className="shrink-0">
+            {/* Thumbnail / Logo */}
+            <div className="shrink-0 -mt-14 md:-mt-16">
               {exam.thumbnailUrl ? (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 border-white/40 shadow-2xl bg-white">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden
+                  border-4 border-white/30 shadow-2xl bg-white">
                   <Image src={exam.thumbnailUrl} alt={exam.title}
                     width={96} height={96} className="w-full h-full object-cover" />
                 </div>
               ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-white/15 backdrop-blur-sm
-                  border border-white/20 flex items-center justify-center shadow-xl">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-white/15
+                  border-4 border-white/20 flex items-center justify-center shadow-xl">
                   <BookOpen className="w-9 h-9 text-white/70" />
                 </div>
               )}
