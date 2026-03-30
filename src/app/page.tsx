@@ -1,255 +1,284 @@
 import { api } from '@/lib/api-client';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import HeroBanner from '@/components/home/HeroBanner';
-import TestCard from '@/components/ui/TestCard';
-import SectionHeading from '@/components/ui/SectionHeading';
-import ExamLevelSection from '@/components/home/ExamLevelSection';
 import Link from 'next/link';
-import { BookOpen, Target, BarChart3, Trophy, Users, Zap, ChevronRight } from 'lucide-react';
 import { ExamCard } from '@/types/exam';
+import {
+  Search, BookOpen, FileText, Star,
+  ChevronRight, Zap, TrendingUp, Users, Shield
+} from 'lucide-react';
 
-interface ExamCategory { id: number; name: string; slug: string; emoji: string | null; seriesCount: number; }
-interface TestSeries { id: string; title: string; slug: string; examType: string; providerName: string; priceInr: number; isFirstTestFree: boolean; testCount: number; durationMinutes: number; avgRating: number; reviewCount: number; thumbnailUrl: string | null; publishedAt: string | null; }
-interface HomeData { examCategories: ExamCategory[]; freeTests: TestSeries[]; topSelling: TestSeries[]; newArrivals: TestSeries[]; }
+// ── Types ─────────────────────────────────────────────────────────────────────
+interface ExamLevel { id: number; name: string; examCount: number; }
 
-// Category emoji mapping
-const EMOJI_MAP: Record<string, string> = {
-  'rrb': '🚂', 'railway': '🚂', 'rail': '🚂',
-  'ssc': '📋',
-  'ibps': '🏦', 'sbi': '🏦', 'bank': '🏦',
-  'upsc': '🏛️', 'ias': '🏛️',
-  'police': '👮', 'constable': '👮',
-  'defence': '⚔️', 'nda': '⚔️', 'cds': '⚔️',
-  'psc': '🗺️', 'state': '🗺️',
-  'teaching': '📚', 'ctet': '📚', 'tet': '📚',
-  'insurance': '🛡️', 'lic': '🛡️',
-};
-
-function getCategoryEmoji(name: string): string {
-  const lower = name.toLowerCase();
-  for (const [key, emoji] of Object.entries(EMOJI_MAP)) {
-    if (lower.includes(key)) return emoji;
-  }
-  return '📝';
-}
-
-// Category background colors (cycling)
-const CAT_COLORS = [
-  'from-orange-500 to-red-500',
-  'from-blue-500 to-indigo-600',
-  'from-green-500 to-emerald-600',
-  'from-purple-500 to-violet-600',
-  'from-pink-500 to-rose-500',
-  'from-cyan-500 to-blue-500',
-  'from-amber-500 to-orange-500',
-  'from-teal-500 to-green-500',
-];
-
-async function getHomeData(): Promise<HomeData & { exams: ExamCard[] }> {
+// ── Data fetching ─────────────────────────────────────────────────────────────
+async function getHomeData(): Promise<{ exams: ExamCard[]; levels: ExamLevel[] }> {
   try {
-    const [home, exams] = await Promise.all([
-      api.get<any>('/api/storefront/home'),
+    const [exams, levels] = await Promise.all([
       api.get<ExamCard[]>('/api/exams?activeOnly=true').catch(() => [] as ExamCard[]),
+      api.get<any>('/api/exams/levels').catch(() => [] as ExamLevel[]),
     ]);
-    const d = home?.data ?? home;
     return {
-      examCategories: d?.examCategories ?? [],
-      freeTests:      d?.freeTests      ?? [],
-      topSelling:     d?.topSelling     ?? [],
-      newArrivals:    d?.newArrivals    ?? [],
       exams: Array.isArray(exams) ? exams : (exams as any)?.data ?? [],
+      levels: Array.isArray(levels) ? levels : (levels as any)?.data ?? [],
     };
   } catch {
-    return { examCategories: [], freeTests: [], topSelling: [], newArrivals: [], exams: [] };
+    return { exams: [], levels: [] };
   }
 }
 
-export default async function HomePage() {
-  const { examCategories, freeTests, topSelling, newArrivals, exams } = await getHomeData();
+function stripHtml(html: string | null): string {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+}
 
-  // All published tests (combine and deduplicate by id)
-  const allTests = Array.from(
-    new Map([...freeTests, ...topSelling, ...newArrivals].map(t => [t.id, t])).values()
+function formatPrice(price: number): string {
+  if (price === 0) return 'FREE';
+  return `₹${price.toLocaleString('en-IN')}`;
+}
+
+// ── Featured Banner ───────────────────────────────────────────────────────────
+function FeaturedBanner({ exam }: { exam: ExamCard }) {
+  const desc = stripHtml(exam.shortDescription);
+  return (
+    <Link href={`/exam/${exam.slug}`} className="block group">
+      <div className="relative h-52 md:h-68 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800">
+        {(exam.bannerUrl || exam.thumbnailUrl) && (
+          <img src={exam.bannerUrl ?? exam.thumbnailUrl!} alt={exam.title}
+            className="absolute inset-0 w-full h-full object-cover opacity-25 group-hover:opacity-35 transition-opacity" />
+        )}
+        <div className="absolute top-4 left-4 flex gap-2">
+          <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+            <Star className="w-3 h-3 fill-yellow-900" /> Featured
+          </span>
+          {exam.priceInr === 0 && (
+            <span className="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+              <Zap className="w-3 h-3" /> Free
+            </span>
+          )}
+        </div>
+        <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-8">
+          <div className="max-w-xl">
+            {exam.examLevelName && (
+              <span className="text-indigo-200 text-xs font-medium uppercase tracking-wide">
+                {exam.examLevelName} · {exam.examTypeName ?? exam.conductingBody}
+              </span>
+            )}
+            <h2 className="text-white text-xl md:text-2xl font-bold mt-1 leading-tight group-hover:text-indigo-100 transition-colors">
+              {exam.title}
+            </h2>
+            {desc && (
+              <p className="text-indigo-200 text-sm mt-1.5 line-clamp-2 hidden sm:block">{desc}</p>
+            )}
+            <div className="flex items-center gap-4 mt-3">
+              <span className="flex items-center gap-1 text-indigo-200 text-sm">
+                <FileText className="w-4 h-4" /> {exam.testCount} Tests
+              </span>
+              <span className="text-white font-bold text-base">
+                {formatPrice(exam.priceInr)}
+              </span>
+              <span className="ml-auto bg-white text-indigo-700 text-sm font-semibold px-4 py-1.5 rounded-full
+                group-hover:bg-indigo-50 transition-colors flex items-center gap-1">
+                Start Practicing <ChevronRight className="w-4 h-4" />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
   );
+}
 
-  // Categories with at least 1 test
-  const activeCategories = examCategories.filter(c => c.seriesCount > 0);
-  // Categories coming soon
-  const comingSoonCategories = examCategories.filter(c => c.seriesCount === 0).slice(0, 4);
+// ── Exam Card ─────────────────────────────────────────────────────────────────
+function ExamCardItem({ exam }: { exam: ExamCard }) {
+  const desc = stripHtml(exam.shortDescription);
+  return (
+    <Link href={`/exam/${exam.slug}`}
+      className="group flex flex-col bg-white rounded-xl border border-gray-200 overflow-hidden
+        hover:shadow-md hover:border-indigo-200 transition-all duration-200">
+      <div className="relative h-32 bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden shrink-0">
+        {exam.thumbnailUrl ? (
+          <img src={exam.thumbnailUrl} alt={exam.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <BookOpen className="w-10 h-10 text-white/40" />
+          </div>
+        )}
+        {exam.examLevelName && (
+          <span className="absolute top-2 left-2 bg-white/90 text-indigo-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+            {exam.examLevelName}
+          </span>
+        )}
+        {exam.isFeatured && (
+          <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">⭐</span>
+        )}
+      </div>
+      <div className="p-3 flex flex-col flex-1">
+        <p className="text-xs text-indigo-500 font-medium truncate">
+          {exam.conductingBody ?? exam.examTypeName ?? 'Government Exam'}
+        </p>
+        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mt-0.5 group-hover:text-indigo-600 transition-colors leading-snug">
+          {exam.title}
+        </h3>
+        {desc && (
+          <p className="text-xs text-gray-500 mt-1 line-clamp-2 hidden sm:block">{desc}</p>
+        )}
+        <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100 mt-2">
+          <span className="flex items-center gap-1 text-xs text-gray-400">
+            <FileText className="w-3 h-3" /> {exam.testCount} Tests
+          </span>
+          <span className={`text-sm font-bold ${exam.priceInr === 0 ? 'text-green-600' : 'text-gray-900'}`}>
+            {formatPrice(exam.priceInr)}
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+export default async function HomePage() {
+  const { exams, levels } = await getHomeData();
+  const featured     = exams.filter(e => e.isFeatured);
+  const latest       = exams.slice(0, 12);
+  const activeLevels = levels.filter(l => l.examCount > 0);
 
   return (
     <>
       <Header />
       <main className="min-h-screen bg-gray-50">
 
-        {/* ── Hero ──────────────────────────────────────────────────────── */}
-        <HeroBanner />
-
-        {/* ── Browse Exams (Exam Pages) ────────────────────────────────── */}
-        {exams.length > 0 && (
-          <section className="bg-white border-b border-gray-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-              <SectionHeading
-                title="Government Exams"
-                subtitle="Explore exams, check eligibility, syllabus, dates and attempt free mock tests"
-                linkHref="/exams"
-                linkLabel="View all exams"
-              />
-              <ExamLevelSection exams={exams} />
-            </div>
-          </section>
-        )}
-
-        {/* ── Available Tests ─────────────────────────────────────────── */}
-        {allTests.length > 0 && (
-          <section className="bg-white border-b border-gray-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-              <SectionHeading
-                title="Available Mock Tests"
-                subtitle="High-quality tests from verified providers — start practicing today"
-                linkHref="/tests"
-                linkLabel="View all tests"
-              />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
-                {allTests.slice(0, 8).map(s => <TestCard key={s.id} series={s as any} />)}
+        {/* ── Compact Hero ─────────────────────────────────────────── */}
+        <section className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7 md:py-9">
+            <div className="flex flex-col md:flex-row md:items-center gap-5">
+              <div className="md:w-1/2">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+                  India's Exam Prep Platform —{' '}
+                  <span className="text-indigo-600">Practice. Perform. Succeed.</span>
+                </h1>
+                <p className="text-gray-500 mt-2 text-sm md:text-base">
+                  Free mock tests for RRB, SSC, Banking, UPSC & more.
+                </p>
+                <div className="flex gap-3 mt-4">
+                  <Link href="/exams"
+                    className="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-indigo-700 transition-colors">
+                    Browse Exams <ChevronRight className="w-4 h-4" />
+                  </Link>
+                  <Link href="/register"
+                    className="inline-flex items-center gap-2 border border-indigo-200 text-indigo-600 px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-indigo-50 transition-colors">
+                    Sign Up Free
+                  </Link>
+                </div>
               </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── Exam Categories ─────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <SectionHeading
-            title="Browse by Exam Category"
-            subtitle="Select your target exam and find the best mock tests"
-          />
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-            {activeCategories.map((cat, i) => (
-              <Link
-                key={cat.id}
-                href={`/tests?examTypeId=${cat.id}`}
-                className="group relative overflow-hidden rounded-2xl p-5 text-white
-                  hover:scale-[1.02] hover:shadow-xl transition-all duration-200">
-                <div className={`absolute inset-0 bg-gradient-to-br ${CAT_COLORS[i % CAT_COLORS.length]}`} />
+              <div className="md:w-1/2">
                 <div className="relative">
-                  <div className="text-3xl mb-3">{getCategoryEmoji(cat.name)}</div>
-                  <h3 className="font-bold text-sm leading-snug mb-1">{cat.name}</h3>
-                  <p className="text-white/80 text-xs">
-                    {cat.seriesCount} {cat.seriesCount === 1 ? 'test series' : 'test series'}
-                  </p>
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input type="text" placeholder="Search exams, mock tests..."
+                    className="w-full pl-12 pr-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-full
+                      focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-sm" />
                 </div>
-                <ChevronRight className="absolute top-3 right-3 w-4 h-4 text-white/60 group-hover:text-white transition-colors" />
-              </Link>
-            ))}
-
-            {/* Coming soon placeholders */}
-            {comingSoonCategories.map((cat) => (
-              <div key={cat.id}
-                className="relative overflow-hidden rounded-2xl p-5 bg-gray-100 border-2 border-dashed border-gray-200">
-                <div className="text-3xl mb-3 grayscale opacity-50">{getCategoryEmoji(cat.name)}</div>
-                <h3 className="font-bold text-sm text-gray-500 leading-snug mb-1">{cat.name}</h3>
-                <span className="inline-block bg-gray-200 text-gray-500 text-[10px] font-semibold
-                  px-2 py-0.5 rounded-full uppercase tracking-wide">
-                  Coming Soon
-                </span>
+                <div className="flex gap-5 mt-3 text-xs text-gray-400">
+                  <span className="flex items-center gap-1"><TrendingUp className="w-3.5 h-3.5 text-indigo-400" /> {exams.length}+ Exams</span>
+                  <span className="flex items-center gap-1"><FileText className="w-3.5 h-3.5 text-indigo-400" /> Free Tests</span>
+                  <span className="flex items-center gap-1"><Shield className="w-3.5 h-3.5 text-indigo-400" /> Verified</span>
+                </div>
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── How It Works ─────────────────────────────────────────────── */}
-        <section className="bg-white border-y border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-            <SectionHeading
-              title="How It Works"
-              subtitle="Three simple steps to crack your dream exam"
-            />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-              {[
-                {
-                  step: '01', icon: Target, color: 'bg-indigo-100 text-indigo-600',
-                  title: 'Choose Your Exam',
-                  desc: 'Browse by exam category — SSC, Railway, Banking, UPSC and more. Find the right test series for your preparation.'
-                },
-                {
-                  step: '02', icon: Zap, color: 'bg-green-100 text-green-600',
-                  title: 'Start Practicing',
-                  desc: 'Attempt full-length mock tests in a real exam environment with timer, question palette and auto-submit.'
-                },
-                {
-                  step: '03', icon: BarChart3, color: 'bg-purple-100 text-purple-600',
-                  title: 'Analyse & Improve',
-                  desc: 'Get detailed performance reports, section-wise analysis, and identify your weak areas to improve.'
-                },
-              ].map(({ step, icon: Icon, color, title, desc }) => (
-                <div key={step} className="flex gap-4">
-                  <div className="shrink-0">
-                    <div className={`w-12 h-12 rounded-2xl ${color} flex items-center justify-center`}>
-                      <Icon className="w-6 h-6" />
-                    </div>
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-gray-400 tracking-widest">STEP {step}</span>
-                    <h3 className="font-bold text-gray-900 mt-0.5 mb-2">{title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
 
-        {/* ── Why GridAcademy ──────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <SectionHeading
-            title="Why GridAcademy?"
-            subtitle="Everything you need to crack your exam — in one place"
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
-            {[
-              { icon: Trophy,    color: 'text-yellow-500 bg-yellow-50', title: 'Top Institutes',    desc: "Tests from India's leading coaching institutes and educators" },
-              { icon: BarChart3, color: 'text-blue-500 bg-blue-50',     title: 'Detailed Analysis', desc: 'Section-wise performance, rank & percentile after every attempt' },
-              { icon: Zap,       color: 'text-green-500 bg-green-50',   title: 'Real Exam Feel',    desc: 'Actual exam interface with timer, palette & negative marking' },
-              { icon: Users,     color: 'text-purple-500 bg-purple-50', title: 'Free to Start',     desc: 'Free tests available for every exam. No credit card needed' },
-            ].map(({ icon: Icon, color, title, desc }) => (
-              <div key={title} className="bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
-                <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center mb-3`}>
-                  <Icon className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-gray-900 text-sm mb-1">{title}</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
-              </div>
-            ))}
+        {/* ── Category Tabs (Udemy-style) ──────────────────────────── */}
+        {activeLevels.length > 0 && (
+          <div className="bg-white border-b border-gray-200 sticky top-16 z-30">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <nav className="flex items-center overflow-x-auto scrollbar-hide h-11 gap-0">
+                <Link href="/exams"
+                  className="shrink-0 px-4 h-full flex items-center text-sm font-semibold text-indigo-600
+                    border-b-2 border-indigo-600 whitespace-nowrap">
+                  All Exams
+                </Link>
+                {activeLevels.map(level => (
+                  <Link key={level.id} href={`/exams?level=${level.id}`}
+                    className="shrink-0 px-4 h-full flex items-center text-sm text-gray-600 border-b-2 border-transparent
+                      hover:text-gray-900 hover:border-gray-300 transition-colors whitespace-nowrap">
+                    {level.name}
+                    <span className="ml-1 text-xs text-gray-400">({level.examCount})</span>
+                  </Link>
+                ))}
+              </nav>
+            </div>
           </div>
-        </section>
+        )}
 
-        {/* ── Provider CTA ─────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-14">
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-8 md:p-12
-            text-white text-center relative overflow-hidden">
-            <div className="absolute inset-0 opacity-10"
-              style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-            <div className="relative">
-              <BookOpen className="w-12 h-12 mx-auto mb-4 text-white/80" />
-              <h2 className="text-2xl md:text-3xl font-bold mb-3">
-                Are you a coaching institute or educator?
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7 space-y-8">
+
+          {/* ── Featured Exam Banner ─────────────────────────────────── */}
+          {featured.length > 0 && (
+            <section>
+              <h2 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2 uppercase tracking-wide">
+                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" /> Featured
               </h2>
-              <p className="text-indigo-100 mb-6 max-w-xl mx-auto text-sm md:text-base">
-                Upload your question bank, create mock tests, and earn{' '}
-                <strong className="text-white">70% of every sale</strong>.
-                Join GridAcademy as a test provider — it&apos;s free to get started.
+              <FeaturedBanner exam={featured[0]} />
+              {featured.length > 1 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                  {featured.slice(1, 3).map(e => <ExamCardItem key={e.id} exam={e} />)}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ── Latest Exams Grid ────────────────────────────────────── */}
+          {latest.length > 0 && (
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-base font-bold text-gray-900">
+                  {featured.length > 0 ? 'All Exams' : 'Available Exams'}
+                </h2>
+                <Link href="/exams"
+                  className="text-sm text-indigo-600 font-medium hover:text-indigo-700 flex items-center gap-1">
+                  View all <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                {latest.map(e => <ExamCardItem key={e.id} exam={e} />)}
+              </div>
+            </section>
+          )}
+
+          {/* ── Empty state ──────────────────────────────────────────── */}
+          {exams.length === 0 && (
+            <section className="text-center py-20">
+              <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-700">Exams Coming Soon</h2>
+              <p className="text-gray-400 mt-2 text-sm max-w-md mx-auto">
+                We're adding new exams and mock tests. Register to get notified when they go live.
               </p>
-              <Link href="/register/provider"
-                className="inline-block bg-white text-indigo-600 font-bold px-8 py-3 rounded-full
-                  hover:bg-indigo-50 transition-colors shadow-lg text-sm md:text-base">
-                Become a Provider &rarr;
+              <Link href="/register"
+                className="mt-6 inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-indigo-700">
+                Get Notified <ChevronRight className="w-4 h-4" />
+              </Link>
+            </section>
+          )}
+
+          {/* ── Provider CTA ─────────────────────────────────────────── */}
+          <section className="rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-700 p-6 md:p-8 text-white">
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <div className="flex-1">
+                <h2 className="text-lg md:text-xl font-bold">Are you a coaching institute or educator?</h2>
+                <p className="text-indigo-200 text-sm mt-1">
+                  Upload your question bank, create mock tests and reach lakhs of aspirants across India.
+                </p>
+              </div>
+              <Link href="/provider/register"
+                className="shrink-0 bg-white text-indigo-700 px-6 py-2.5 rounded-full text-sm font-bold
+                  hover:bg-indigo-50 transition-colors flex items-center gap-2 w-fit">
+                <Users className="w-4 h-4" /> Become a Provider
               </Link>
             </div>
-          </div>
-        </section>
-
+          </section>
+        </div>
       </main>
       <Footer />
     </>

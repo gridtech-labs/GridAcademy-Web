@@ -12,11 +12,13 @@ export interface ExamCard {
   title: string;
   shortDescription: string | null;
   thumbnailUrl: string | null;
+  bannerUrl: string | null;
   examLevelName: string | null;
   examTypeName: string | null;
   conductingBody: string | null;
   testCount: number;
   isFeatured: boolean;
+  priceInr: number;
   status: number; // 0=Draft, 1=Published
   createdAt: string;
 }
