@@ -82,25 +82,35 @@ export default async function ExamDetailPage({ params }: PageProps) {
       </div>
 
       {/* ── Hero ───────────────────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-br from-indigo-700 via-indigo-800 to-purple-900 text-white relative overflow-hidden">
-        {exam.bannerUrl && (
+      <div className="relative text-white overflow-hidden" style={{ minHeight: '260px' }}>
+
+        {/* Banner image — full width behind everything */}
+        {exam.bannerUrl ? (
           <Image src={exam.bannerUrl} alt={exam.title} fill priority
-            className="object-cover opacity-10" sizes="100vw" />
-        )}
+            className="object-cover object-center" sizes="100vw" />
+        ) : null}
+
+        {/* Gradient overlay — ensures text is always readable */}
+        <div className={`absolute inset-0 ${
+          exam.bannerUrl
+            ? 'bg-gradient-to-r from-indigo-900/85 via-indigo-800/75 to-purple-900/70'
+            : 'bg-gradient-to-br from-indigo-700 via-indigo-800 to-purple-900'
+        }`} />
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14">
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center">
 
-            {/* Thumbnail / Logo */}
+            {/* Thumbnail / Logo — small icon on top of banner */}
             <div className="shrink-0">
               {exam.thumbnailUrl ? (
-                <div className="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden border-2 border-white/30 shadow-xl bg-white">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 border-white/40 shadow-2xl bg-white">
                   <Image src={exam.thumbnailUrl} alt={exam.title}
-                    width={112} height={112} className="w-full h-full object-cover" />
+                    width={96} height={96} className="w-full h-full object-cover" />
                 </div>
               ) : (
-                <div className="w-24 h-24 md:w-28 md:h-28 rounded-2xl bg-white/15 backdrop-blur-sm
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-white/15 backdrop-blur-sm
                   border border-white/20 flex items-center justify-center shadow-xl">
-                  <BookOpen className="w-10 h-10 text-white/70" />
+                  <BookOpen className="w-9 h-9 text-white/70" />
                 </div>
               )}
             </div>
