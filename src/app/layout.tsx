@@ -7,32 +7,46 @@ import SessionProvider from '@/components/providers/SessionProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: { default: "GridAcademy — India's Best Mock Test Platform", template: '%s | GridAcademy' },
-  description: 'Prepare for SSC, Banking, Railway, UPSC and more with expert-created mock tests from top coaching institutes.',
-  keywords: 'mock test, SSC CGL, IBPS PO, RRB NTPC, UPSC, competitive exam preparation India',
+  title: {
+    default: "GridAcademy — India's Best Mock Test Platform",
+    template: '%s | GridAcademy',
+  },
+  description:
+    'Prepare for SSC, Banking, Railway, UPSC and more with expert-created mock tests from top coaching institutes.',
+  keywords:
+    'mock test, SSC CGL, IBPS PO, RRB NTPC, UPSC, competitive exam preparation India',
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
     apple: '/favicon.svg',
   },
+  alternates: {
+    canonical: 'https://www.gridacademy.in',
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      
       <head>
-        {/* Google Analytics */}
+        {/* ✅ Google Analytics (Optimized) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-Z3KQZWY3X6"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-Z3KQZWY3X6');
+
+            gtag('config', 'G-Z3KQZWY3X6', {
+              page_path: window.location.pathname,
+            });
           `}
         </Script>
       </head>
