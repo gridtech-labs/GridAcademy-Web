@@ -2,6 +2,7 @@ import { api } from '@/lib/api-client';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ExamCard } from '@/types/exam';
 import {
   Search, BookOpen, FileText, Star,
@@ -44,8 +45,9 @@ function FeaturedBanner({ exam }: { exam: ExamCard }) {
     <Link href={`/exam/${exam.slug}`} className="block group">
       <div className="relative h-52 md:h-68 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800">
         {(exam.bannerUrl || exam.thumbnailUrl) && (
-          <img src={exam.bannerUrl ?? exam.thumbnailUrl!} alt={exam.title}
-            className="absolute inset-0 w-full h-full object-cover opacity-25 group-hover:opacity-35 transition-opacity" />
+          <Image src={exam.bannerUrl ?? exam.thumbnailUrl!} alt={exam.title} fill
+            className="object-cover opacity-25 group-hover:opacity-35 transition-opacity"
+            unoptimized />
         )}
         <div className="absolute top-4 left-4 flex gap-2">
           <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
@@ -98,8 +100,9 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
         hover:shadow-md hover:border-indigo-200 transition-all duration-200">
       <div className="relative h-32 bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden shrink-0">
         {exam.thumbnailUrl ? (
-          <img src={exam.thumbnailUrl} alt={exam.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <Image src={exam.thumbnailUrl} alt={exam.title} fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            unoptimized />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <BookOpen className="w-10 h-10 text-white/40" />
@@ -155,7 +158,7 @@ export default async function HomePage() {
             <div className="flex flex-col md:flex-row md:items-center gap-5">
               <div className="md:w-1/2">
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
-                  India's Exam Prep Platform —{' '}
+                  India&apos;s Exam Prep Platform —{' '}
                   <span className="text-indigo-600">Practice. Perform. Succeed.</span>
                 </h1>
                 <p className="text-gray-500 mt-2 text-sm md:text-base">
@@ -253,7 +256,7 @@ export default async function HomePage() {
               <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-gray-700">Exams Coming Soon</h2>
               <p className="text-gray-400 mt-2 text-sm max-w-md mx-auto">
-                We're adding new exams and mock tests. Register to get notified when they go live.
+                We&apos;re adding new exams and mock tests. Register to get notified when they go live.
               </p>
               <Link href="/register"
                 className="mt-6 inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-indigo-700">
