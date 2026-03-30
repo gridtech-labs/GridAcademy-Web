@@ -117,12 +117,17 @@ export default function Header() {
       <div className="border-t border-gray-100 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <nav className="flex items-center gap-1 overflow-x-auto scrollbar-hide h-10">
-            <Link href="/tests"
+            <Link href="/exams"
               className="shrink-0 px-4 py-1.5 text-sm font-semibold text-indigo-600 bg-indigo-50 rounded-full hover:bg-indigo-100 transition-colors">
+              Exams
+            </Link>
+            <Link href="/tests"
+              className="shrink-0 px-4 py-1.5 text-sm font-semibold text-purple-600 bg-purple-50 rounded-full hover:bg-purple-100 transition-colors">
               All Tests
             </Link>
+            <span className="text-gray-300 text-sm px-1">|</span>
             {EXAM_CATEGORIES.map(cat => (
-              <Link key={cat.slug} href={`/exams/${cat.slug}`}
+              <Link key={cat.slug} href={`/tests?q=${encodeURIComponent(cat.label)}`}
                 className="shrink-0 px-4 py-1.5 text-sm text-gray-600 rounded-full hover:bg-gray-100 hover:text-gray-900 transition-colors whitespace-nowrap">
                 {cat.label}
               </Link>
@@ -140,8 +145,16 @@ export default function Header() {
               className="w-full pl-10 pr-4 py-2 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div className="flex flex-wrap gap-2">
+            <Link href="/exams" onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-1 text-sm bg-indigo-50 text-indigo-700 rounded-full font-semibold">
+              All Exams
+            </Link>
+            <Link href="/tests" onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-1 text-sm bg-purple-50 text-purple-700 rounded-full font-semibold">
+              All Tests
+            </Link>
             {EXAM_CATEGORIES.map(cat => (
-              <Link key={cat.slug} href={`/exams/${cat.slug}`}
+              <Link key={cat.slug} href={`/tests?q=${encodeURIComponent(cat.label)}`}
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-indigo-50 hover:text-indigo-600">
                 {cat.label}

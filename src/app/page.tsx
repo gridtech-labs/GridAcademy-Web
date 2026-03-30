@@ -4,8 +4,10 @@ import Footer from '@/components/layout/Footer';
 import HeroBanner from '@/components/home/HeroBanner';
 import TestCard from '@/components/ui/TestCard';
 import SectionHeading from '@/components/ui/SectionHeading';
+import ExamLevelSection from '@/components/home/ExamLevelSection';
 import Link from 'next/link';
 import { BookOpen, Target, BarChart3, Trophy, Users, Zap, ChevronRight } from 'lucide-react';
+import { ExamCard } from '@/types/exam';
 
 interface ExamCategory { id: number; name: string; slug: string; emoji: string | null; seriesCount: number; }
 interface TestSeries { id: string; title: string; slug: string; examType: string; providerName: string; priceInr: number; isFirstTestFree: boolean; testCount: number; durationMinutes: number; avgRating: number; reviewCount: number; thumbnailUrl: string | null; publishedAt: string | null; }
@@ -44,23 +46,27 @@ const CAT_COLORS = [
   'from-teal-500 to-green-500',
 ];
 
-async function getHomeData(): Promise<HomeData> {
+async function getHomeData(): Promise<HomeData & { exams: ExamCard[] }> {
   try {
-    const data = await api.get<{ data: HomeData }>('/api/storefront/home');
-    const d = (data as any)?.data ?? data as any;
+    const [home, exams] = await Promise.all([
+      api.get<any>('/api/storefront/home'),
+      api.get<ExamCard[]>('/api/exams?activeOnly=true').catch(() => [] as ExamCard[]),
+    ]);
+    const d = home?.data ?? home;
     return {
       examCategories: d?.examCategories ?? [],
       freeTests:      d?.freeTests      ?? [],
       topSelling:     d?.topSelling     ?? [],
       newArrivals:    d?.newArrivals    ?? [],
+      exams: Array.isArray(exams) ? exams : (exams as any)?.data ?? [],
     };
   } catch {
-    return { examCategories: [], freeTests: [], topSelling: [], newArrivals: [] };
+    return { examCategories: [], freeTests: [], topSelling: [], newArrivals: [], exams: [] };
   }
 }
 
 export default async function HomePage() {
-  const { examCategories, freeTests, topSelling, newArrivals } = await getHomeData();
+  const { examCategories, freeTests, topSelling, newArrivals, exams } = await getHomeData();
 
   // All published tests (combine and deduplicate by id)
   const allTests = Array.from(
@@ -79,6 +85,21 @@ export default async function HomePage() {
 
         {/* ── Hero ──────────────────────────────────────────────────────── */}
         <HeroBanner />
+
+        {/* ── Browse Exams (Exam Pages) ────────────────────────────────── */}
+        {exams.length > 0 && (
+          <section className="bg-white border-b border-gray-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+              <SectionHeading
+                title="Government Exams"
+                subtitle="Explore exams, check eligibility, syllabus, dates and attempt free mock tests"
+                linkHref="/exams"
+                linkLabel="View all exams"
+              />
+              <ExamLevelSection exams={exams} />
+            </div>
+          </section>
+        )}
 
         {/* ── Available Tests ─────────────────────────────────────────── */}
         {allTests.length > 0 && (
