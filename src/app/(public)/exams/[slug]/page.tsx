@@ -22,17 +22,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return { title: meta.title, description: meta.description };
 }
 
-async function getTests(slug: string, searchParams: Record<string, string>) {
+async function getTests(slug: string, searchParams: Record<string, string>): Promise<TestSeries[]> {
   try {
     const qs = new URLSearchParams({
-      examSlug: slug,
-      sort: searchParams.sort ?? 'popular',
+      categorySlug: slug,
+      sortBy: searchParams.sort ?? 'popular',
       page: searchParams.page ?? '1',
       pageSize: '20',
-      ...(searchParams.free === 'true' ? { isFree: 'true' } : {}),
-      ...(searchParams.q ? { q: searchParams.q } : {}),
+      ...(searchParams.free === 'true' ? { minPrice: '0', maxPrice: '0' } : {}),
+      ...(searchParams.q ? { query: searchParams.q } : {}),
     });
-    return await api.get<TestSeries[]>(`/api/storefront/tests?${qs}`);
+    const result = await api.get<{ data: { items: TestSeries[] } } | TestSeries[]>(`/api/storefront/tests?${qs}`);
+    // Handle both response shapes
+    const items = (result as any)?.data?.items ?? (result as any)?.items ?? (Array.isArray(result) ? result : []);
+    return items as TestSeries[];
   } catch {
     return [];
   }

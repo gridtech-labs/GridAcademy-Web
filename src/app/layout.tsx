@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   title: { default: 'GridAcademy — India\'s Best Mock Test Platform', template: '%s | GridAcademy' },
   description: 'Prepare for SSC, Banking, Railway, UPSC and more with expert-created mock tests from top coaching institutes.',
   keywords: 'mock test, SSC CGL, IBPS PO, RRB NTPC, UPSC, competitive exam preparation India',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

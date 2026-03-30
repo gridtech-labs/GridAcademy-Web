@@ -10,13 +10,14 @@ import { BookOpen } from 'lucide-react';
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
-  searchParams: { q?: string; sortBy?: string; free?: string; page?: string };
+  searchParams: { q?: string; sortBy?: string; free?: string; page?: string; examTypeId?: string };
 }
 
 async function fetchTests(searchParams: PageProps['searchParams']) {
   const qs = new URLSearchParams();
-  if (searchParams.q)       qs.set('q',       searchParams.q);
-  if (searchParams.sortBy)  qs.set('sortBy',   searchParams.sortBy);
+  if (searchParams.q)          qs.set('query',      searchParams.q);
+  if (searchParams.sortBy)     qs.set('sortBy',      searchParams.sortBy);
+  if (searchParams.examTypeId) qs.set('examTypeId',  searchParams.examTypeId);
   if (searchParams.free === 'true') {
     qs.set('minPrice', '0');
     qs.set('maxPrice', '0');
