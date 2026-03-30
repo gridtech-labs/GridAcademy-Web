@@ -51,3 +51,21 @@ export function calcPercentage(value: number, total: number): number {
   if (total === 0) return 0;
   return Math.round((value / total) * 100);
 }
+
+/**
+ * Strip HTML tags and decode common entities — returns plain text.
+ * Used wherever rich-text content must be shown as a short plain summary.
+ */
+export function stripHtml(html: string | null | undefined): string {
+  if (!html) return '';
+  return html
+    .replace(/<[^>]*>/g, '')          // remove all tags
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')             // collapse whitespace
+    .trim();
+}

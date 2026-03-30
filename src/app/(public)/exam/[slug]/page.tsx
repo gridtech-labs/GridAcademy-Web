@@ -16,6 +16,7 @@ import {
   ChevronRight, BookOpen, Building2, Trophy,
   Tag, ExternalLink, Users,
 } from 'lucide-react';
+import { stripHtml } from '@/lib/utils';
 
 interface PageProps { params: { slug: string } }
 
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!exam) return { title: 'Exam Details' };
     return {
       title: exam.metaTitle ?? exam.title,
-      description: exam.metaDescription ?? exam.shortDescription ?? undefined,
+      description: stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
       openGraph: exam.bannerUrl ? { images: [{ url: exam.bannerUrl }] } : undefined,
     };
   } catch { return { title: 'Exam Details' }; }
@@ -150,7 +151,7 @@ export default async function ExamDetailPage({ params }: PageProps) {
 
               {exam.shortDescription && (
                 <p className="text-indigo-200 text-sm md:text-base max-w-2xl mb-4 leading-relaxed">
-                  {exam.shortDescription}
+                  {stripHtml(exam.shortDescription)}
                 </p>
               )}
 
