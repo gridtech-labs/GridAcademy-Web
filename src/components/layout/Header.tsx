@@ -125,7 +125,7 @@ export default function Header() {
               All Tests
             </Link>
             {['Railway','UPSC','Banking','SSC','GATE','Defence'].map(cat => (
-              <Link key={cat} href={`/exams?category=${cat}`} onClick={() => setMobileMenuOpen(false)}
+              <Link key={cat} href={`/?category=${cat}`} onClick={() => setMobileMenuOpen(false)}
                 className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-orange-50 hover:text-orange-600">
                 {cat}
               </Link>

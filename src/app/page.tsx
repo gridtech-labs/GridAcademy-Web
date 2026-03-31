@@ -107,7 +107,7 @@ function LeftSidebar({ exams }: { exams: ExamCard[] }) {
       <div className="px-3 pb-3">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1 mt-2">Exam Categories</p>
         {CATEGORIES.filter(c => c.value).map(cat => (
-          <Link key={cat.value} href={`/exams?category=${cat.value}`}
+          <Link key={cat.value} href={`/?category=${cat.value}`}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
             <span className="text-base leading-none">{cat.label.split(' ')[0]}</span>
             <span>{cat.value}</span>
@@ -282,10 +282,17 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default async function HomePage() {
+export default async function HomePage({ searchParams }: { searchParams?: { category?: string } }) {
   const { exams } = await getHomeData();
-  const featured  = exams.filter(e => e.isFeatured);
-  const latest    = exams.slice(0, 16);
+  const activeCategory = searchParams?.category ?? '';
+
+  // Filter client-side (avoids API category param which needs DB migration)
+  const filteredExams = activeCategory
+    ? exams.filter(e => e.category === activeCategory)
+    : exams;
+
+  const featured  = exams.filter(e => e.isFeatured);  // always from full list for hero
+  const latest    = filteredExams.slice(0, 16);
 
   return (
     <>
@@ -324,16 +331,20 @@ export default async function HomePage() {
           {/* ── Filter pills ────────────────────────────────────────── */}
           <div className="overflow-x-auto scrollbar-hide mb-5 -mx-4 px-4 md:-mx-6 md:px-6">
             <div className="flex items-center gap-2 min-w-max">
-              {CATEGORIES.map(cat => (
-                <Link key={cat.label} href={cat.value ? `/exams?category=${cat.value}` : '/exams'}
-                  className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
-                    ${cat.value === ''
-                      ? 'bg-orange-500 text-white border-orange-500'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
-                    }`}>
-                  {cat.label}
-                </Link>
-              ))}
+              {CATEGORIES.map(cat => {
+                const isActive = cat.value === activeCategory;
+                return (
+                  <Link key={cat.label}
+                    href={cat.value ? `/?category=${cat.value}` : '/'}
+                    className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
+                      ${isActive
+                        ? 'bg-orange-500 text-white border-orange-500'
+                        : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
+                      }`}>
+                    {cat.label}
+                  </Link>
+                );
+              })}
             </div>
           </div>
 

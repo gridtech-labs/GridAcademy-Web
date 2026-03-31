@@ -61,15 +61,15 @@ export default async function ExamDetailPage({ params }: PageProps) {
   const freeTest = exam.tests.find(t => t.isFree);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-50">
 
       {/* ── Breadcrumb ─────────────────────────────────────────────────────────── */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
           <nav className="flex items-center gap-1.5 text-xs text-gray-500">
-            <Link href="/" className="hover:text-indigo-600 transition-colors">Home</Link>
+            <Link href="/" className="hover:text-orange-500 transition-colors">Home</Link>
             <ChevronRight className="w-3 h-3" />
-            <Link href="/exams" className="hover:text-indigo-600 transition-colors">Exams</Link>
+            <Link href="/exams" className="hover:text-orange-500 transition-colors">Exams</Link>
             {exam.examLevelName && (
               <>
                 <ChevronRight className="w-3 h-3" />
@@ -84,24 +84,28 @@ export default async function ExamDetailPage({ params }: PageProps) {
 
       {/* ── Hero ───────────────────────────────────────────────────────────────── */}
 
-      {/* Banner strip — fixed height so Next.js Image fill works correctly */}
-      <div className="relative w-full h-48 md:h-64 overflow-hidden bg-indigo-900">
-        {exam.bannerUrl && (
+      {/* Banner strip */}
+      <div className="relative w-full h-48 md:h-64 overflow-hidden"
+        style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
+        {(exam.bannerUrl || exam.thumbnailUrl) && (
           <Image
-            src={exam.bannerUrl}
+            src={exam.bannerUrl ?? exam.thumbnailUrl!}
             alt={exam.title}
             fill
             priority
-            className="object-cover object-center"
+            className="object-cover object-center opacity-30"
             sizes="100vw"
+            unoptimized
           />
         )}
-        {/* Bottom fade so the info section blends in smoothly */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-900/30 to-indigo-900/80" />
+        {/* Radial glow like design */}
+        <div className="absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse at 70% 50%, rgba(249,115,22,.15), transparent 60%)' }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
       </div>
 
-      {/* Info section — always solid, sits below the banner */}
-      <div className="bg-gradient-to-br from-indigo-800 to-purple-900 text-white">
+      {/* Info section */}
+      <div className="text-white" style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-10">
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center">
 
@@ -109,14 +113,15 @@ export default async function ExamDetailPage({ params }: PageProps) {
             <div className="shrink-0 -mt-14 md:-mt-16">
               {exam.thumbnailUrl ? (
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden
-                  border-4 border-white/30 shadow-2xl bg-white">
+                  border-4 border-orange-400/40 shadow-2xl bg-white">
                   <Image src={exam.thumbnailUrl} alt={exam.title}
-                    width={96} height={96} className="w-full h-full object-cover" />
+                    width={96} height={96} className="w-full h-full object-cover" unoptimized />
                 </div>
               ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-white/15
-                  border-4 border-white/20 flex items-center justify-center shadow-xl">
-                  <BookOpen className="w-9 h-9 text-white/70" />
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-4 border-orange-400/30
+                  flex items-center justify-center shadow-xl text-4xl"
+                  style={{ background: 'rgba(249,115,22,.2)' }}>
+                  📝
                 </div>
               )}
             </div>
@@ -126,13 +131,13 @@ export default async function ExamDetailPage({ params }: PageProps) {
               {/* Badges */}
               <div className="flex flex-wrap gap-2 mb-3">
                 {exam.examLevelName && (
-                  <span className="bg-yellow-400/20 text-yellow-200 border border-yellow-400/30
+                  <span className="bg-orange-500/20 text-orange-300 border border-orange-400/30
                     text-xs font-semibold px-3 py-1 rounded-full">
                     {exam.examLevelName}
                   </span>
                 )}
                 {exam.examTypeName && (
-                  <span className="bg-white/15 text-white border border-white/20
+                  <span className="bg-white/10 text-white border border-white/20
                     text-xs font-semibold px-3 py-1 rounded-full">
                     {exam.examTypeName}
                   </span>
@@ -140,7 +145,7 @@ export default async function ExamDetailPage({ params }: PageProps) {
                 {freeTest && (
                   <span className="bg-green-500/20 text-green-300 border border-green-400/30
                     text-xs font-semibold px-3 py-1 rounded-full">
-                    Free Test Available
+                    ✓ Free Test Available
                   </span>
                 )}
               </div>
@@ -150,13 +155,13 @@ export default async function ExamDetailPage({ params }: PageProps) {
               </h1>
 
               {exam.shortDescription && (
-                <p className="text-indigo-200 text-sm md:text-base max-w-2xl mb-4 leading-relaxed">
+                <p className="text-slate-400 text-sm md:text-base max-w-2xl mb-4 leading-relaxed">
                   {stripHtml(exam.shortDescription)}
                 </p>
               )}
 
               {/* Meta row */}
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-indigo-200">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
                 {exam.conductingBody && (
                   <span className="flex items-center gap-1.5">
                     <Building2 className="w-4 h-4 shrink-0" />
@@ -169,14 +174,14 @@ export default async function ExamDetailPage({ params }: PageProps) {
                 </span>
                 {exam.officialWebsite && (
                   <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 hover:text-white transition-colors underline underline-offset-2">
+                    className="flex items-center gap-1.5 hover:text-orange-400 transition-colors underline underline-offset-2">
                     <Globe className="w-4 h-4 shrink-0" />
                     Official Website
                   </a>
                 )}
                 {exam.notificationUrl && (
                   <a href={exam.notificationUrl} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 hover:text-white transition-colors underline underline-offset-2">
+                    className="flex items-center gap-1.5 hover:text-orange-400 transition-colors underline underline-offset-2">
                     <Bell className="w-4 h-4 shrink-0" />
                     Official Notification
                   </a>
@@ -221,8 +226,8 @@ export default async function ExamDetailPage({ params }: PageProps) {
 
             {/* Tests card — primary action */}
             {exam.tests.length > 0 && (
-              <div className="bg-white rounded-2xl border border-indigo-100 shadow-sm overflow-hidden">
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3">
+              <div className="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden">
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-3">
                   <h3 className="text-white font-bold text-sm uppercase tracking-wide">
                     Available Tests
                   </h3>
@@ -263,8 +268,8 @@ export default async function ExamDetailPage({ params }: PageProps) {
                         ) : (
                           <Link href={`/test/${exam.slug}`}
                             className="flex items-center justify-center gap-2 w-full text-sm font-semibold
-                              bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white
-                              py-2.5 rounded-xl transition-colors border border-indigo-200 hover:border-indigo-600">
+                              bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white
+                              py-2.5 rounded-xl transition-colors border border-orange-200 hover:border-orange-500">
                             View Test Details
                           </Link>
                         )}
@@ -287,7 +292,7 @@ export default async function ExamDetailPage({ params }: PageProps) {
                   exam.testCount > 0  && { icon: FileText,   label: 'Total Mock Tests',  value: `${exam.testCount} Tests` },
                 ].filter(Boolean).map((item: any, i) => (
                   <li key={i} className="flex items-center gap-3 px-5 py-3">
-                    <item.icon className="w-4 h-4 text-indigo-500 shrink-0" />
+                    <item.icon className="w-4 h-4 text-orange-500 shrink-0" />
                     <div className="min-w-0">
                       <span className="text-xs text-gray-400 block">{item.label}</span>
                       <span className="text-sm font-semibold text-gray-800 truncate block">{item.value}</span>
@@ -296,11 +301,11 @@ export default async function ExamDetailPage({ params }: PageProps) {
                 ))}
                 {exam.officialWebsite && (
                   <li className="flex items-center gap-3 px-5 py-3">
-                    <Globe className="w-4 h-4 text-indigo-500 shrink-0" />
+                    <Globe className="w-4 h-4 text-orange-500 shrink-0" />
                     <div className="min-w-0">
                       <span className="text-xs text-gray-400 block">Official Website</span>
                       <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
-                        className="text-sm font-semibold text-indigo-600 hover:underline flex items-center gap-1">
+                        className="text-sm font-semibold text-orange-600 hover:underline flex items-center gap-1">
                         {new URL(exam.officialWebsite).hostname}
                         <ExternalLink className="w-3 h-3 shrink-0" />
                       </a>
@@ -309,11 +314,11 @@ export default async function ExamDetailPage({ params }: PageProps) {
                 )}
                 {exam.notificationUrl && (
                   <li className="flex items-center gap-3 px-5 py-3">
-                    <Bell className="w-4 h-4 text-indigo-500 shrink-0" />
+                    <Bell className="w-4 h-4 text-orange-500 shrink-0" />
                     <div className="min-w-0">
                       <span className="text-xs text-gray-400 block">Notification</span>
                       <a href={exam.notificationUrl} target="_blank" rel="noopener noreferrer"
-                        className="text-sm font-semibold text-indigo-600 hover:underline flex items-center gap-1">
+                        className="text-sm font-semibold text-orange-600 hover:underline flex items-center gap-1">
                         Download PDF
                         <ExternalLink className="w-3 h-3 shrink-0" />
                       </a>
@@ -327,20 +332,20 @@ export default async function ExamDetailPage({ params }: PageProps) {
             {importantDates.length > 0 && (
               <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
                 <div className="px-5 py-3 border-b border-gray-100 bg-gray-50 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-indigo-500" />
+                  <Calendar className="w-4 h-4 text-orange-500" />
                   <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Key Dates</h3>
                 </div>
                 <ul className="divide-y divide-gray-100">
                   {importantDates.slice(0, 6).map((d, i) => (
                     <li key={i} className="flex items-center justify-between gap-3 px-5 py-3">
                       <span className="text-sm text-gray-600 leading-snug">{d.label}</span>
-                      <span className="text-sm font-bold text-indigo-700 whitespace-nowrap">{d.date}</span>
+                      <span className="text-sm font-bold text-orange-700 whitespace-nowrap">{d.date}</span>
                     </li>
                   ))}
                   {importantDates.length > 6 && (
                     <li className="px-5 py-3">
                       <button
-                        className="text-xs text-indigo-600 font-semibold hover:underline w-full text-left">
+                        className="text-xs text-orange-600 font-semibold hover:underline w-full text-left">
                         +{importantDates.length - 6} more dates
                       </button>
                     </li>
