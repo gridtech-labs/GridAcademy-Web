@@ -229,11 +229,9 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
   const icon = categoryIcon(exam.category);
   return (
     <Link href={`/exam/${exam.slug}`}
-      className="group flex flex-col bg-white rounded-xl border border-gray-200
-        hover:shadow-md hover:border-orange-200 transition-all duration-200 overflow-hidden"
-      style={{ borderTop: '3px solid transparent' }}
-      onMouseEnter={e => (e.currentTarget.style.borderTopColor = '#f97316')}
-      onMouseLeave={e => (e.currentTarget.style.borderTopColor = 'transparent')}>
+      className="group flex flex-col bg-white rounded-xl overflow-hidden transition-all duration-200
+        border-t-[3px] border-t-transparent border border-gray-200
+        hover:shadow-md hover:border-orange-200 hover:border-t-orange-500">
 
       {/* Thumbnail or icon */}
       <div className="relative h-28 bg-gradient-to-br from-orange-400 to-orange-600 overflow-hidden shrink-0">
