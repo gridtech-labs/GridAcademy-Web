@@ -16,6 +16,7 @@ export interface ExamCard {
   examLevelName: string | null;
   examTypeName: string | null;
   conductingBody: string | null;
+  category: string | null;
   testCount: number;
   isFeatured: boolean;
   priceInr: number;

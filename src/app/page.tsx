@@ -5,9 +5,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ExamCard } from '@/types/exam';
 import {
-  Search, BookOpen, FileText, Star,
-  ChevronRight, Zap, TrendingUp, Users, Shield
+  FileText, Star, ChevronRight, Zap,
+  Home, BookOpen, Trophy, BarChart2, Search
 } from 'lucide-react';
+
+// ── CSS Variables (injected as inline style on root) ──────────────────────────
+// Primary: #f97316  |  Sidebar: 260px  |  RightPanel: 300px
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface ExamLevel { id: number; name: string; examCount: number; }
@@ -38,101 +41,239 @@ function formatPrice(price: number): string {
   return `₹${price.toLocaleString('en-IN')}`;
 }
 
-// ── Featured Banner ───────────────────────────────────────────────────────────
-function FeaturedBanner({ exam }: { exam: ExamCard }) {
-  const desc = stripHtml(exam.shortDescription);
+// ── Category config ───────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { label: 'All Exams', value: '' },
+  { label: '🚂 Railway', value: 'Railway' },
+  { label: '🏛️ UPSC', value: 'UPSC' },
+  { label: '🏦 Banking', value: 'Banking' },
+  { label: '👮 SSC', value: 'SSC' },
+  { label: '🔬 GATE', value: 'GATE' },
+  { label: '📐 Defence', value: 'Defence' },
+];
+
+// Icon & color for each category
+function categoryIcon(cat: string | null): string {
+  switch (cat) {
+    case 'Railway':  return '🚂';
+    case 'UPSC':     return '🏛️';
+    case 'Banking':  return '🏦';
+    case 'SSC':      return '👮';
+    case 'GATE':     return '🔬';
+    case 'Defence':  return '📐';
+    default:         return '📝';
+  }
+}
+
+// ── Sidebar (tablet+) ─────────────────────────────────────────────────────────
+function LeftSidebar({ exams }: { exams: ExamCard[] }) {
+  const categoryCounts: Record<string, number> = {};
+  exams.forEach(e => {
+    if (e.category) categoryCounts[e.category] = (categoryCounts[e.category] ?? 0) + 1;
+  });
+
   return (
-    <Link href={`/exam/${exam.slug}`} className="block group">
-      <div className="relative h-52 md:h-68 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800">
-        {(exam.bannerUrl || exam.thumbnailUrl) && (
-          <Image src={exam.bannerUrl ?? exam.thumbnailUrl!} alt={exam.title} fill
-            className="object-cover opacity-25 group-hover:opacity-35 transition-opacity"
-            unoptimized />
-        )}
-        <div className="absolute top-4 left-4 flex gap-2">
-          <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-            <Star className="w-3 h-3 fill-yellow-900" /> Featured
-          </span>
-          {exam.priceInr === 0 && (
-            <span className="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-              <Zap className="w-3 h-3" /> Free
-            </span>
-          )}
-        </div>
-        <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-8">
-          <div className="max-w-xl">
-            {exam.examLevelName && (
-              <span className="text-indigo-200 text-xs font-medium uppercase tracking-wide">
-                {exam.examLevelName} · {exam.examTypeName ?? exam.conductingBody}
-              </span>
-            )}
-            <h2 className="text-white text-xl md:text-2xl font-bold mt-1 leading-tight group-hover:text-indigo-100 transition-colors">
-              {exam.title}
-            </h2>
-            {desc && (
-              <p className="text-indigo-200 text-sm mt-1.5 line-clamp-2 hidden sm:block">{desc}</p>
-            )}
-            <div className="flex items-center gap-4 mt-3">
-              <span className="flex items-center gap-1 text-indigo-200 text-sm">
-                <FileText className="w-4 h-4" /> {exam.testCount} Tests
-              </span>
-              <span className="text-white font-bold text-base">
-                {formatPrice(exam.priceInr)}
-              </span>
-              <span className="ml-auto bg-white text-indigo-700 text-sm font-semibold px-4 py-1.5 rounded-full
-                group-hover:bg-indigo-50 transition-colors flex items-center gap-1">
-                Start Practicing <ChevronRight className="w-4 h-4" />
-              </span>
-            </div>
-          </div>
+    <aside className="hidden md:flex flex-col bg-white border-r border-gray-200 overflow-y-auto"
+      style={{ width: 260, position: 'sticky', top: 56, height: 'calc(100vh - 56px)' }}>
+
+      {/* Main nav */}
+      <div className="p-3">
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1">Main Menu</p>
+        <Link href="/"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-orange-600 bg-orange-50">
+          <Home className="w-4 h-4" /> Home
+        </Link>
+        <Link href="/exams"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          <BookOpen className="w-4 h-4" /> All Exams
+        </Link>
+        <Link href="/tests"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          <FileText className="w-4 h-4 shrink-0" />
+          <span>Free Tests</span>
+          <span className="ml-auto bg-orange-100 text-orange-600 text-xs font-bold px-1.5 py-0.5 rounded-full">Free</span>
+        </Link>
+        <Link href="/leaderboard"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          <Trophy className="w-4 h-4" /> Leaderboard
+        </Link>
+        <Link href="/dashboard"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          <BarChart2 className="w-4 h-4" /> My Progress
+        </Link>
+      </div>
+
+      {/* Category nav */}
+      <div className="px-3 pb-3">
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1 mt-2">Exam Categories</p>
+        {CATEGORIES.filter(c => c.value).map(cat => (
+          <Link key={cat.value} href={`/exams?category=${cat.value}`}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+            <span className="text-base leading-none">{cat.label.split(' ')[0]}</span>
+            <span>{cat.value}</span>
+            {categoryCounts[cat.value] ? (
+              <span className="ml-auto text-xs text-gray-400">{categoryCounts[cat.value]}</span>
+            ) : null}
+          </Link>
+        ))}
+      </div>
+
+      {/* Bottom CTA */}
+      <div className="mt-auto p-3">
+        <div className="rounded-xl p-4 text-white text-sm"
+          style={{ background: 'linear-gradient(135deg,#f97316,#ea580c)' }}>
+          <p className="font-bold mb-1">🏫 Are you an educator?</p>
+          <p className="text-orange-100 text-xs mb-3">Upload tests &amp; reach lakhs of students.</p>
+          <Link href="/provider/register"
+            className="block text-center bg-white text-orange-600 font-bold text-xs py-2 rounded-lg hover:bg-orange-50 transition-colors">
+            Become a Provider
+          </Link>
         </div>
       </div>
-    </Link>
+    </aside>
+  );
+}
+
+// ── Right Panel (desktop only) ────────────────────────────────────────────────
+function RightPanel({ exams }: { exams: ExamCard[] }) {
+  const total   = exams.length;
+  const free    = exams.filter(e => e.priceInr === 0).length;
+  const tests   = exams.reduce((s, e) => s + e.testCount, 0);
+  const featured = exams.filter(e => e.isFeatured).length;
+
+  return (
+    <aside className="hidden lg:flex flex-col gap-4 py-7 pr-6"
+      style={{ width: 300, position: 'sticky', top: 64, maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
+
+      {/* Platform Stats */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+          📊 Platform Stats
+        </h3>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { icon: '📝', num: total, label: 'Total Exams' },
+            { icon: '🆓', num: free, label: 'Free Exams' },
+            { icon: '📋', num: tests, label: 'Mock Tests' },
+            { icon: '⭐', num: featured, label: 'Featured' },
+          ].map(s => (
+            <div key={s.label} className="bg-gray-50 rounded-lg p-3 flex items-center gap-2">
+              <span className="text-xl leading-none">{s.icon}</span>
+              <div>
+                <p className="text-base font-extrabold text-gray-900 leading-none">{s.num}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top Performers (placeholder leaderboard) */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-bold text-gray-800 mb-3">🏆 Top Performers</h3>
+        {[
+          { rank: 1, name: 'Aakash Singh',   score: '96/100', cls: 'bg-yellow-100 text-yellow-800' },
+          { rank: 2, name: 'Priya Kumari',   score: '94/100', cls: 'bg-gray-100 text-gray-700' },
+          { rank: 3, name: 'Ravi Shankar',   score: '91/100', cls: 'bg-orange-100 text-orange-700' },
+          { rank: 4, name: 'Sunita Devi',    score: '89/100', cls: 'bg-gray-50 text-gray-500' },
+          { rank: 5, name: 'Manoj Yadav',    score: '87/100', cls: 'bg-gray-50 text-gray-500' },
+        ].map(p => (
+          <div key={p.rank} className="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
+            <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shrink-0 ${p.cls}`}>
+              {p.rank}
+            </span>
+            <span className="text-sm font-medium text-gray-800 flex-1 truncate">{p.name}</span>
+            <span className="text-sm font-bold text-orange-500">{p.score}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Upcoming Deadlines */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-bold text-gray-800 mb-3">📅 Upcoming Deadlines</h3>
+        {[
+          { day: '30', mon: 'Apr', title: 'RRB ALP Application', sub: 'Last date to apply' },
+          { day: '25', mon: 'May', title: 'UPSC Prelims 2026',   sub: 'Hall ticket from May 10' },
+          { day: '10', mon: 'Jun', title: 'RRB ALP CBT 1',       sub: 'Admit card 7 days prior' },
+        ].map(d => (
+          <div key={d.title} className="flex gap-3 py-2.5 border-b border-gray-100 last:border-0">
+            <div className="shrink-0 rounded-lg px-2.5 py-2 text-center text-white"
+              style={{ background: '#f97316', minWidth: 44 }}>
+              <span className="block text-lg font-extrabold leading-none">{d.day}</span>
+              <span className="text-xs font-semibold">{d.mon}</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-800 leading-snug">{d.title}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{d.sub}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Provider CTA */}
+      <div className="rounded-xl p-5 text-white"
+        style={{ background: 'linear-gradient(135deg,#f97316,#ea580c)' }}>
+        <h3 className="text-sm font-bold mb-1">🎯 Are you a coaching institute?</h3>
+        <p className="text-orange-100 text-xs mb-3">Upload question banks, create mock tests &amp; reach lakhs of students.</p>
+        <Link href="/provider/register"
+          className="block text-center bg-white text-orange-600 font-bold text-sm py-2 rounded-lg hover:bg-orange-50 transition-colors">
+          Become a Provider
+        </Link>
+      </div>
+    </aside>
   );
 }
 
 // ── Exam Card ─────────────────────────────────────────────────────────────────
 function ExamCardItem({ exam }: { exam: ExamCard }) {
-  const desc = stripHtml(exam.shortDescription);
+  const icon = categoryIcon(exam.category);
   return (
     <Link href={`/exam/${exam.slug}`}
-      className="group flex flex-col bg-white rounded-xl border border-gray-200 overflow-hidden
-        hover:shadow-md hover:border-indigo-200 transition-all duration-200">
-      <div className="relative h-32 bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden shrink-0">
+      className="group flex flex-col bg-white rounded-xl border border-gray-200
+        hover:shadow-md hover:border-orange-200 transition-all duration-200 overflow-hidden"
+      style={{ borderTop: '3px solid transparent' }}
+      onMouseEnter={e => (e.currentTarget.style.borderTopColor = '#f97316')}
+      onMouseLeave={e => (e.currentTarget.style.borderTopColor = 'transparent')}>
+
+      {/* Thumbnail or icon */}
+      <div className="relative h-28 bg-gradient-to-br from-orange-400 to-orange-600 overflow-hidden shrink-0">
         {exam.thumbnailUrl ? (
           <Image src={exam.thumbnailUrl} alt={exam.title} fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             unoptimized />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <BookOpen className="w-10 h-10 text-white/40" />
+          <div className="absolute inset-0 flex items-center justify-center text-4xl">
+            {icon}
           </div>
         )}
         {exam.examLevelName && (
-          <span className="absolute top-2 left-2 bg-white/90 text-indigo-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+          <span className="absolute top-2 left-2 bg-white/90 text-orange-700 text-xs font-semibold px-2 py-0.5 rounded-full">
             {exam.examLevelName}
           </span>
         )}
         {exam.isFeatured && (
-          <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">⭐</span>
+          <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">
+            <Star className="w-2.5 h-2.5 inline fill-yellow-900" />
+          </span>
         )}
       </div>
+
       <div className="p-3 flex flex-col flex-1">
-        <p className="text-xs text-indigo-500 font-medium truncate">
-          {exam.conductingBody ?? exam.examTypeName ?? 'Government Exam'}
+        <p className="text-xs text-orange-500 font-medium truncate">
+          {exam.conductingBody ?? exam.examTypeName ?? exam.category ?? 'Government Exam'}
         </p>
-        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mt-0.5 group-hover:text-indigo-600 transition-colors leading-snug">
+        <h3 className="text-sm font-bold text-gray-900 line-clamp-2 mt-0.5 group-hover:text-orange-600 transition-colors leading-snug">
           {exam.title}
         </h3>
-        {desc && (
-          <p className="text-xs text-gray-500 mt-1 line-clamp-2 hidden sm:block">{desc}</p>
-        )}
         <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100 mt-2">
           <span className="flex items-center gap-1 text-xs text-gray-400">
             <FileText className="w-3 h-3" /> {exam.testCount} Tests
           </span>
           <span className={`text-sm font-bold ${exam.priceInr === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-            {formatPrice(exam.priceInr)}
+            {exam.priceInr === 0
+              ? <span className="flex items-center gap-0.5"><Zap className="w-3 h-3" />Free</span>
+              : formatPrice(exam.priceInr)
+            }
           </span>
         </div>
       </div>
@@ -142,109 +283,134 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default async function HomePage() {
-  const { exams, levels } = await getHomeData();
-  const featured     = exams.filter(e => e.isFeatured);
-  const latest       = exams.slice(0, 12);
-  const activeLevels = levels.filter(l => l.examCount > 0);
+  const { exams } = await getHomeData();
+  const featured  = exams.filter(e => e.isFeatured);
+  const latest    = exams.slice(0, 16);
 
   return (
     <>
+      {/* CSS custom properties */}
+      <style>{`
+        :root {
+          --primary: #f97316;
+          --primary-dark: #ea580c;
+          --topbar-h: 56px;
+        }
+        @media (min-width: 768px) { :root { --topbar-h: 56px; } }
+        @media (min-width: 1024px) { :root { --topbar-h: 56px; } }
+      `}</style>
+
       <Header />
-      <main className="min-h-screen bg-gray-50">
 
-        {/* ── Compact Hero ─────────────────────────────────────────── */}
-        <section className="bg-white border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7 md:py-9">
-            <div className="flex flex-col md:flex-row md:items-center gap-5">
-              <div className="md:w-1/2">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
-                  India&apos;s Exam Prep Platform —{' '}
-                  <span className="text-indigo-600">Practice. Perform. Succeed.</span>
-                </h1>
-                <p className="text-gray-500 mt-2 text-sm md:text-base">
-                  Free mock tests for RRB, SSC, Banking, UPSC & more.
-                </p>
-                <div className="flex gap-3 mt-4">
-                  <Link href="/exams"
-                    className="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-indigo-700 transition-colors">
-                    Browse Exams <ChevronRight className="w-4 h-4" />
-                  </Link>
-                  <Link href="/register"
-                    className="inline-flex items-center gap-2 border border-indigo-200 text-indigo-600 px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-indigo-50 transition-colors">
-                    Sign Up Free
-                  </Link>
-                </div>
-              </div>
-              <div className="md:w-1/2">
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input type="text" placeholder="Search exams, mock tests..."
-                    className="w-full pl-12 pr-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-full
-                      focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-sm" />
-                </div>
-                <div className="flex gap-5 mt-3 text-xs text-gray-400">
-                  <span className="flex items-center gap-1"><TrendingUp className="w-3.5 h-3.5 text-indigo-400" /> {exams.length}+ Exams</span>
-                  <span className="flex items-center gap-1"><FileText className="w-3.5 h-3.5 text-indigo-400" /> Free Tests</span>
-                  <span className="flex items-center gap-1"><Shield className="w-3.5 h-3.5 text-indigo-400" /> Verified</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+      {/* ── Mobile exam alert strip ──────────────────────────────────── */}
+      <div className="lg:hidden flex items-center justify-between gap-3 px-4 py-2.5 text-white text-sm"
+        style={{ background: 'linear-gradient(90deg,#f97316,#ea580c)' }}>
+        <span className="font-medium text-xs sm:text-sm">
+          🚂 <strong>RRB ALP 2026</strong> – 5696 Vacancies Released! Apply by Apr 30
+        </span>
+        <Link href="/exam/rrb-alp-2026"
+          className="shrink-0 bg-white text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-orange-50 transition-colors">
+          View →
+        </Link>
+      </div>
 
-        {/* ── Category Tabs (Udemy-style) ──────────────────────────── */}
-        {activeLevels.length > 0 && (
-          <div className="bg-white border-b border-gray-200 sticky top-16 z-30">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
-              <nav className="flex items-center overflow-x-auto scrollbar-hide h-11 gap-0">
-                <Link href="/exams"
-                  className="shrink-0 px-4 h-full flex items-center text-sm font-semibold text-indigo-600
-                    border-b-2 border-indigo-600 whitespace-nowrap">
-                  All Exams
+      <div className="flex bg-gray-50 min-h-screen">
+        {/* Left Sidebar */}
+        <LeftSidebar exams={exams} />
+
+        {/* Main content */}
+        <main className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-5 pb-20 md:pb-6">
+
+          {/* ── Filter pills ────────────────────────────────────────── */}
+          <div className="overflow-x-auto scrollbar-hide mb-5 -mx-4 px-4 md:-mx-6 md:px-6">
+            <div className="flex items-center gap-2 min-w-max">
+              {CATEGORIES.map(cat => (
+                <Link key={cat.label} href={cat.value ? `/exams?category=${cat.value}` : '/exams'}
+                  className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
+                    ${cat.value === ''
+                      ? 'bg-orange-500 text-white border-orange-500'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
+                    }`}>
+                  {cat.label}
                 </Link>
-                {activeLevels.map(level => (
-                  <Link key={level.id} href={`/exams?level=${level.id}`}
-                    className="shrink-0 px-4 h-full flex items-center text-sm text-gray-600 border-b-2 border-transparent
-                      hover:text-gray-900 hover:border-gray-300 transition-colors whitespace-nowrap">
-                    {level.name}
-                    <span className="ml-1 text-xs text-gray-400">({level.examCount})</span>
-                  </Link>
-                ))}
-              </nav>
+              ))}
             </div>
           </div>
-        )}
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7 space-y-8">
-
-          {/* ── Featured Exam Banner ─────────────────────────────────── */}
+          {/* ── Hero banner ─────────────────────────────────────────── */}
           {featured.length > 0 && (
-            <section>
-              <h2 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2 uppercase tracking-wide">
-                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" /> Featured
-              </h2>
-              <FeaturedBanner exam={featured[0]} />
-              {featured.length > 1 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                  {featured.slice(1, 3).map(e => <ExamCardItem key={e.id} exam={e} />)}
+            <Link href={`/exam/${featured[0].slug}`}
+              className="block rounded-2xl overflow-hidden mb-6 group"
+              style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
+              <div className="relative p-6 md:p-8">
+                {(featured[0].bannerUrl || featured[0].thumbnailUrl) && (
+                  <Image
+                    src={featured[0].bannerUrl ?? featured[0].thumbnailUrl!}
+                    alt={featured[0].title} fill
+                    className="object-cover opacity-20 group-hover:opacity-30 transition-opacity"
+                    unoptimized />
+                )}
+                <div className="relative z-10 max-w-lg">
+                  <div className="inline-flex items-center gap-1.5 mb-3 text-xs font-bold px-3 py-1 rounded-full"
+                    style={{ background: 'rgba(249,115,22,.2)', border: '1px solid rgba(249,115,22,.4)', color: '#fdba74' }}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse inline-block"></span>
+                    New Notification
+                  </div>
+                  <h2 className="text-white text-xl md:text-2xl font-extrabold leading-tight mb-2">
+                    {featured[0].title}
+                  </h2>
+                  {featured[0].shortDescription && (
+                    <p className="text-slate-400 text-sm mb-4 line-clamp-2">
+                      {stripHtml(featured[0].shortDescription)}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="bg-orange-500 text-white text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-orange-600 transition-colors">
+                      Start Preparation
+                    </span>
+                    <span className="text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                      style={{ border: '1.5px solid rgba(255,255,255,.25)' }}>
+                      View Syllabus
+                    </span>
+                    <span className={`ml-auto text-sm font-bold ${featured[0].priceInr === 0 ? 'text-green-400' : 'text-white'}`}>
+                      {formatPrice(featured[0].priceInr)}
+                    </span>
+                  </div>
                 </div>
-              )}
-            </section>
+              </div>
+            </Link>
           )}
 
-          {/* ── Latest Exams Grid ────────────────────────────────────── */}
+          {/* ── Quick stats (mobile 2×2, tablet 4×1) ───────────────── */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            {[
+              { icon: '📝', num: `${exams.length}+`, label: 'Exams' },
+              { icon: '🆓', num: `${exams.filter(e => e.priceInr === 0).length}`, label: 'Free Exams' },
+              { icon: '📋', num: `${exams.reduce((s, e) => s + e.testCount, 0)}+`, label: 'Mock Tests' },
+              { icon: '🏆', num: '10K+', label: 'Students' },
+            ].map(s => (
+              <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-3 flex items-center gap-3">
+                <span className="text-2xl leading-none shrink-0">{s.icon}</span>
+                <div>
+                  <p className="text-xl font-extrabold text-gray-900 leading-none">{s.num}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ── Exam cards grid ──────────────────────────────────────── */}
           {latest.length > 0 && (
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-bold text-gray-900">
-                  {featured.length > 0 ? 'All Exams' : 'Available Exams'}
-                </h2>
+                <h2 className="text-base font-bold text-gray-900">Explore Exams</h2>
                 <Link href="/exams"
-                  className="text-sm text-indigo-600 font-medium hover:text-indigo-700 flex items-center gap-1">
+                  className="text-sm font-semibold hover:opacity-80 flex items-center gap-1"
+                  style={{ color: '#f97316' }}>
                   View all <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {latest.map(e => <ExamCardItem key={e.id} exam={e} />)}
               </div>
             </section>
@@ -252,37 +418,43 @@ export default async function HomePage() {
 
           {/* ── Empty state ──────────────────────────────────────────── */}
           {exams.length === 0 && (
-            <section className="text-center py-20">
+            <div className="text-center py-20">
               <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-gray-700">Exams Coming Soon</h2>
               <p className="text-gray-400 mt-2 text-sm max-w-md mx-auto">
                 We&apos;re adding new exams and mock tests. Register to get notified when they go live.
               </p>
               <Link href="/register"
-                className="mt-6 inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-indigo-700">
+                className="mt-6 inline-flex items-center gap-2 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90"
+                style={{ background: '#f97316' }}>
                 Get Notified <ChevronRight className="w-4 h-4" />
               </Link>
-            </section>
-          )}
-
-          {/* ── Provider CTA ─────────────────────────────────────────── */}
-          <section className="rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-700 p-6 md:p-8 text-white">
-            <div className="flex flex-col md:flex-row md:items-center gap-4">
-              <div className="flex-1">
-                <h2 className="text-lg md:text-xl font-bold">Are you a coaching institute or educator?</h2>
-                <p className="text-indigo-200 text-sm mt-1">
-                  Upload your question bank, create mock tests and reach lakhs of aspirants across India.
-                </p>
-              </div>
-              <Link href="/provider/register"
-                className="shrink-0 bg-white text-indigo-700 px-6 py-2.5 rounded-full text-sm font-bold
-                  hover:bg-indigo-50 transition-colors flex items-center gap-2 w-fit">
-                <Users className="w-4 h-4" /> Become a Provider
-              </Link>
             </div>
-          </section>
-        </div>
-      </main>
+          )}
+        </main>
+
+        {/* Right Panel */}
+        <RightPanel exams={exams} />
+      </div>
+
+      {/* ── Mobile bottom navigation ─────────────────────────────────── */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 grid grid-cols-4"
+        style={{ height: 60, boxShadow: '0 -2px 10px rgba(0,0,0,.06)' }}>
+        {[
+          { icon: <Home className="w-5 h-5" />, label: 'Home',   href: '/',          active: true },
+          { icon: <Search className="w-5 h-5" />, label: 'Search', href: '/exams',    active: false },
+          { icon: <FileText className="w-5 h-5" />, label: 'Tests', href: '/tests',   active: false },
+          { icon: <BookOpen className="w-5 h-5" />, label: 'Profile', href: '/dashboard', active: false },
+        ].map(item => (
+          <Link key={item.label} href={item.href}
+            className={`flex flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors
+              ${item.active ? 'text-orange-500' : 'text-gray-500 hover:text-orange-500'}`}>
+            {item.icon}
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+
       <Footer />
     </>
   );

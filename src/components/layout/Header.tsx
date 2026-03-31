@@ -3,77 +3,67 @@
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState } from 'react';
-import { Search, Menu, X, User, BookOpen, LogOut, ChevronDown } from 'lucide-react';
+import { Search, Bell, Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { getInitials } from '@/lib/utils';
-
-const EXAM_CATEGORIES = [
-  { label: 'SSC', slug: 'ssc' },
-  { label: 'Banking', slug: 'banking' },
-  { label: 'Railways', slug: 'railways' },
-  { label: 'UPSC', slug: 'upsc' },
-  { label: 'Police', slug: 'police' },
-  { label: 'Defence', slug: 'defence' },
-  { label: 'State PSC', slug: 'state-psc' },
-  { label: 'Teaching', slug: 'teaching' },
-];
 
 export default function Header() {
   const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [profileOpen, setProfileOpen] = useState(false);
-
   const user = session?.user as any;
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-      {/* Top bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200"
+      style={{ height: 'var(--topbar-h, 56px)' }}>
+      <div className="h-full flex items-center gap-3 px-4 md:px-6 lg:px-8">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <BookOpen className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-bold text-indigo-600 hidden sm:block">GridAcademy</span>
+        <Link href="/" className="shrink-0 text-lg font-extrabold tracking-tight">
+          <span className="text-gray-900">Grid</span>
+          <span className="text-orange-500">Academy</span>
         </Link>
 
-        {/* Search */}
-        <div className="flex-1 max-w-xl relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        {/* Search bar */}
+        <div className="flex-1 max-w-lg relative hidden sm:block">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search mock tests, exams..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-sm bg-gray-100 rounded-full border border-transparent
-              focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:border-indigo-300 transition-all"
+            placeholder="Search exams, topics, tests…"
+            className="w-full pl-9 pr-4 py-2 text-sm bg-gray-100 rounded-full border border-transparent
+              focus:outline-none focus:ring-2 focus:ring-orange-400 focus:bg-white focus:border-orange-300 transition-all"
           />
         </div>
 
         {/* Right side */}
-        <div className="ml-auto flex items-center gap-3">
-          {/* Become a Provider — shown to guests only */}
+        <div className="ml-auto flex items-center gap-2">
+          {/* Notification bell */}
+          <button className="relative w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-colors">
+            <Bell className="w-4.5 h-4.5 text-gray-500" style={{ width: 18, height: 18 }} />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
+          </button>
+
+          {/* Become a Provider — guests only, desktop */}
           {!session && (
             <Link href="/provider/register"
-              className="text-sm font-medium text-green-700 hover:text-green-800 border border-green-200 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-full transition-colors hidden md:block whitespace-nowrap">
+              className="hidden md:block text-sm font-medium text-green-700 border border-green-200 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
               🏫 Become a Provider
             </Link>
           )}
 
+          {/* Auth */}
           {session ? (
-            <div className="relative">
+            <div className="relative hidden md:block">
               <button
                 onClick={() => setProfileOpen(o => !o)}
-                className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
+                className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-orange-600 transition-colors"
               >
-                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold">
-                  {getInitials(user?.name ?? 'S')}
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                  style={{ background: 'var(--primary, #f97316)' }}>
+                  {getInitials(user?.name ?? 'U')}
                 </div>
-                <span className="hidden sm:block max-w-[100px] truncate">{user?.name}</span>
+                <span className="hidden lg:block max-w-[100px] truncate">{user?.name}</span>
                 <ChevronDown className="w-3 h-3" />
               </button>
-
               {profileOpen && (
                 <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
                   <div className="px-4 py-2 border-b border-gray-100">
@@ -81,8 +71,8 @@ export default function Header() {
                     <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                   </div>
                   <Link href="/dashboard" onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                    <User className="w-4 h-4" /> My Tests
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
+                    <User className="w-4 h-4" /> My Dashboard
                   </Link>
                   <button
                     onClick={() => signOut({ callbackUrl: '/' })}
@@ -93,83 +83,65 @@ export default function Header() {
               )}
             </div>
           ) : (
-            <>
+            <div className="hidden md:flex items-center gap-2">
               <Link href="/login"
-                className="text-sm font-medium text-gray-700 hover:text-indigo-600 hidden sm:block transition-colors">
+                className="text-sm font-medium text-gray-700 hover:text-orange-600 px-3 py-1.5 transition-colors">
                 Login
               </Link>
               <Link href="/register"
-                className="text-sm font-semibold bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition-colors">
+                className="text-sm font-semibold bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition-colors">
                 Sign Up Free
               </Link>
-            </>
+            </div>
           )}
 
-          {/* Mobile menu toggle */}
-          <button className="md:hidden p-2 rounded-lg hover:bg-gray-100"
-            onClick={() => setMobileMenuOpen(o => !o)}>
+          {/* Mobile hamburger */}
+          <button className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100"
+            onClick={() => setMobileMenuOpen(o => !o)}
+            aria-label="Open menu">
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Category nav bar */}
-      <div className="border-t border-gray-100 hidden md:block">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <nav className="flex items-center gap-1 overflow-x-auto scrollbar-hide h-10">
-            <Link href="/exams"
-              className="shrink-0 px-4 py-1.5 text-sm font-semibold text-indigo-600 bg-indigo-50 rounded-full hover:bg-indigo-100 transition-colors">
-              Exams
-            </Link>
-            <Link href="/tests"
-              className="shrink-0 px-4 py-1.5 text-sm font-semibold text-purple-600 bg-purple-50 rounded-full hover:bg-purple-100 transition-colors">
-              All Tests
-            </Link>
-            <span className="text-gray-300 text-sm px-1">|</span>
-            {EXAM_CATEGORIES.map(cat => (
-              <Link key={cat.slug} href={`/tests?q=${encodeURIComponent(cat.label)}`}
-                className="shrink-0 px-4 py-1.5 text-sm text-gray-600 rounded-full hover:bg-gray-100 hover:text-gray-900 transition-colors whitespace-nowrap">
-                {cat.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
+      {/* Mobile dropdown menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-3">
+        <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-3 shadow-lg">
+          {/* Mobile search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input type="text" placeholder="Search mock tests..."
-              className="w-full pl-10 pr-4 py-2 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input type="text" placeholder="Search exams, tests…"
+              className="w-full pl-10 pr-4 py-2 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-400" />
           </div>
+
+          {/* Nav links */}
           <div className="flex flex-wrap gap-2">
             <Link href="/exams" onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-1 text-sm bg-indigo-50 text-indigo-700 rounded-full font-semibold">
+              className="px-3 py-1 text-sm bg-orange-50 text-orange-600 rounded-full font-semibold">
               All Exams
             </Link>
             <Link href="/tests" onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-1 text-sm bg-purple-50 text-purple-700 rounded-full font-semibold">
+              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full font-semibold">
               All Tests
             </Link>
-            {EXAM_CATEGORIES.map(cat => (
-              <Link key={cat.slug} href={`/tests?q=${encodeURIComponent(cat.label)}`}
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-indigo-50 hover:text-indigo-600">
-                {cat.label}
+            {['Railway','UPSC','Banking','SSC','GATE','Defence'].map(cat => (
+              <Link key={cat} href={`/exams?category=${cat}`} onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-orange-50 hover:text-orange-600">
+                {cat}
               </Link>
             ))}
           </div>
-          {!session && (
-            <div className="flex flex-col gap-2 pt-2">
-              <div className="flex gap-3">
+
+          {/* Auth buttons */}
+          {!session ? (
+            <div className="flex flex-col gap-2 pt-1">
+              <div className="flex gap-2">
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 text-center py-2 border border-indigo-600 text-indigo-600 rounded-full text-sm font-semibold">
+                  className="flex-1 text-center py-2 border border-orange-500 text-orange-600 rounded-full text-sm font-semibold">
                   Login
                 </Link>
                 <Link href="/register" onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 text-center py-2 bg-indigo-600 text-white rounded-full text-sm font-semibold">
+                  className="flex-1 text-center py-2 bg-orange-500 text-white rounded-full text-sm font-semibold">
                   Sign Up Free
                 </Link>
               </div>
@@ -177,6 +149,22 @@ export default function Header() {
                 className="text-center py-2 border border-green-500 text-green-700 bg-green-50 rounded-full text-sm font-semibold">
                 🏫 Become a Provider
               </Link>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs font-bold">
+                  {getInitials(user?.name ?? 'U')}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">{user?.name}</p>
+                  <p className="text-xs text-gray-500">{user?.email}</p>
+                </div>
+              </div>
+              <button onClick={() => signOut({ callbackUrl: '/' })}
+                className="text-sm text-red-600 font-medium px-3 py-1.5 rounded-full hover:bg-red-50">
+                Sign Out
+              </button>
             </div>
           )}
         </div>
