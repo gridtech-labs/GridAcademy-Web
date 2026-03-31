@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { api } from '@/lib/api-client';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -278,6 +279,32 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
     </Link>
   );
 }
+
+export const metadata: Metadata = {
+  title: "GridAcademy — India's Best Mock Test Platform",
+  description:
+    "Prepare for SSC, Banking, Railway, UPSC and more with expert-created mock tests.",
+    
+  alternates: {
+    canonical: "https://www.gridacademy.in/",
+  },
+
+  openGraph: {
+    title: "GridAcademy — India's Best Mock Test Platform",
+    description:
+      "Prepare for SSC, Banking, Railway, UPSC and more with expert-created mock tests.",
+    url: "https://www.gridacademy.in/",
+    siteName: "GridAcademy",
+    images: [
+      {
+        url: "https://www.gridacademy.in/og-image.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: "website",
+  },
+};
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default async function HomePage({ searchParams }: { searchParams?: { category?: string } }) {

@@ -20,16 +20,68 @@ import { stripHtml } from '@/lib/utils';
 
 interface PageProps { params: { slug: string } }
 
+// export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+//   try {
+//     const exam = await api.get<ExamDetail>(`/api/exams/${params.slug}`);
+//     if (!exam) return { title: 'Exam Details' };
+//     return {
+//       title: exam.metaTitle ?? exam.title,
+//       description: stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
+//       openGraph: exam.bannerUrl ? { images: [{ url: exam.bannerUrl }] } : undefined,
+//     };
+//   } catch { return { title: 'Exam Details' }; }
+// }
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
     const exam = await api.get<ExamDetail>(`/api/exams/${params.slug}`);
-    if (!exam) return { title: 'Exam Details' };
+    if (!exam) return { title: "Exam Details" };
+
+    const url = `https://www.gridacademy.in/exam/${params.slug}`;
+
     return {
       title: exam.metaTitle ?? exam.title,
-      description: stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
-      openGraph: exam.bannerUrl ? { images: [{ url: exam.bannerUrl }] } : undefined,
+      description:
+        stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
+
+      alternates: {
+        canonical: url,
+      },
+
+      openGraph: {
+        title: exam.metaTitle ?? exam.title,
+        description:
+          stripHtml(exam.metaDescription ?? exam.shortDescription) || "",
+        url: url,
+        siteName: "GridAcademy",
+        images: [
+          {
+            url:
+              exam.bannerUrl ||
+              exam.thumbnailUrl ||
+              "https://www.gridacademy.in/og-image.jpg",
+            width: 1200,
+            height: 630,
+          },
+        ],
+        type: "article",
+      },
+
+      twitter: {
+        card: "summary_large_image",
+        title: exam.metaTitle ?? exam.title,
+        description:
+          stripHtml(exam.metaDescription ?? exam.shortDescription) || "",
+        images: [
+          exam.bannerUrl ||
+            exam.thumbnailUrl ||
+            "https://www.gridacademy.in/og-image.jpg",
+        ],
+      },
     };
-  } catch { return { title: 'Exam Details' }; }
+  } catch {
+    return { title: "Exam Details" };
+  }
 }
 
 export default async function ExamDetailPage({ params }: PageProps) {
