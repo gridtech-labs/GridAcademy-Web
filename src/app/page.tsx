@@ -377,16 +377,9 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           {featured.length > 0 && (
             <Link href={`/exam/${featured[0].slug}`}
               className="block rounded-2xl overflow-hidden mb-6 group"
-              style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
+              style={{ background: 'linear-gradient(135deg,#1e1b4b 0%,#312e81 45%,#1e3a5f 100%)' }}>
               <div className="relative p-6 md:p-8">
-                {(featured[0].bannerUrl || featured[0].thumbnailUrl) && (
-                  <Image
-                    src={featured[0].bannerUrl ?? featured[0].thumbnailUrl!}
-                    alt={featured[0].title} fill
-                    className="object-cover opacity-20 group-hover:opacity-30 transition-opacity"
-                    unoptimized />
-                )}
-                <div className="relative z-10 max-w-lg">
+                <div className="max-w-lg">
                   <div className="inline-flex items-center gap-1.5 mb-3 text-xs font-bold px-3 py-1 rounded-full"
                     style={{ background: 'rgba(249,115,22,.2)', border: '1px solid rgba(249,115,22,.4)', color: '#fdba74' }}>
                     <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse inline-block"></span>
@@ -396,7 +389,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                     {featured[0].title}
                   </h2>
                   {featured[0].shortDescription && (
-                    <p className="text-slate-400 text-sm mb-4 line-clamp-2">
+                    <p className="text-indigo-200/80 text-sm mb-4 line-clamp-2">
                       {stripHtml(featured[0].shortDescription)}
                     </p>
                   )}

@@ -30,9 +30,14 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
 
-      {/* Tab nav */}
-      <div className="border-b border-gray-200 bg-gray-50/80 overflow-x-auto">
-        <div className="flex min-w-max">
+      {/* Tab nav — horizontally scrollable on mobile, no scrollbar shown */}
+      <div className="relative border-b border-gray-200 bg-gray-50/80">
+        {/* right-fade hint so user knows more tabs exist */}
+        <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-gray-100/90 to-transparent z-10 sm:hidden" />
+        <div
+          className="flex overflow-x-auto"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+        >
           {tabs.map(tab => {
             const Icon = ICONS[tab.icon] ?? BookOpen;
             const isActive = activeTab === tab.id;
@@ -41,7 +46,7 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  flex items-center gap-2 px-5 py-4 text-sm font-semibold whitespace-nowrap
+                  flex items-center gap-1.5 px-4 py-3.5 text-sm font-semibold whitespace-nowrap shrink-0
                   border-b-2 transition-all duration-150 focus:outline-none
                   ${isActive
                     ? 'border-indigo-600 text-indigo-600 bg-white'
@@ -49,7 +54,7 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
                 `}
               >
                 <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-indigo-500' : 'text-gray-400'}`} />
-                {tab.label}
+                <span>{tab.label}</span>
               </button>
             );
           })}
