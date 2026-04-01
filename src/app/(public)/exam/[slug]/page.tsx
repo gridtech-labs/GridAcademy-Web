@@ -113,6 +113,29 @@ export default async function ExamDetailPage({ params }: PageProps) {
   const freeTest = exam.tests.find(t => t.isFree);
 
   return (
+    <>
+    {/* JSON-LD Structured Data SEO */}
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "EducationalOccupationalProgram",
+      name: exam.title,
+      description: stripHtml(exam.shortDescription || ""),
+      url: `https://www.gridacademy.in/exam/${exam.slug}`,
+      image:
+        exam.bannerUrl ||
+        exam.thumbnailUrl ||
+        "https://www.gridacademy.in/og-image.jpg",
+      provider: {
+        "@type": "Organization",
+        name: "GridAcademy",
+        url: "https://www.gridacademy.in",
+      },
+    }),
+  }}
+/>
     <div className="min-h-screen bg-gray-50">
 
       {/* ── Breadcrumb ─────────────────────────────────────────────────────────── */}
@@ -410,5 +433,6 @@ export default async function ExamDetailPage({ params }: PageProps) {
         </div>
       </div>
     </div>
+    </>
   );
 }
