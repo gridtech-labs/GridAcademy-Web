@@ -30,13 +30,38 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
 
-      {/* Tab nav — horizontally scrollable on mobile, no scrollbar shown */}
-      <div className="relative border-b border-gray-200 bg-gray-50/80">
-        {/* right-fade hint so user knows more tabs exist */}
-        <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-gray-100/90 to-transparent z-10 sm:hidden" />
+      {/* Tab nav ─────────────────────────────────────────────────────────── */}
+
+      {/* Mobile: 3-column pill grid so nothing scrolls off-screen */}
+      <div className="grid grid-cols-3 gap-px bg-gray-200 border-b border-gray-200 sm:hidden">
+        {tabs.map(tab => {
+          const Icon = ICONS[tab.icon] ?? BookOpen;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`
+                flex flex-col items-center justify-center gap-1 py-3 px-1 text-[11px] font-semibold
+                transition-all duration-150 focus:outline-none
+                ${isActive
+                  ? 'bg-white text-indigo-600'
+                  : 'bg-gray-50 text-gray-500 hover:bg-white hover:text-gray-800'}
+              `}
+            >
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-indigo-500' : 'text-gray-400'}`} />
+              <span className="text-center leading-tight">{tab.label}</span>
+              {isActive && <span className="block w-4 h-0.5 rounded-full bg-indigo-600 mt-0.5" />}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Desktop: single horizontal tab bar (hidden on mobile) */}
+      <div className="hidden sm:block border-b border-gray-200 bg-gray-50/80">
         <div
           className="flex overflow-x-auto"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}
         >
           {tabs.map(tab => {
             const Icon = ICONS[tab.icon] ?? BookOpen;
@@ -46,7 +71,7 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  flex items-center gap-1.5 px-4 py-3.5 text-sm font-semibold whitespace-nowrap shrink-0
+                  flex items-center gap-2 px-5 py-4 text-sm font-semibold whitespace-nowrap shrink-0
                   border-b-2 transition-all duration-150 focus:outline-none
                   ${isActive
                     ? 'border-indigo-600 text-indigo-600 bg-white'
@@ -54,7 +79,7 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
                 `}
               >
                 <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-indigo-500' : 'text-gray-400'}`} />
-                <span>{tab.label}</span>
+                {tab.label}
               </button>
             );
           })}

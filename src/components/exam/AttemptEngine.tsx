@@ -505,19 +505,20 @@ export default function AttemptEngine({ attempt, token }: Props) {
             )}
           </div>
 
-          {/* Bottom action bar */}
-          <div className="bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between shrink-0">
-            <div className="flex gap-2">
+          {/* Bottom action bar — 2 rows on mobile, 1 row on sm+ */}
+          <div className="bg-white border-t border-gray-200 px-3 py-2 shrink-0">
+            {/* Row 1 (mobile): Clear + Mark | Row 2 (mobile): Prev + Next */}
+            <div className="grid grid-cols-2 gap-2 sm:hidden">
               <button
                 onClick={handleClearResponse}
-                className="px-4 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 flex items-center gap-1.5"
+                className="flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50"
               >
                 <X className="w-3.5 h-3.5" />
                 Clear
               </button>
               <button
                 onClick={handleMarkForReview}
-                className={`px-4 py-2 text-sm rounded-lg flex items-center gap-1.5 transition-colors ${
+                className={`flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm rounded-lg transition-colors ${
                   currentAnswer?.isMarkedForReview
                     ? 'bg-orange-500 text-white border border-orange-500'
                     : 'border border-orange-400 text-orange-600 hover:bg-orange-50'
@@ -526,12 +527,10 @@ export default function AttemptEngine({ attempt, token }: Props) {
                 <Flag className="w-3.5 h-3.5" />
                 {currentAnswer?.isMarkedForReview ? 'Marked' : 'Mark & Next'}
               </button>
-            </div>
-            <div className="flex gap-2">
               <button
                 onClick={goPrev}
                 disabled={isFirst}
-                className="flex items-center gap-1 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center justify-center gap-1 px-3 py-2.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Prev
@@ -539,11 +538,52 @@ export default function AttemptEngine({ attempt, token }: Props) {
               <button
                 onClick={goNext}
                 disabled={isLast}
-                className="flex items-center gap-1 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg disabled:cursor-not-allowed transition-colors"
+                className="flex items-center justify-center gap-1 px-3 py-2.5 text-sm bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg disabled:cursor-not-allowed transition-colors"
               >
                 Next
                 <ChevronRight className="w-4 h-4" />
               </button>
+            </div>
+            {/* Single row on sm+ */}
+            <div className="hidden sm:flex items-center justify-between gap-2">
+              <div className="flex gap-2">
+                <button
+                  onClick={handleClearResponse}
+                  className="px-4 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 flex items-center gap-1.5"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Clear
+                </button>
+                <button
+                  onClick={handleMarkForReview}
+                  className={`px-4 py-2 text-sm rounded-lg flex items-center gap-1.5 transition-colors ${
+                    currentAnswer?.isMarkedForReview
+                      ? 'bg-orange-500 text-white border border-orange-500'
+                      : 'border border-orange-400 text-orange-600 hover:bg-orange-50'
+                  }`}
+                >
+                  <Flag className="w-3.5 h-3.5" />
+                  {currentAnswer?.isMarkedForReview ? 'Marked' : 'Mark & Next'}
+                </button>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={goPrev}
+                  disabled={isFirst}
+                  className="flex items-center gap-1 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Prev
+                </button>
+                <button
+                  onClick={goNext}
+                  disabled={isLast}
+                  className="flex items-center gap-1 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg disabled:cursor-not-allowed transition-colors"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
