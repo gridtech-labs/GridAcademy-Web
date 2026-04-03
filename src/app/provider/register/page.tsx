@@ -93,8 +93,8 @@ export default function ProviderRegisterPage() {
   /* ── success screen ──────────────────────────────────────────────── */
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl shadow-xl w-full max-w-lg p-8 text-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 w-full max-w-lg p-8 text-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
             <CheckCircle className="w-11 h-11 text-green-600" />
           </div>
@@ -121,7 +121,7 @@ export default function ProviderRegisterPage() {
 
           <a
             href={`${ADMIN_URL}/Account/Login`}
-            className="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors text-center mb-3"
+            className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-colors text-center mb-3"
           >
             Go to Provider Portal Login →
           </a>
@@ -135,16 +135,16 @@ export default function ProviderRegisterPage() {
 
   /* ── registration form ───────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gray-50">
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-4 py-4">
+      <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-bold text-indigo-600">GridAcademy</span>
+            <span className="text-lg font-bold text-gray-900">GridAcademy</span>
           </Link>
           <p className="text-sm text-gray-500 hidden sm:block">
             Already registered?{' '}
@@ -156,7 +156,7 @@ export default function ProviderRegisterPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+      <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
         {/* ── Left: benefits panel ─────────────────────────────── */}
         <div className="hidden lg:block sticky top-8">
@@ -187,7 +187,7 @@ export default function ProviderRegisterPage() {
             ))}
           </div>
 
-          <div className="mt-10 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-5 text-white">
+          <div className="mt-10 rounded-2xl p-5 text-white" style={{ background: 'linear-gradient(135deg,#1e1b4b,#312e81)' }}>
             <p className="font-bold text-lg">How it works</p>
             <ol className="mt-3 space-y-2 text-sm text-green-100">
               <li className="flex items-start gap-2">
@@ -211,7 +211,7 @@ export default function ProviderRegisterPage() {
         </div>
 
         {/* ── Right: form ──────────────────────────────────────── */}
-        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-1">Register as a Provider</h2>
           <p className="text-sm text-gray-500 mb-6">Create your institute account to get started</p>
 
@@ -406,7 +406,7 @@ export default function ProviderRegisterPage() {
             <button
               type="submit"
               disabled={loading || !agreed}
-              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 mt-2"
+              className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 mt-2"
             >
               {loading && <Loader2 className="w-5 h-5 animate-spin" />}
               {loading ? 'Submitting application...' : (
