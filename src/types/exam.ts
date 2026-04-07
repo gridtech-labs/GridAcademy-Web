@@ -6,6 +6,12 @@ export interface ExamLevel {
   examCount: number;
 }
 
+export interface ExamTypeFilter {
+  id: number;
+  name: string;
+  examCount: number;
+}
+
 export interface ExamCard {
   id: string;
   slug: string;

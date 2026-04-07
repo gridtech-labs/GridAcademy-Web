@@ -1,7 +1,7 @@
 import { api } from '@/lib/api-client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExamCard } from '@/types/exam';
+import { ExamCard, ExamTypeFilter } from '@/types/exam';
 import {
   FileText, Zap, Home, BookOpen, Trophy, BarChart2,
   ChevronRight, Search, Star
@@ -10,7 +10,14 @@ import {
 // ── Data fetching ─────────────────────────────────────────────────────────────
 async function getAllExams(): Promise<ExamCard[]> {
   try {
-    const res = await api.get<ExamCard[]>('/api/exams?activeOnly=true');
+    const res = await api.get<ExamCard[]>('/api/exams');
+    return Array.isArray(res) ? res : (res as any)?.data ?? [];
+  } catch { return []; }
+}
+
+async function getExamTypes(): Promise<ExamTypeFilter[]> {
+  try {
+    const res = await api.get<ExamTypeFilter[]>('/api/exams/exam-types');
     return Array.isArray(res) ? res : (res as any)?.data ?? [];
   } catch { return []; }
 }
@@ -24,34 +31,35 @@ function formatPrice(p: number) {
   return p === 0 ? 'FREE' : `₹${p.toLocaleString('en-IN')}`;
 }
 
-// ── Category config ───────────────────────────────────────────────────────────
-const CATEGORIES = [
-  { label: 'All Exams', value: '' },
-  { label: '🚂 Railway',  value: 'Railway' },
-  { label: '🏛️ UPSC',    value: 'UPSC' },
-  { label: '🏦 Banking',  value: 'Banking' },
-  { label: '👮 SSC',      value: 'SSC' },
-  { label: '🔬 GATE',     value: 'GATE' },
-  { label: '📐 Defence',  value: 'Defence' },
-];
-
-function categoryIcon(cat: string | null) {
-  switch (cat) {
-    case 'Railway':  return '🚂';
-    case 'UPSC':     return '🏛️';
-    case 'Banking':  return '🏦';
-    case 'SSC':      return '👮';
-    case 'GATE':     return '🔬';
-    case 'Defence':  return '📐';
-    default:         return '📝';
-  }
+// Generic icon — falls back to 📝 for unknown types
+function categoryIcon(name: string | null) {
+  if (!name) return '📝';
+  const n = name.toLowerCase();
+  if (n.includes('railway') || n.includes('rrb')) return '🚂';
+  if (n.includes('upsc') || n.includes('ias')) return '🏛️';
+  if (n.includes('bank')) return '🏦';
+  if (n.includes('ssc')) return '👮';
+  if (n.includes('gate')) return '🔬';
+  if (n.includes('defence') || n.includes('nda') || n.includes('cds')) return '📐';
+  if (n.includes('police')) return '🚔';
+  if (n.includes('teach') || n.includes('tet') || n.includes('ctet')) return '📚';
+  if (n.includes('state') || n.includes('psc')) return '🗺️';
+  if (n.includes('cuet')) return '🎓';
+  if (n.includes('jee') || n.includes('neet')) return '⚗️';
+  if (n.includes('mat') || n.includes('cat') || n.includes('mba')) return '💼';
+  return '📝';
 }
 
 // ── Sidebar ───────────────────────────────────────────────────────────────────
-function LeftSidebar({ exams, active }: { exams: ExamCard[]; active: string }) {
-  const counts: Record<string, number> = {};
-  exams.forEach(e => { if (e.category) counts[e.category] = (counts[e.category] ?? 0) + 1; });
-
+function LeftSidebar({
+  examTypes,
+  active,
+  counts,
+}: {
+  examTypes: ExamTypeFilter[];
+  active: string;
+  counts: Record<string, number>;
+}) {
   return (
     <aside className="hidden md:flex flex-col bg-white border-r border-gray-200 overflow-y-auto shrink-0"
       style={{ width: 260, position: 'sticky', top: 56, height: 'calc(100vh - 56px)' }}>
@@ -82,18 +90,27 @@ function LeftSidebar({ exams, active }: { exams: ExamCard[]; active: string }) {
       </div>
 
       <div className="px-3 pb-3">
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1 mt-2">Filter by Category</p>
-        {CATEGORIES.map(cat => {
-          const isActive = cat.value === active;
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1 mt-2">Filter by Exam Type</p>
+
+        {/* All Exams */}
+        <Link href="/exams"
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+            ${ active === '' ? 'bg-orange-50 text-orange-600 font-semibold' : 'text-gray-700 hover:bg-gray-100' }`}>
+          <span className="text-base leading-none">📋</span>
+          <span>All Exams</span>
+        </Link>
+
+        {examTypes.map(et => {
+          const isActive = et.name === active;
           return (
-            <Link key={cat.label}
-              href={cat.value ? `/exams?category=${cat.value}` : '/exams'}
+            <Link key={et.id}
+              href={`/exams?category=${encodeURIComponent(et.name)}`}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
                 ${isActive ? 'bg-orange-50 text-orange-600 font-semibold' : 'text-gray-700 hover:bg-gray-100'}`}>
-              <span className="text-base leading-none">{cat.label.split(' ')[0]}</span>
-              <span>{cat.value || 'All Exams'}</span>
-              {cat.value && counts[cat.value] ? (
-                <span className="ml-auto text-xs text-gray-400">{counts[cat.value]}</span>
+              <span className="text-base leading-none">{categoryIcon(et.name)}</span>
+              <span>{et.name}</span>
+              {counts[et.name] ? (
+                <span className="ml-auto text-xs text-gray-400">{counts[et.name]}</span>
               ) : null}
             </Link>
           );
@@ -115,7 +132,7 @@ function LeftSidebar({ exams, active }: { exams: ExamCard[]; active: string }) {
   );
 }
 
-// ── Exam Card — pure CSS hover, no event handlers ─────────────────────────────
+// ── Exam Card ─────────────────────────────────────────────────────────────────
 function ExamCardItem({ exam }: { exam: ExamCard }) {
   return (
     <Link href={`/exam/${exam.slug}`}
@@ -129,7 +146,7 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
             className="object-cover group-hover:scale-105 transition-transform duration-300" unoptimized />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-4xl">
-            {categoryIcon(exam.category)}
+            {categoryIcon(exam.examTypeName)}
           </div>
         )}
         {exam.examLevelName && (
@@ -146,7 +163,7 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
 
       <div className="p-3 flex flex-col flex-1">
         <p className="text-xs text-orange-500 font-medium truncate">
-          {exam.conductingBody ?? exam.category ?? 'Government Exam'}
+          {exam.conductingBody ?? exam.examTypeName ?? 'Government Exam'}
         </p>
         <h3 className="text-sm font-bold text-gray-900 line-clamp-2 mt-0.5 group-hover:text-orange-600 leading-snug">
           {exam.title}
@@ -170,32 +187,43 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
   );
 }
 
-// ── Page — Header/Footer come from (public)/layout.tsx ────────────────────────
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default async function ExamsPage({
   searchParams
 }: {
   searchParams?: { category?: string; q?: string }
 }) {
-  const allExams = await getAllExams();
+  const [allExams, examTypes] = await Promise.all([getAllExams(), getExamTypes()]);
+
   const activeCategory = searchParams?.category ?? '';
   const searchQuery    = (searchParams?.q ?? '').toLowerCase();
 
+  // Filter by examTypeName (dynamic — driven by DB exam types)
   let filtered = activeCategory
-    ? allExams.filter(e => e.category === activeCategory)
+    ? allExams.filter(e => e.examTypeName === activeCategory)
     : allExams;
 
   if (searchQuery) {
     filtered = filtered.filter(e =>
       e.title.toLowerCase().includes(searchQuery) ||
-      (e.conductingBody ?? '').toLowerCase().includes(searchQuery)
+      (e.conductingBody ?? '').toLowerCase().includes(searchQuery) ||
+      (e.examTypeName ?? '').toLowerCase().includes(searchQuery)
     );
   }
 
-  const categoryLabel = CATEGORIES.find(c => c.value === activeCategory)?.label ?? 'All Exams';
+  // Count per exam type (for sidebar badges)
+  const counts: Record<string, number> = {};
+  allExams.forEach(e => {
+    if (e.examTypeName) counts[e.examTypeName] = (counts[e.examTypeName] ?? 0) + 1;
+  });
+
+  const categoryLabel = activeCategory
+    ? (examTypes.find(t => t.name === activeCategory)?.name ?? activeCategory)
+    : 'All Exams';
 
   return (
     <div className="flex bg-gray-50 min-h-screen">
-      <LeftSidebar exams={allExams} active={activeCategory} />
+      <LeftSidebar examTypes={examTypes} active={activeCategory} counts={counts} />
 
       <main className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-5 pb-24 md:pb-6">
 
@@ -214,20 +242,30 @@ export default async function ExamsPage({
           )}
         </nav>
 
-        {/* Filter pills */}
+        {/* Filter pills — dynamic from DB */}
         <div className="overflow-x-auto scrollbar-hide mb-5 -mx-4 px-4 md:-mx-0 md:px-0">
           <div className="flex items-center gap-2 min-w-max">
-            {CATEGORIES.map(cat => {
-              const isActive = cat.value === activeCategory;
+            {/* All */}
+            <Link href="/exams"
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
+                ${ activeCategory === ''
+                  ? 'bg-orange-500 text-white border-orange-500'
+                  : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
+                }`}>
+              All Exams
+            </Link>
+
+            {examTypes.map(et => {
+              const isActive = et.name === activeCategory;
               return (
-                <Link key={cat.label}
-                  href={cat.value ? `/exams?category=${cat.value}` : '/exams'}
+                <Link key={et.id}
+                  href={`/exams?category=${encodeURIComponent(et.name)}`}
                   className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
                     ${isActive
                       ? 'bg-orange-500 text-white border-orange-500'
                       : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
                     }`}>
-                  {cat.label}
+                  {categoryIcon(et.name)} {et.name}
                 </Link>
               );
             })}
