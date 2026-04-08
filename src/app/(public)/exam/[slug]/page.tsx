@@ -159,10 +159,10 @@ export default async function ExamDetailPage({ params }: PageProps) {
 
       {/* ── Hero ───────────────────────────────────────────────────────────────── */}
 
-      {/* Banner strip */}
-      <div className="relative w-full h-48 md:h-64 overflow-hidden"
-        style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
-        {(exam.bannerUrl || exam.thumbnailUrl) && (
+      {/* Banner strip — only shown when a banner/thumbnail image exists */}
+      {(exam.bannerUrl || exam.thumbnailUrl) && (
+        <div className="relative w-full h-48 md:h-64 overflow-hidden"
+          style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
           <Image
             src={exam.bannerUrl ?? exam.thumbnailUrl!}
             alt={exam.title}
@@ -172,12 +172,12 @@ export default async function ExamDetailPage({ params }: PageProps) {
             sizes="100vw"
             unoptimized
           />
-        )}
-        {/* Radial glow like design */}
-        <div className="absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse at 70% 50%, rgba(249,115,22,.15), transparent 60%)' }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
-      </div>
+          {/* Radial glow */}
+          <div className="absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse at 70% 50%, rgba(249,115,22,.15), transparent 60%)' }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+        </div>
+      )}
 
       {/* Info section */}
       <div className="text-white" style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
@@ -185,7 +185,7 @@ export default async function ExamDetailPage({ params }: PageProps) {
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center">
 
             {/* Thumbnail / Logo */}
-            <div className="shrink-0 -mt-14 md:-mt-16">
+            <div className={`shrink-0 ${(exam.bannerUrl || exam.thumbnailUrl) ? '-mt-14 md:-mt-16' : ''}`}>
               {exam.thumbnailUrl ? (
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden
                   border-4 border-orange-400/40 shadow-2xl bg-white">
