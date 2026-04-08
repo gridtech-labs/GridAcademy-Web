@@ -10,14 +10,14 @@ import {
 // ── Data fetching ─────────────────────────────────────────────────────────────
 async function getAllExams(): Promise<ExamCard[]> {
   try {
-    const res = await api.get<ExamCard[]>('/api/exams');
+    const res = await api.get<ExamCard[]>('/api/exam-pages');
     return Array.isArray(res) ? res : (res as any)?.data ?? [];
   } catch { return []; }
 }
 
 async function getExamTypes(): Promise<ExamTypeFilter[]> {
   try {
-    const res = await api.get<ExamTypeFilter[]>('/api/exams/exam-types');
+    const res = await api.get<ExamTypeFilter[]>('/api/exam-pages/exam-types');
     return Array.isArray(res) ? res : (res as any)?.data ?? [];
   } catch { return []; }
 }
