@@ -4,7 +4,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExamCard } from '@/types/exam';
+import { ExamCard, ExamTypeFilter } from '@/types/exam';
 import {
   FileText, Star, ChevronRight, Zap,
   Home, BookOpen, Trophy, BarChart2, Search
@@ -17,18 +17,20 @@ import {
 interface ExamLevel { id: number; name: string; examCount: number; }
 
 // ── Data fetching ─────────────────────────────────────────────────────────────
-async function getHomeData(): Promise<{ exams: ExamCard[]; levels: ExamLevel[] }> {
+async function getHomeData(): Promise<{ exams: ExamCard[]; levels: ExamLevel[]; examTypes: ExamTypeFilter[] }> {
   try {
-    const [exams, levels] = await Promise.all([
-      api.get<ExamCard[]>('/api/exams?activeOnly=true').catch(() => [] as ExamCard[]),
-      api.get<any>('/api/exams/levels').catch(() => [] as ExamLevel[]),
+    const [exams, levels, examTypes] = await Promise.all([
+      api.get<ExamCard[]>('/api/exam-pages?activeOnly=true').catch(() => [] as ExamCard[]),
+      api.get<any>('/api/exam-pages/levels').catch(() => [] as ExamLevel[]),
+      api.get<ExamTypeFilter[]>('/api/exam-pages/exam-types').catch(() => [] as ExamTypeFilter[]),
     ]);
     return {
-      exams: Array.isArray(exams) ? exams : (exams as any)?.data ?? [],
-      levels: Array.isArray(levels) ? levels : (levels as any)?.data ?? [],
+      exams:     Array.isArray(exams)      ? exams      : (exams as any)?.data      ?? [],
+      levels:    Array.isArray(levels)     ? levels     : (levels as any)?.data     ?? [],
+      examTypes: Array.isArray(examTypes)  ? examTypes  : (examTypes as any)?.data  ?? [],
     };
   } catch {
-    return { exams: [], levels: [] };
+    return { exams: [], levels: [], examTypes: [] };
   }
 }
 
@@ -42,35 +44,33 @@ function formatPrice(price: number): string {
   return `₹${price.toLocaleString('en-IN')}`;
 }
 
-// ── Category config ───────────────────────────────────────────────────────────
-const CATEGORIES = [
-  { label: 'All Exams', value: '' },
-  { label: '🚂 Railway', value: 'Railway' },
-  { label: '🏛️ UPSC', value: 'UPSC' },
-  { label: '🏦 Banking', value: 'Banking' },
-  { label: '👮 SSC', value: 'SSC' },
-  { label: '🔬 GATE', value: 'GATE' },
-  { label: '📐 Defence', value: 'Defence' },
-];
-
-// Icon & color for each category
-function categoryIcon(cat: string | null): string {
-  switch (cat) {
-    case 'Railway':  return '🚂';
-    case 'UPSC':     return '🏛️';
-    case 'Banking':  return '🏦';
-    case 'SSC':      return '👮';
-    case 'GATE':     return '🔬';
-    case 'Defence':  return '📐';
-    default:         return '📝';
-  }
+// ── Exam type icon mapping (extendable) ───────────────────────────────────────
+function examTypeIcon(name: string | null): string {
+  if (!name) return '📝';
+  const map: Record<string, string> = {
+    'Railway':   '🚂',
+    'UPSC':      '🏛️',
+    'Banking':   '🏦',
+    'SSC':       '👮',
+    'GATE':      '🔬',
+    'Defence':   '📐',
+    'CUET':      '📚',
+    'JEE':       '🧪',
+    'NEET':      '🩺',
+    'State PSC': '🏢',
+    'Teaching':  '🎓',
+    'Police':    '🚔',
+    'Central':   '🏛️',
+  };
+  return map[name] ?? '📝';
 }
 
 // ── Sidebar (tablet+) ─────────────────────────────────────────────────────────
-function LeftSidebar({ exams }: { exams: ExamCard[] }) {
-  const categoryCounts: Record<string, number> = {};
+function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamTypeFilter[] }) {
+  // Count exams per exam type from the fetched list
+  const typeCounts: Record<string, number> = {};
   exams.forEach(e => {
-    if (e.category) categoryCounts[e.category] = (categoryCounts[e.category] ?? 0) + 1;
+    if (e.examTypeName) typeCounts[e.examTypeName] = (typeCounts[e.examTypeName] ?? 0) + 1;
   });
 
   return (
@@ -104,16 +104,16 @@ function LeftSidebar({ exams }: { exams: ExamCard[] }) {
         </Link>
       </div>
 
-      {/* Category nav */}
+      {/* Exam type nav — dynamic from DB */}
       <div className="px-3 pb-3">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1 mt-2">Exam Categories</p>
-        {CATEGORIES.filter(c => c.value).map(cat => (
-          <Link key={cat.value} href={`/?category=${cat.value}`}
+        {examTypes.map(t => (
+          <Link key={t.id} href={`/?category=${encodeURIComponent(t.name)}`}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
-            <span className="text-base leading-none">{cat.label.split(' ')[0]}</span>
-            <span>{cat.value}</span>
-            {categoryCounts[cat.value] ? (
-              <span className="ml-auto text-xs text-gray-400">{categoryCounts[cat.value]}</span>
+            <span className="text-base leading-none">{examTypeIcon(t.name)}</span>
+            <span>{t.name}</span>
+            {typeCounts[t.name] ? (
+              <span className="ml-auto text-xs text-gray-400">{typeCounts[t.name]}</span>
             ) : null}
           </Link>
         ))}
@@ -227,7 +227,7 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
 
 // ── Exam Card ─────────────────────────────────────────────────────────────────
 function ExamCardItem({ exam }: { exam: ExamCard }) {
-  const icon = categoryIcon(exam.category);
+  const icon = examTypeIcon(exam.examTypeName ?? exam.category);
   return (
     <Link href={`/exam/${exam.slug}`}
       className="group flex flex-col bg-white rounded-xl overflow-hidden transition-all duration-200
@@ -284,7 +284,7 @@ export const metadata: Metadata = {
   title: "GridAcademy — India's Best Mock Test Platform",
   description:
     "Prepare for SSC, Banking, Railway, UPSC and more with expert-created mock tests.",
-    
+
   alternates: {
     canonical: "https://www.gridacademy.in/",
   },
@@ -308,16 +308,19 @@ export const metadata: Metadata = {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default async function HomePage({ searchParams }: { searchParams?: { category?: string } }) {
-  const { exams } = await getHomeData();
+  const { exams, examTypes } = await getHomeData();
   const activeCategory = searchParams?.category ?? '';
 
-  // Filter client-side (avoids API category param which needs DB migration)
+  // Max 8 exam types shown as tabs (+ "All Exams" = 9 total)
+  const tabExamTypes = examTypes.slice(0, 8);
+
+  // Filter by examTypeName (dynamic exam type from DB)
   const filteredExams = activeCategory
-    ? exams.filter(e => e.category === activeCategory)
+    ? exams.filter(e => e.examTypeName === activeCategory)
     : exams;
 
-  const featured  = exams.filter(e => e.isFeatured);  // always from full list for hero
-  const latest    = filteredExams.slice(0, 16);
+  const featured = exams.filter(e => e.isFeatured);  // always from full list for hero
+  const latest   = filteredExams.slice(0, 16);
 
   return (
     <>
@@ -348,25 +351,37 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
 
       <div className="flex bg-gray-50 min-h-screen">
         {/* Left Sidebar */}
-        <LeftSidebar exams={exams} />
+        <LeftSidebar exams={exams} examTypes={tabExamTypes} />
 
         {/* Main content */}
         <main className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-5 pb-20 md:pb-6">
 
-          {/* ── Filter pills ────────────────────────────────────────── */}
+          {/* ── Filter pills — dynamic exam types (max 9 incl. "All Exams") ── */}
           <div className="overflow-x-auto scrollbar-hide mb-5 -mx-4 px-4 md:-mx-6 md:px-6">
             <div className="flex items-center gap-2 min-w-max">
-              {CATEGORIES.map(cat => {
-                const isActive = cat.value === activeCategory;
+              {/* "All Exams" pill */}
+              <Link
+                href="/"
+                className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
+                  ${activeCategory === ''
+                    ? 'bg-orange-500 text-white border-orange-500'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
+                  }`}>
+                All Exams
+              </Link>
+
+              {/* Dynamic exam type pills */}
+              {tabExamTypes.map(t => {
+                const isActive = t.name === activeCategory;
                 return (
-                  <Link key={cat.label}
-                    href={cat.value ? `/?category=${cat.value}` : '/'}
+                  <Link key={t.id}
+                    href={`/?category=${encodeURIComponent(t.name)}`}
                     className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
                       ${isActive
                         ? 'bg-orange-500 text-white border-orange-500'
                         : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
                       }`}>
-                    {cat.label}
+                    {examTypeIcon(t.name)} {t.name}
                   </Link>
                 );
               })}
@@ -432,7 +447,9 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           {latest.length > 0 && (
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-bold text-gray-900">Explore Exams</h2>
+                <h2 className="text-base font-bold text-gray-900">
+                  {activeCategory ? `${activeCategory} Exams` : 'Explore Exams'}
+                </h2>
                 <Link href="/exams"
                   className="text-sm font-semibold hover:opacity-80 flex items-center gap-1"
                   style={{ color: '#f97316' }}>
@@ -446,18 +463,34 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           )}
 
           {/* ── Empty state ──────────────────────────────────────────── */}
-          {exams.length === 0 && (
+          {latest.length === 0 && (
             <div className="text-center py-20">
               <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-700">Exams Coming Soon</h2>
-              <p className="text-gray-400 mt-2 text-sm max-w-md mx-auto">
-                We&apos;re adding new exams and mock tests. Register to get notified when they go live.
-              </p>
-              <Link href="/register"
-                className="mt-6 inline-flex items-center gap-2 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90"
-                style={{ background: '#f97316' }}>
-                Get Notified <ChevronRight className="w-4 h-4" />
-              </Link>
+              {activeCategory ? (
+                <>
+                  <h2 className="text-xl font-semibold text-gray-700">No {activeCategory} Exams Yet</h2>
+                  <p className="text-gray-400 mt-2 text-sm max-w-md mx-auto">
+                    We&apos;re adding {activeCategory} exams soon. Check back shortly or browse all exams.
+                  </p>
+                  <Link href="/"
+                    className="mt-6 inline-flex items-center gap-2 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90"
+                    style={{ background: '#f97316' }}>
+                    View All Exams <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-xl font-semibold text-gray-700">Exams Coming Soon</h2>
+                  <p className="text-gray-400 mt-2 text-sm max-w-md mx-auto">
+                    We&apos;re adding new exams and mock tests. Register to get notified when they go live.
+                  </p>
+                  <Link href="/register"
+                    className="mt-6 inline-flex items-center gap-2 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90"
+                    style={{ background: '#f97316' }}>
+                    Get Notified <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </>
+              )}
             </div>
           )}
         </main>
@@ -470,9 +503,9 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 grid grid-cols-4"
         style={{ height: 60, boxShadow: '0 -2px 10px rgba(0,0,0,.06)' }}>
         {[
-          { icon: <Home className="w-5 h-5" />, label: 'Home',   href: '/',          active: true },
-          { icon: <Search className="w-5 h-5" />, label: 'Search', href: '/exams',    active: false },
-          { icon: <FileText className="w-5 h-5" />, label: 'Tests', href: '/tests',   active: false },
+          { icon: <Home className="w-5 h-5" />, label: 'Home',    href: '/',           active: true },
+          { icon: <Search className="w-5 h-5" />, label: 'Search', href: '/exams',     active: false },
+          { icon: <FileText className="w-5 h-5" />, label: 'Tests', href: '/tests',    active: false },
           { icon: <BookOpen className="w-5 h-5" />, label: 'Profile', href: '/dashboard', active: false },
         ].map(item => (
           <Link key={item.label} href={item.href}
