@@ -22,7 +22,7 @@ interface PageProps { params: { slug: string } }
 
 // export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
 //   try {
-//     const exam = await api.get<ExamDetail>(`/api/exams/${params.slug}`);
+//     const exam = await api.get<ExamDetail>(`/api/exam-pages/${params.slug}`);
 //     if (!exam) return { title: 'Exam Details' };
 //     return {
 //       title: exam.metaTitle ?? exam.title,
@@ -34,7 +34,7 @@ interface PageProps { params: { slug: string } }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
-    const exam = await api.get<ExamDetail>(`/api/exams/${params.slug}`);
+    const exam = await api.get<ExamDetail>(`/api/exam-pages/${params.slug}`);
     if (!exam) return { title: "Exam Details" };
 
     const url = `https://www.gridacademy.in/exam/${params.slug}`;
@@ -90,7 +90,7 @@ export default async function ExamDetailPage({ params }: PageProps) {
 
   let exam: ExamDetail;
   try {
-    const data = await api.get<ExamDetail>(`/api/exams/${params.slug}`);
+    const data = await api.get<ExamDetail>(`/api/exam-pages/${params.slug}`);
     if (!data) notFound();
     exam = data;
   } catch { notFound(); }
