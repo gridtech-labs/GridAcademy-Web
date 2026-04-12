@@ -1,11 +1,13 @@
-import { CheckCircle, BookOpen } from 'lucide-react';
+import { CheckCircle, BookOpen, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CheckoutSuccessPage({
   searchParams,
 }: {
-  searchParams: { ref?: string };
+  searchParams: { ref?: string; exam?: string };
 }) {
+  const examSlug = searchParams.exam;
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-xl max-w-md w-full p-10 text-center">
@@ -15,13 +17,19 @@ export default function CheckoutSuccessPage({
         <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Payment Successful! 🎉</h1>
         <p className="text-gray-500 mb-2">Your booking is confirmed.</p>
         {searchParams.ref && (
-          <p className="text-xs text-gray-400 font-mono mb-6">Ref: {searchParams.ref}</p>
+          <p className="text-xs text-gray-400 font-mono mb-4">Ref: {searchParams.ref}</p>
         )}
         <p className="text-sm text-gray-600 mb-8">
           A confirmation email has been sent to your registered email address.
-          You can now access your test series from My Tests.
+          You now have full access to all tests in this exam series.
         </p>
         <div className="flex flex-col gap-3">
+          {examSlug ? (
+            <Link href={`/exam/${examSlug}`}
+              className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-colors">
+              <ArrowRight className="w-5 h-5" /> Start Preparing Now
+            </Link>
+          ) : null}
           <Link href="/dashboard"
             className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition-colors">
             <BookOpen className="w-5 h-5" /> Go to My Tests

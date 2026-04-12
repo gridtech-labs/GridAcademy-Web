@@ -9,6 +9,7 @@ import { api } from '@/lib/api-client';
 import { ExamDetail, ImportantDate } from '@/types/exam';
 import ExamDetailTabs from '@/components/exam/ExamDetailTabs';
 import FreeTestButton from '@/components/exam/FreeTestButton';
+import ExamBuyButton from '@/components/exam/ExamBuyButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import {
@@ -94,6 +95,34 @@ export default async function ExamDetailPage({ params }: PageProps) {
     if (!data) notFound();
     exam = data;
   } catch { notFound(); }
+
+  // Check if user already has access (for paid exams)
+  let hasAccess = false;
+  let examOffers: any[] = [];
+  if (exam.priceInr > 0) {
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
+    // Check access
+    if (session && token) {
+      try {
+        const accessRes = await fetch(`${API_BASE}/api/exam-payment/access/${exam.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: 'no-store',
+        });
+        if (accessRes.ok) {
+          const accessJson = await accessRes.json();
+          hasAccess = (accessJson.data ?? accessJson)?.hasAccess === true;
+        }
+      } catch { /* ignore */ }
+    }
+    // Fetch available offers (public)
+    try {
+      const offersRes = await fetch(`${API_BASE}/api/exam-payment/offers/${exam.id}`, { cache: 'no-store' });
+      if (offersRes.ok) {
+        const offersJson = await offersRes.json();
+        examOffers = offersJson.data ?? offersJson ?? [];
+      }
+    } catch { /* ignore */ }
+  }
 
   let importantDates: ImportantDate[] = [];
   if (exam.importantDates) {
@@ -298,6 +327,27 @@ export default async function ExamDetailPage({ params }: PageProps) {
 
           {/* Right: Sidebar */}
           <aside className="w-full lg:w-80 shrink-0 space-y-5 lg:sticky lg:top-20">
+
+            {/* Buy / Access card — shown only for paid exams */}
+            {exam.priceInr > 0 && (
+              <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-gray-900 text-base">Get Full Access</h3>
+                  <span className="text-lg font-extrabold text-orange-600">
+                    ₹{exam.priceInr.toLocaleString('en-IN')}
+                  </span>
+                </div>
+                <ExamBuyButton
+                  examPageId={exam.id}
+                  examTitle={exam.title}
+                  examSlug={exam.slug}
+                  priceInr={exam.priceInr}
+                  hasAccess={hasAccess}
+                  token={token}
+                  offers={examOffers}
+                />
+              </div>
+            )}
 
             {/* Tests card — primary action */}
             {exam.tests.length > 0 && (
