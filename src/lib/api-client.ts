@@ -39,7 +39,7 @@ async function request<T>(
 
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE}${path}`, { ...fetchOptions, headers });
+  const res = await fetch(`${API_BASE}${path}`, { ...fetchOptions, headers, cache: 'no-store' });
 
   if (!res.ok) {
     let message = `HTTP ${res.status}`;
