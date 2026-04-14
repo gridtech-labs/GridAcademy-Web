@@ -6,10 +6,11 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { api } from '@/lib/api-client';
-import { ExamDetail, ImportantDate } from '@/types/exam';
+import { ExamDetail, ExamFaq, ImportantDate } from '@/types/exam';
 import ExamDetailTabs from '@/components/exam/ExamDetailTabs';
 import FreeTestButton from '@/components/exam/FreeTestButton';
 import ExamBuyButton from '@/components/exam/ExamBuyButton';
+import ExamFaqSection from '@/components/exam/ExamFaqSection';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import {
@@ -18,6 +19,7 @@ import {
   Tag, ExternalLink, Users,
 } from 'lucide-react';
 import { stripHtml } from '@/lib/utils';
+import { getStaticFaqs } from '@/lib/static-faqs';
 
 interface PageProps { params: { slug: string } }
 
@@ -129,6 +131,12 @@ export default async function ExamDetailPage({ params }: PageProps) {
     try { importantDates = JSON.parse(exam.importantDates); } catch { /* ignore */ }
   }
 
+  let faqs: ExamFaq[] = [];
+  if (exam.faqs) {
+    try { faqs = JSON.parse(exam.faqs); } catch { /* ignore */ }
+  }
+  if (faqs.length === 0) faqs = getStaticFaqs(exam.slug);
+
   const tabs = [
     { id: 'overview',    label: 'Overview',        icon: 'BookOpen',  content: exam.overview },
     { id: 'eligibility', label: 'Eligibility',     icon: 'Users',     content: exam.eligibility },
@@ -165,6 +173,25 @@ export default async function ExamDetailPage({ params }: PageProps) {
     }),
   }}
 />
+{faqs.length > 0 && (
+  <script
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+      __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map(faq => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      }),
+    }}
+  />
+)}
     <div className="min-h-screen bg-gray-50">
 
       {/* ── Breadcrumb ─────────────────────────────────────────────────────────── */}
@@ -482,6 +509,10 @@ export default async function ExamDetailPage({ params }: PageProps) {
           </aside>
         </div>
       </div>
+
+      {/* ── FAQ Section ────────────────────────────────────────────────────────── */}
+      {faqs.length > 0 && <ExamFaqSection faqs={faqs} />}
+
     </div>
     </>
   );
