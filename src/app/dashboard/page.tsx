@@ -86,12 +86,15 @@ export default async function DashboardPage() {
             <p className="text-indigo-100 text-sm mt-1">Continue your exam preparation</p>
           </div>
 
-          {/* Debug error banner — remove after diagnosis */}
-          {fetchError && (
-            <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-xs text-red-700 font-mono break-all">
-              <strong>API Error:</strong> {fetchError}
-            </div>
-          )}
+          {/* Debug banner — remove after diagnosis */}
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-3 text-xs text-yellow-800 font-mono break-all space-y-1">
+            <div><strong>API URL:</strong> {process.env.NEXT_PUBLIC_API_URL ?? '(not set — using localhost:5000)'}</div>
+            <div><strong>User ID:</strong> {user?.id ?? '(none)'}</div>
+            {fetchError
+              ? <div className="text-red-700"><strong>Error:</strong> {fetchError}</div>
+              : <div className="text-green-700"><strong>Tests fetched:</strong> {tests.length} records</div>
+            }
+          </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
