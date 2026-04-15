@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   BookOpen, Loader2, Eye, EyeOff, CheckCircle,
@@ -16,7 +17,10 @@ const PERKS = [
   { icon: Clock,      text: 'Practice anytime — mobile-friendly'        },
 ];
 
-export default function RegisterPage() {
+function RegisterForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl  = searchParams.get('callbackUrl') ?? '/dashboard';
+
   const [name,            setName]            = useState('');
   const [email,           setEmail]           = useState('');
   const [password,        setPassword]        = useState('');
@@ -71,9 +75,10 @@ export default function RegisterPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Account Created! 🎉</h2>
           <p className="text-gray-500 text-sm mb-6 leading-relaxed">
             Welcome to GridAcademy, <strong className="text-gray-800">{name}</strong>!<br />
-            Your account has been created. Start preparing today.
+            Your account has been created. Sign in to start preparing.
           </p>
-          <Link href="/login"
+          <Link
+            href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
             className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-colors text-center">
             Sign In Now →
           </Link>
@@ -229,7 +234,7 @@ export default function RegisterPage() {
 
             <p className="text-center text-sm text-gray-500 mt-6">
               Already have an account?{' '}
-              <Link href="/login" className="text-orange-600 font-semibold hover:underline">Sign In</Link>
+              <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="text-orange-600 font-semibold hover:underline">Sign In</Link>
             </p>
           </div>
 
@@ -242,5 +247,17 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <RegisterForm />
+    </Suspense>
   );
 }

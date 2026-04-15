@@ -188,3 +188,26 @@ export interface FreeAccessResponse {
   assignmentId: string;
   attemptId?: string;
 }
+
+// ── Attempt Instructions Info (lightweight — no question data) ────────────────
+
+export interface AttemptSectionInfo {
+  name: string;
+  subjectName: string;
+  questionCount: number;
+  marksPerQuestion: number;
+  negativeMarksPerQuestion: number;
+}
+
+export interface AttemptInfo {
+  attemptId: string;
+  assignmentId: string;
+  testTitle: string;
+  instructions: string | null;
+  durationMinutes: number;
+  totalQuestions: number;
+  passingPercent: number;
+  negativeMarkingEnabled: boolean;
+  instructionsAcknowledged: boolean;
+  sections: AttemptSectionInfo[];
+}

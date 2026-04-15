@@ -81,7 +81,9 @@ export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token,
         if (!attemptId) throw new Error('No attempt ID returned');
       }
 
-      router.push(`/attempt/${attemptId}`);
+      // Always go to instructions first — the instructions page will redirect
+      // to /attempt/{attemptId} after the student acknowledges the rules.
+      router.push(`/instructions/${attemptId}`);
     } catch (err: any) {
       setError(err?.message ?? 'Something went wrong. Please try again.');
       setLoading(false);

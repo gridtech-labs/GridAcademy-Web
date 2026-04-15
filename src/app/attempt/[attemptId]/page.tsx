@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import { api } from '@/lib/api-client';
-import { AttemptState } from '@/types/exam';
+import { AttemptState, AttemptInfo } from '@/types/exam';
 import { redirect } from 'next/navigation';
 import AttemptEngine from '@/components/exam/AttemptEngine';
 
@@ -24,6 +24,28 @@ export default async function AttemptPage({ params }: PageProps) {
 
   const token = (session.user as any).accessToken as string;
 
+  // ── Instructions gate ────────────────────────────────────────────────────
+  // Check InstructionsAcknowledged BEFORE loading the full exam state.
+  // This ensures the instructions page is always shown regardless of how
+  // the attempt was created (API, payment flow, free-access, etc.).
+  let info: AttemptInfo | null = null;
+  try {
+    info = await api.get<AttemptInfo>(
+      `/api/assessment/attempts/${params.attemptId}/info`,
+      token,
+    );
+  } catch {
+    redirect('/dashboard');
+  }
+
+  if (!info) redirect('/dashboard');
+
+  if (!info.instructionsAcknowledged) {
+    // Student hasn't read/accepted instructions yet — send them there first
+    redirect(`/instructions/${params.attemptId}`);
+  }
+
+  // ── Load full attempt state ──────────────────────────────────────────────
   let attemptState: AttemptState;
   try {
     const data = await api.get<AttemptState>(
