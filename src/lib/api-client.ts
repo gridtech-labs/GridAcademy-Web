@@ -26,6 +26,13 @@ export class ApiError extends Error {
   }
 }
 
+export class UnauthorizedError extends ApiError {
+  constructor() {
+    super(401, 'Session expired. Please log in again.');
+    this.name = 'UnauthorizedError';
+  }
+}
+
 async function request<T>(
   path: string,
   options: RequestInit & { token?: string } = {}
@@ -42,6 +49,7 @@ async function request<T>(
   const res = await fetch(`${API_BASE}${path}`, { ...fetchOptions, headers, cache: 'no-store' });
 
   if (!res.ok) {
+    if (res.status === 401) throw new UnauthorizedError();
     let message = `HTTP ${res.status}`;
     try {
       const err = await res.json();

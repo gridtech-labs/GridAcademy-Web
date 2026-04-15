@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
-import { api } from '@/lib/api-client';
+import { api, UnauthorizedError } from '@/lib/api-client';
 import { redirect } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import {
@@ -53,12 +53,15 @@ export default async function DashboardPage() {
 
   // Fetch the student's test assignments from the LMS
   let tests: TestCard[] = [];
-  let fetchError: string | null = null;
   try {
     tests = await api.get<TestCard[]>('/api/assessment/my-tests', token);
   } catch (e: any) {
-    fetchError = e?.message ?? String(e);
-    console.error('[dashboard] my-tests fetch error:', fetchError, '| token prefix:', token?.slice(0, 20));
+    if (e instanceof UnauthorizedError) {
+      // Token expired — force re-login to get a fresh token
+      redirect('/api/auth/signout?callbackUrl=/login');
+    }
+    console.error('[dashboard] my-tests fetch error:', e?.message);
+    // Other errors: show empty dashboard rather than crashing
   }
 
   const now = new Date();
@@ -84,16 +87,6 @@ export default async function DashboardPage() {
           <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-white">
             <h1 className="text-2xl font-bold">Welcome back, {user?.name?.split(' ')[0] ?? 'Student'}! 👋</h1>
             <p className="text-indigo-100 text-sm mt-1">Continue your exam preparation</p>
-          </div>
-
-          {/* Debug banner — remove after diagnosis */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-3 text-xs text-yellow-800 font-mono break-all space-y-1">
-            <div><strong>API URL:</strong> {process.env.NEXT_PUBLIC_API_URL ?? '(not set — using localhost:5000)'}</div>
-            <div><strong>User ID:</strong> {user?.id ?? '(none)'}</div>
-            {fetchError
-              ? <div className="text-red-700"><strong>Error:</strong> {fetchError}</div>
-              : <div className="text-green-700"><strong>Tests fetched:</strong> {tests.length} records</div>
-            }
           </div>
 
           {/* Stats */}
