@@ -52,7 +52,14 @@ export default async function DashboardPage() {
   const user  = session.user as any;
 
   // Fetch the student's test assignments from the LMS
-  const tests = await api.get<TestCard[]>('/api/assessment/my-tests', token).catch(() => [] as TestCard[]);
+  let tests: TestCard[] = [];
+  let fetchError: string | null = null;
+  try {
+    tests = await api.get<TestCard[]>('/api/assessment/my-tests', token);
+  } catch (e: any) {
+    fetchError = e?.message ?? String(e);
+    console.error('[dashboard] my-tests fetch error:', fetchError, '| token prefix:', token?.slice(0, 20));
+  }
 
   const now = new Date();
 
@@ -78,6 +85,13 @@ export default async function DashboardPage() {
             <h1 className="text-2xl font-bold">Welcome back, {user?.name?.split(' ')[0] ?? 'Student'}! 👋</h1>
             <p className="text-indigo-100 text-sm mt-1">Continue your exam preparation</p>
           </div>
+
+          {/* Debug error banner — remove after diagnosis */}
+          {fetchError && (
+            <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-xs text-red-700 font-mono break-all">
+              <strong>API Error:</strong> {fetchError}
+            </div>
+          )}
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
