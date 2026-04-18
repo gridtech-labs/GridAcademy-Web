@@ -52,6 +52,28 @@ export const authOptions: NextAuthOptions = {
         } catch { return null; }
       },
     }),
+    CredentialsProvider({
+      id: 'quick-access',
+      name: 'Quick Access',
+      credentials: {
+        email:  { label: 'Email',  type: 'email' },
+        mobile: { label: 'Mobile', type: 'text'  },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.mobile) return null;
+        try {
+          const res = await fetch(`${API_BASE}/api/auth/quick-access`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: credentials.email, mobile: credentials.mobile }),
+          });
+          if (!res.ok) return null;
+          const json = await res.json();
+          const d = json.data;
+          return { id: String(d.userId), name: d.fullName, email: d.email, role: d.role, accessToken: d.accessToken };
+        } catch { return null; }
+      },
+    }),
     ...(process.env.GOOGLE_CLIENT_ID
       ? [GoogleProvider({ clientId: process.env.GOOGLE_CLIENT_ID!, clientSecret: process.env.GOOGLE_CLIENT_SECRET! })]
       : []),
