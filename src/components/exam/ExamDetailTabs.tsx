@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ImportantDate } from '@/types/exam';
 import {
   BookOpen, Users, FileText, Trophy,
@@ -91,23 +91,7 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
         {active?.id === 'dates' ? (
           <ImportantDatesTable dates={importantDates} />
         ) : active?.content ? (
-          <div
-            className="
-              prose prose-sm max-w-none
-              prose-headings:font-bold prose-headings:text-gray-900 prose-headings:mt-6 prose-headings:mb-2
-              prose-h2:text-lg prose-h3:text-base
-              prose-p:text-gray-700 prose-p:leading-relaxed prose-p:my-2
-              prose-li:text-gray-700 prose-li:leading-relaxed
-              prose-ul:my-2 prose-ol:my-2
-              prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-gray-900
-              prose-table:border prose-table:border-gray-200 prose-table:rounded-lg
-              prose-th:bg-indigo-50 prose-th:text-gray-700 prose-th:font-semibold prose-th:px-4 prose-th:py-2
-              prose-td:px-4 prose-td:py-2 prose-td:border-b prose-td:border-gray-100
-              prose-img:rounded-xl prose-img:shadow-sm
-            "
-            dangerouslySetInnerHTML={{ __html: active.content }}
-          />
+          <RichContent html={active.content} />
         ) : (
           <div className="py-10 text-center text-gray-400">
             <FileText className="w-10 h-10 mx-auto mb-3 opacity-30" />
@@ -116,6 +100,30 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
         )}
       </div>
     </div>
+  );
+}
+
+function RichContent({ html }: { html: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    // Wrap bare tables in a scroll container so they don't overflow on mobile
+    ref.current.querySelectorAll('table').forEach(table => {
+      if (table.parentElement?.classList.contains('table-scroll-wrapper')) return;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'table-scroll-wrapper';
+      table.parentNode?.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+  }, [html]);
+
+  return (
+    <div
+      ref={ref}
+      className="exam-rich-content"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
   );
 }
 

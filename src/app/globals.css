@@ -35,3 +35,158 @@ body {
     text-wrap: balance;
   }
 }
+
+/* ── Exam rich-text content ──────────────────────────────────────────────────
+   All rules use !important to override inline styles injected by the CMS/backend.
+   Wrap with class="exam-rich-content" on the dangerouslySetInnerHTML container.
+──────────────────────────────────────────────────────────────────────────── */
+.exam-rich-content {
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+  color: #374151 !important;
+}
+
+/* Headings */
+.exam-rich-content h1,
+.exam-rich-content h2,
+.exam-rich-content h3,
+.exam-rich-content h4 {
+  font-weight: 700 !important;
+  color: #111827 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.35 !important;
+}
+.exam-rich-content h1 { font-size: 1.25rem !important; }
+.exam-rich-content h2 { font-size: 1.125rem !important; }
+.exam-rich-content h3 { font-size: 1rem !important; }
+.exam-rich-content h4 { font-size: 0.9375rem !important; }
+
+/* Paragraphs */
+.exam-rich-content p {
+  color: #374151 !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.7 !important;
+  font-size: 0.875rem !important;
+}
+
+/* Lists */
+.exam-rich-content ul,
+.exam-rich-content ol {
+  padding-left: 1.5rem !important;
+  margin: 0.75rem 0 !important;
+}
+.exam-rich-content ul { list-style-type: disc !important; }
+.exam-rich-content ol { list-style-type: decimal !important; }
+.exam-rich-content li {
+  color: #374151 !important;
+  margin: 0.3rem 0 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
+}
+
+/* Strong / em */
+.exam-rich-content strong,
+.exam-rich-content b {
+  font-weight: 700 !important;
+  color: #111827 !important;
+}
+.exam-rich-content em { font-style: italic !important; }
+
+/* Links */
+.exam-rich-content a {
+  color: #4f46e5 !important;
+  text-decoration: underline !important;
+}
+
+/* ── Tables ── */
+
+figure.table {
+  max-width: 100%;
+}
+
+/* Responsive scroll wrapper injected by RichContent useEffect */
+.exam-rich-content .table-scroll-wrapper {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.06) !important;
+  margin: 1.25rem 0 !important;
+}
+
+.exam-rich-content table {
+  /* width: auto lets the table be its natural content width (e.g. 892px).
+     min-width: 100% ensures it fills the container when content is narrow.
+     Together with the scroll wrapper's overflow-x:auto, wide tables scroll. */
+  width: auto !important;
+  min-width: 100% !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  font-size: 0.8125rem !important;
+  background-color: #ffffff !important;
+  display: table !important;
+}
+
+/* When inside scroll wrapper, remove outer decorations (wrapper owns them) */
+.exam-rich-content .table-scroll-wrapper table {
+  margin: 0 !important;
+  
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Fallback for tables NOT yet wrapped (SSR / before hydration) */
+.exam-rich-content > table,
+.exam-rich-content p > table,
+.exam-rich-content div > table {
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.06) !important;
+  border-radius: 0.75rem !important;
+  margin: 1.25rem 0 !important;
+}
+
+.exam-rich-content thead,
+.exam-rich-content thead tr {
+  background-color: #eef2ff !important;
+}
+
+.exam-rich-content th {
+  background-color: #eef2ff !important;
+  color: #3730a3 !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  padding: 0.75rem 1rem !important;
+  text-align: left !important;
+  border-bottom: 2px solid #c7d2fe !important;
+  line-height: 1.4 !important;
+}
+
+.exam-rich-content td {
+  padding: 0.65rem 1rem !important;
+  color: #374151 !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.5 !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+  background-color: transparent !important;
+  vertical-align: top !important;
+}
+
+/* Zebra rows */
+.exam-rich-content tbody tr:nth-child(even) td {
+  background-color: #f9fafb !important;
+}
+.exam-rich-content tbody tr:hover td {
+  background-color: #eef2ff !important;
+  transition: background-color 0.12s ease !important;
+}
+
+/* First column emphasis */
+.exam-rich-content td:first-child {
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+}
