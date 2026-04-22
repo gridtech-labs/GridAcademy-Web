@@ -265,22 +265,22 @@ export default function ExamBuyButton({
 
       {/* Offer code input */}
       {!offerResult?.valid ? (
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full">
           <input
             type="text"
             value={offerInput}
             onChange={e => setOfferInput(e.target.value.toUpperCase())}
             onKeyDown={e => e.key === 'Enter' && validateOffer(offerInput)}
-            placeholder="Enter offer code"
-            className="flex-1 text-sm border border-gray-300 rounded-lg px-3 py-2 uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-orange-400"
+            placeholder="Offer code"
+            className="flex-1 min-w-0 text-sm border border-gray-300 rounded-lg px-3 py-2 uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-orange-400"
             disabled={loading}
           />
           <button
             type="button"
             onClick={() => validateOffer(offerInput)}
             disabled={validating || !offerInput.trim()}
-            className="text-sm font-semibold px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 border border-gray-300 transition-colors">
-            {validating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Apply'}
+            className="shrink-0 w-20 text-sm font-semibold py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 border border-gray-300 transition-colors">
+            {validating ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Apply'}
           </button>
         </div>
       ) : (

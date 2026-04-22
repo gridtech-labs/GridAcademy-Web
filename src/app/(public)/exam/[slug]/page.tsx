@@ -196,22 +196,27 @@ export default async function ExamDetailPage({ params }: PageProps) {
 
       {/* ── Breadcrumb ─────────────────────────────────────────────────────────── */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
-          <nav className="flex items-center gap-1.5 text-xs text-gray-500">
-            <Link href="/" className="hover:text-orange-500 transition-colors">Home</Link>
-            <ChevronRight className="w-3 h-3" />
-            <Link href="/exams" className="hover:text-orange-500 transition-colors">Exams</Link>
-            {exam.examLevelName && (
-              <>
-                <ChevronRight className="w-3 h-3" />
-                <span className="text-gray-500">{exam.examLevelName}</span>
-              </>
-            )}
-            <ChevronRight className="w-3 h-3" />
-            <span className="text-gray-800 font-medium truncate max-w-[200px]">{exam.title}</span>
-          </nav>
-        </div>
-      </div>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
+    <nav
+      className="flex items-center gap-1.5 text-xs text-gray-500
+                 overflow-x-auto scrollbar-hide whitespace-nowrap"
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}
+    >
+      <Link href="/" className="hover:text-orange-500 transition-colors shrink-0">Home</Link>
+      <ChevronRight className="w-3 h-3 shrink-0" />
+      <Link href="/exams" className="hover:text-orange-500 transition-colors shrink-0">Exams</Link>
+      {exam.examLevelName && (
+        <>
+          <ChevronRight className="w-3 h-3 shrink-0" />
+          <span className="text-gray-500 shrink-0">{exam.examLevelName}</span>
+        </>
+      )}
+      <ChevronRight className="w-3 h-3 shrink-0" />
+      {/* Last crumb: no truncate needed — whole nav scrolls now */}
+      <span className="text-gray-800 font-medium shrink-0">{exam.title}</span>
+    </nav>
+  </div>
+</div>
 
       {/* ── Hero ───────────────────────────────────────────────────────────────── */}
 
@@ -338,7 +343,7 @@ export default async function ExamDetailPage({ params }: PageProps) {
 
       {/* ── Main Content ───────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-normal">
 
           {/* Left: Tabs */}
           <div className="flex-1 min-w-0">
@@ -353,63 +358,78 @@ export default async function ExamDetailPage({ params }: PageProps) {
           </div>
 
           {/* Right: Sidebar */}
-          <aside className="w-full lg:w-80 shrink-0 space-y-5 lg:sticky lg:top-20">
+          <aside className="w-full lg:w-[300px] shrink-0 space-y-4 lg:sticky lg:top-20">
 
-            {/* Buy / Access card — shown only for paid exams */}
+            {/* ── Buy / Access card ── */}
             {exam.priceInr > 0 && (
-              <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-gray-900 text-base">Get Full Access</h3>
-                  <span className="text-lg font-extrabold text-orange-600">
-                    ₹{exam.priceInr.toLocaleString('en-IN')}
-                  </span>
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-gray-900 text-sm">Get Full Access</h3>
+                    <span className="text-xl font-extrabold text-orange-600">
+                      ₹{exam.priceInr.toLocaleString('en-IN')}
+                    </span>
+                  </div>
                 </div>
-                <ExamBuyButton
-                  examPageId={exam.id}
-                  examTitle={exam.title}
-                  examSlug={exam.slug}
-                  priceInr={exam.priceInr}
-                  hasAccess={hasAccess}
-                  token={token}
-                  offers={examOffers}
-                />
+                <div className="px-5 py-4">
+                  <ExamBuyButton
+                    examPageId={exam.id}
+                    examTitle={exam.title}
+                    examSlug={exam.slug}
+                    priceInr={exam.priceInr}
+                    hasAccess={hasAccess}
+                    token={token}
+                    offers={examOffers}
+                  />
+                </div>
               </div>
             )}
 
-            {/* Tests card — primary action */}
+            {/* ── Available Tests card ── */}
             {exam.tests.length > 0 && (
-              <div className="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden">
-                <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-3">
-                  <h3 className="text-white font-bold text-sm uppercase tracking-wide">
-                    Available Tests
-                  </h3>
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                {/* Card header */}
+                <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-100 bg-gray-50">
+                  <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center shrink-0">
+                    <FileText className="w-3.5 h-3.5 text-orange-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Available Tests</h3>
                 </div>
-                <ul className="divide-y divide-gray-100 px-4 py-2">
+
+                <ul className="divide-y divide-gray-100">
                   {exam.tests
                     .sort((a, b) => a.sortOrder - b.sortOrder)
                     .map(test => (
-                      <li key={test.testId} className="py-4">
+                      <li key={test.testId} className="px-5 py-4">
+                        {/* Title + FREE badge */}
                         <div className="flex items-start justify-between gap-2 mb-2">
                           <p className="text-sm font-semibold text-gray-900 leading-snug flex-1">
                             {test.title}
                           </p>
-                          {test.isFree && (
-                            <span className="shrink-0 bg-green-100 text-green-700 text-[10px] font-bold
-                              px-2 py-0.5 rounded-full uppercase tracking-wide">
+                          {test.isFree ? (
+                            <span className="shrink-0 bg-green-50 text-green-700 border border-green-200
+                              text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
                               FREE
+                            </span>
+                          ) : (
+                            <span className="shrink-0 bg-orange-50 text-orange-600 border border-orange-200
+                              text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
+                              PAID
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
+                        {/* Meta */}
+                        <div className="flex items-center gap-4 text-xs text-gray-500 mb-3.5">
+                          <span className="flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-gray-400" />
                             {test.durationMinutes} min
                           </span>
-                          <span className="flex items-center gap-1">
-                            <FileText className="w-3 h-3" />
+                          <span className="flex items-center gap-1.5">
+                            <FileText className="w-3.5 h-3.5 text-gray-400" />
                             {test.totalQuestions} Questions
                           </span>
                         </div>
+                        {/* CTA */}
                         {test.isFree ? (
                           <FreeTestButton
                             testId={test.testId}
@@ -420,8 +440,8 @@ export default async function ExamDetailPage({ params }: PageProps) {
                         ) : (
                           <Link href={`/test/${exam.slug}`}
                             className="flex items-center justify-center gap-2 w-full text-sm font-semibold
-                              bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white
-                              py-2.5 rounded-xl transition-colors border border-orange-200 hover:border-orange-500">
+                              bg-gray-50 text-gray-700 hover:bg-orange-500 hover:text-white
+                              py-2.5 rounded-xl transition-all border border-gray-200 hover:border-orange-500">
                             View Test Details
                           </Link>
                         )}
@@ -431,46 +451,64 @@ export default async function ExamDetailPage({ params }: PageProps) {
               </div>
             )}
 
-            {/* Quick Info */}
-            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-              <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
+            {/* ── Exam Highlights card ── */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-100 bg-gray-50">
+                <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center shrink-0">
+                  <Trophy className="w-3.5 h-3.5 text-orange-600" />
+                </div>
                 <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Exam Highlights</h3>
               </div>
+
               <ul className="divide-y divide-gray-100">
-                {[
-                  exam.conductingBody && { icon: Building2,  label: 'Conducting Body',  value: exam.conductingBody },
-                  exam.examLevelName  && { icon: Trophy,     label: 'Exam Level',        value: exam.examLevelName },
-                  exam.examTypeName   && { icon: Tag,        label: 'Category',          value: exam.examTypeName },
-                  exam.testCount > 0  && { icon: FileText,   label: 'Total Mock Tests',  value: `${exam.testCount} Tests` },
-                ].filter(Boolean).map((item: any, i) => (
-                  <li key={i} className="flex items-center gap-3 px-5 py-3">
-                    <item.icon className="w-4 h-4 text-orange-500 shrink-0" />
-                    <div className="min-w-0">
-                      <span className="text-xs text-gray-400 block">{item.label}</span>
-                      <span className="text-sm font-semibold text-gray-800 truncate block">{item.value}</span>
+                {([
+                  exam.conductingBody && { icon: Building2, label: 'Conducting Body', value: exam.conductingBody },
+                  exam.examLevelName  && { icon: Trophy,    label: 'Exam Level',       value: exam.examLevelName },
+                  exam.examTypeName   && { icon: Tag,       label: 'Category',         value: exam.examTypeName },
+                  exam.testCount > 0  && { icon: FileText,  label: 'Total Mock Tests', value: `${exam.testCount} Tests` },
+                ] as any[]).filter(Boolean).map((item: any, i: number) => (
+                  <li key={i} className="flex items-center gap-3.5 px-5 py-3.5">
+                    <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
+                      <item.icon className="w-4 h-4 text-orange-500" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-0.5">
+                        {item.label}
+                      </span>
+                      <span className="text-sm font-semibold text-gray-800 block truncate">{item.value}</span>
                     </div>
                   </li>
                 ))}
+
                 {exam.officialWebsite && (
-                  <li className="flex items-center gap-3 px-5 py-3">
-                    <Globe className="w-4 h-4 text-orange-500 shrink-0" />
-                    <div className="min-w-0">
-                      <span className="text-xs text-gray-400 block">Official Website</span>
+                  <li className="flex items-center gap-3.5 px-5 py-3.5">
+                    <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
+                      <Globe className="w-4 h-4 text-orange-500" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-0.5">
+                        Official Website
+                      </span>
                       <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
-                        className="text-sm font-semibold text-orange-600 hover:underline flex items-center gap-1">
+                        className="text-sm font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1 truncate">
                         {new URL(exam.officialWebsite).hostname}
                         <ExternalLink className="w-3 h-3 shrink-0" />
                       </a>
                     </div>
                   </li>
                 )}
+
                 {exam.notificationUrl && (
-                  <li className="flex items-center gap-3 px-5 py-3">
-                    <Bell className="w-4 h-4 text-orange-500 shrink-0" />
-                    <div className="min-w-0">
-                      <span className="text-xs text-gray-400 block">Notification</span>
+                  <li className="flex items-center gap-3.5 px-5 py-3.5">
+                    <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
+                      <Bell className="w-4 h-4 text-orange-500" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-0.5">
+                        Notification
+                      </span>
                       <a href={exam.notificationUrl} target="_blank" rel="noopener noreferrer"
-                        className="text-sm font-semibold text-orange-600 hover:underline flex items-center gap-1">
+                        className="text-sm font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1">
                         Download PDF
                         <ExternalLink className="w-3 h-3 shrink-0" />
                       </a>
@@ -480,24 +518,25 @@ export default async function ExamDetailPage({ params }: PageProps) {
               </ul>
             </div>
 
-            {/* Key Dates */}
+            {/* ── Key Dates card ── */}
             {importantDates.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                <div className="px-5 py-3 border-b border-gray-100 bg-gray-50 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-orange-500" />
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-100 bg-gray-50">
+                  <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center shrink-0">
+                    <Calendar className="w-3.5 h-3.5 text-orange-600" />
+                  </div>
                   <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Key Dates</h3>
                 </div>
                 <ul className="divide-y divide-gray-100">
                   {importantDates.slice(0, 6).map((d, i) => (
-                    <li key={i} className="flex items-center justify-between gap-3 px-5 py-3">
+                    <li key={i} className="flex items-center justify-between gap-3 px-5 py-3.5">
                       <span className="text-sm text-gray-600 leading-snug">{d.label}</span>
-                      <span className="text-sm font-bold text-orange-700 whitespace-nowrap">{d.date}</span>
+                      <span className="text-sm font-bold text-orange-600 whitespace-nowrap">{d.date}</span>
                     </li>
                   ))}
                   {importantDates.length > 6 && (
-                    <li className="px-5 py-3">
-                      <button
-                        className="text-xs text-orange-600 font-semibold hover:underline w-full text-left">
+                    <li className="px-5 py-3.5">
+                      <button className="text-xs text-orange-600 font-semibold hover:underline w-full text-left">
                         +{importantDates.length - 6} more dates
                       </button>
                     </li>
