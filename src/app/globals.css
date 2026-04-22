@@ -101,9 +101,36 @@ body {
 }
 
 /* ── Tables ── */
+/* Fix: figure.table injected by CMS often carries inline width — constrain it */
+.exam-rich-content figure.table {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  margin: 1.25rem 0 !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.06) !important;
+  display: block !important;          /* figure is inline by default — must be block to stretch full width */
+}
 
-figure.table {
-  max-width: 100%;
+/* table inside figure — let it be natural width, figure scrolls it */
+.exam-rich-content figure.table table {
+  width: auto !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Also ensure the JS-injected wrapper always scrolls smoothly */
+.exam-rich-content .table-scroll-wrapper {
+  scroll-behavior: smooth !important;
+  cursor: grab !important;
+}
+.exam-rich-content .table-scroll-wrapper:active {
+  cursor: grabbing !important;
 }
 
 /* Responsive scroll wrapper injected by RichContent useEffect */

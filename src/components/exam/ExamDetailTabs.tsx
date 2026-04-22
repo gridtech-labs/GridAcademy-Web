@@ -28,7 +28,7 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
   const active = tabs.find(t => t.id === activeTab);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm" style={{ overflow: 'clip' }}>
 
       {/* Tab nav ─────────────────────────────────────────────────────────── */}
 
