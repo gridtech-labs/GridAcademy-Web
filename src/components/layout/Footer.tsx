@@ -72,7 +72,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <p>© {new Date().getFullYear()} GridAcademy. All rights reserved.</p>
-          <p>GSTIN: XXXXXXXXXXXX &nbsp;|&nbsp; Grievance Officer: support@gridacademy.in</p>
+          <p>GSTIN: XXXXXXXXXXXX &nbsp;|&nbsp; Grievance Officer: <a href="mailto:info@gridacademy.in" className="hover:text-gray-300 transition-colors">info@gridacademy.in</a></p>
         </div>
       </div>
     </footer>
