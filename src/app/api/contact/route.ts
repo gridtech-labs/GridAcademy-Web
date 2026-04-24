@@ -8,8 +8,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
   }
 
-  const smtpHost     = process.env.SMTP_HOST     ?? 'smtp.gmail.com';
-  const smtpPort     = parseInt(process.env.SMTP_PORT ?? '587');
+  const smtpHost     = process.env.SMTP_HOST     ?? 'smtpout.secureserver.net';
+  const smtpPort     = parseInt(process.env.SMTP_PORT ?? '465');
   const smtpUser     = process.env.SMTP_USER     ?? 'info@gridacademy.in';
   const smtpPassword = process.env.SMTP_PASSWORD ?? '';
   const contactEmail = process.env.CONTACT_EMAIL ?? 'info@gridacademy.in';
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   const transporter = nodemailer.createTransport({
     host: smtpHost,
     port: smtpPort,
-    secure: smtpPort === 465,
+    secure: true, // SSL on port 465
     auth: { user: smtpUser, pass: smtpPassword },
   });
 
