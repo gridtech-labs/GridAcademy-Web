@@ -28,12 +28,13 @@ export default function ContactPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? 'Failed to send');
       setStatus('success');
       setForm({ name: '', email: '', phone: '', subject: '', message: '' });
-    } catch {
+    } catch (err: any) {
       setStatus('error');
-      setErrorMsg('Something went wrong. Please email us directly at info@gridacademy.in');
+      setErrorMsg(err?.message ?? 'Something went wrong. Please email us directly at info@gridacademy.in');
     }
   }
 
@@ -66,7 +67,7 @@ export default function ContactPage() {
                   <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-semibold">Message sent successfully!</p>
-                    <p className="text-sm mt-0.5">Thank you, {form.name || 'there'}! We&apos;ll reply to your email within 24 hours.</p>
+                    <p className="text-sm mt-0.5">Thank you! A confirmation has been sent to your email. We&apos;ll get back to you within 24 hours.</p>
                   </div>
                 </div>
               )}
