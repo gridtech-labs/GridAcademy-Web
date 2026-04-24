@@ -18,9 +18,18 @@ export default function Header() {
       <div className="h-full flex items-center gap-3 px-4 md:px-6 lg:px-8">
 
         {/* Logo */}
-        <Link href="/" className="shrink-0 text-lg font-extrabold tracking-tight">
-          <span className="text-gray-900">Grid</span>
-          <span className="text-orange-500">Academy</span>
+        <Link href="/" className="shrink-0 flex items-center gap-2">
+          <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="1" width="6" height="6" rx="1.5" fill="white"/>
+              <rect x="11" y="1" width="6" height="6" rx="1.5" fill="white" fillOpacity="0.7"/>
+              <rect x="1" y="11" width="6" height="6" rx="1.5" fill="white" fillOpacity="0.7"/>
+              <rect x="11" y="11" width="6" height="6" rx="1.5" fill="white"/>
+            </svg>
+          </div>
+          <span className="text-xl font-extrabold tracking-tight leading-none">
+            <span className="text-gray-900">Grid</span><span className="text-orange-500">Academy</span>
+          </span>
         </Link>
 
         {/* Search bar */}
