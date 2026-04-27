@@ -59,6 +59,7 @@ export interface ExamDetail extends ExamCard {
   bannerUrl: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
+  metaKeywords: string | null;
   faqs: string | null; // JSON string: ExamFaq[]
   viewCount: number;
   tests: ExamTest[];
