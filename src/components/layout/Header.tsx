@@ -16,7 +16,7 @@ export default function Header() {
     <>
     <div className="w-full bg-orange-500 text-white text-center text-sm py-2 font-semibold tracking-wide">
   🔥 Limited Time Offer – Get CUET Mock Test for Only ₹7 
-  <a href="/exam/cuet-mock-test-2026-ug-real-exam-practice" class="underline ml-2 font-bold">
+  <a href="/exam/cuet-mock-test-2026-ug-real-exam-practice" className="underline ml-2 font-bold">
     Start Now →
   </a>
 </div>
