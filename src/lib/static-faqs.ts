@@ -67,6 +67,34 @@ const staticFaqs: Record<string, ExamFaq[]> = {
     },
   ],
 
+  'cuet-mock-test-2026-ug-real-exam-practice': [
+    {
+      question: 'Is this CUET mock test free?',
+      answer:
+        'This is a premium CUET mock test available at an affordable price of ₹7, designed with real exam-level questions and detailed analysis.',
+    },
+    {
+      question: 'Is this mock test based on the latest CUET 2026 pattern?',
+      answer:
+        'Yes, this mock test is designed according to the latest CUET UG exam pattern and syllabus.',
+    },
+    {
+      question: 'How will I get my result?',
+      answer:
+        'You will get instant results along with detailed performance analysis after completing the test.',
+    },
+    {
+      question: 'Who should attempt this CUET mock test?',
+      answer:
+        'Students preparing for CUET 2026, beginners, and those who want to improve their score should attempt this mock test.',
+    },
+    {
+      question: 'How many questions are included in this mock test?',
+      answer:
+        'The mock test includes full-length questions similar to the actual CUET exam pattern.',
+    },
+  ],
+
   'ssc-cgl-t1-2025-paper': [
     {
       question: 'What is SSC CGL Tier 1?',

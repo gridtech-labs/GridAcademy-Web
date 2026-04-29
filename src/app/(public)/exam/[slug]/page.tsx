@@ -23,6 +23,26 @@ import { getStaticFaqs } from '@/lib/static-faqs';
 
 interface PageProps { params: { slug: string } }
 
+const SLUG_KEYWORDS: Record<string, string[]> = {
+  "cuet-ug-2026-mock-paper": [
+    "CUET mock test 2026",
+    "CUET UG mock paper",
+    "CUET practice test free",
+    "CUET sample paper",
+    "CUET online test",
+  ],
+  "cuet-mock-test-2026-ug-real-exam-practice": [
+    "CUET mock test 2026",
+    "CUET UG mock test",
+    "CUET practice test online",
+    "CUET sample paper 2026",
+    "CUET exam preparation",
+    "CUET online test series",
+    "NTA CUET mock test",
+    "CUET test practice",
+  ],
+};
+
 // export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
 //   try {
 //     const exam = await api.get<ExamDetail>(`/api/exam-pages/${params.slug}`);
@@ -50,6 +70,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       alternates: {
         canonical: url,
       },
+
+      ...((() => {
+        const kw = exam.metaKeywords
+          ? exam.metaKeywords.split(",").map(k => k.trim())
+          : SLUG_KEYWORDS[params.slug];
+        return kw ? { keywords: kw } : {};
+      })()),
 
       openGraph: {
         title: exam.metaTitle ?? exam.title,
@@ -408,11 +435,14 @@ export default async function ExamDetailPage({ params }: PageProps) {
             {/* ── Buy / Access card ── */}
             {exam.priceInr > 0 && (
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div className="bg-orange-500 text-white text-center text-xs font-semibold py-1.5 tracking-wide">
+                  🔥 Limited Time Offer – Only ₹{exam.priceInr.toLocaleString('en-IN')}
+                </div>
                 <div className="px-5 py-4 border-b border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-bold text-gray-900 text-sm">Get Full Access</h3>
-                    <span className="text-xl font-extrabold text-orange-600">
-                      ₹{exam.priceInr.toLocaleString('en-IN')}
+                  <div className="flex items-center justify-center">
+                    <h3 className="text-right font-bold text-gray-900 text-sm md:text-lg">Start Full Mock Test – </h3>
+                    <span className="pl-1 text-sm md:text-lg font-extrabold text-orange-600">
+                      Only ₹{exam.priceInr.toLocaleString('en-IN')}
                     </span>
                   </div>
                 </div>

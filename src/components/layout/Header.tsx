@@ -13,8 +13,16 @@ export default function Header() {
   const user = session?.user as any;
 
   return (
+    <>
+    <div className="w-full bg-orange-500 text-white text-center text-sm py-2 font-semibold tracking-wide">
+  🔥 Limited Time Offer – Get CUET Mock Test for Only ₹7 
+  <a href="/exam/cuet-mock-test-2026-ug-real-exam-practice" class="underline ml-2 font-bold">
+    Start Now →
+  </a>
+</div>
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200"
       style={{ height: 'var(--topbar-h, 56px)' }}>
+       
       <div className="h-full flex items-center gap-3 px-4 md:px-6 lg:px-8">
 
         {/* Logo */}
@@ -179,5 +187,6 @@ export default function Header() {
         </div>
       )}
     </header>
+    </>
   );
 }
