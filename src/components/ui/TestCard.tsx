@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Star, Clock, FileText, Zap } from 'lucide-react';
+import { Star, Clock, FileText } from 'lucide-react';
 import { TestSeries } from '@/types';
 import { formatPrice, formatDuration, cn } from '@/lib/utils';
 
@@ -12,46 +12,46 @@ export default function TestCard({ series, className }: TestCardProps) {
   return (
     <Link href={`/test/${series.slug}`}
       className={cn(
-        'group block bg-white rounded-2xl border border-gray-200 overflow-hidden',
-        'hover:shadow-lg hover:border-indigo-200 transition-all duration-200',
+        'group block bg-white rounded-xl border border-gray-200 overflow-hidden',
+        'hover:border-gray-300 hover:shadow-sm transition-all duration-150',
         className
       )}>
 
       {/* Thumbnail */}
-      <div className="relative h-40 bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden">
+      <div className="relative h-36 bg-gray-100 overflow-hidden">
         {series.thumbnailUrl ? (
           <img src={series.thumbnailUrl} alt={series.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            className="w-full h-full object-cover" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <FileText className="w-12 h-12 text-white/50" />
+            <FileText className="w-10 h-10 text-gray-300" />
           </div>
         )}
 
         {/* Exam badge */}
-        <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-indigo-700
-          text-xs font-semibold px-2 py-0.5 rounded-full">
+        <span className="absolute top-2 left-2 bg-white text-gray-600
+          text-xs font-medium px-2 py-0.5 rounded border border-gray-200">
           {series.examType}
         </span>
 
         {/* Free preview badge */}
         {series.isFirstTestFree && (
-          <span className="absolute top-2 right-2 bg-green-500 text-white
-            text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
-            <Zap className="w-3 h-3" /> Free Test
+          <span className="absolute top-2 right-2 bg-green-100 text-green-700
+            text-xs font-semibold px-2 py-0.5 rounded border border-green-200">
+            Free Test
           </span>
         )}
       </div>
 
       {/* Content */}
       <div className="p-4">
-        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-indigo-600 transition-colors leading-snug">
+        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-[#1760f4] transition-colors leading-snug">
           {series.title}
         </h3>
-        <p className="text-xs text-gray-500 mt-1">{series.providerName}</p>
+        <p className="text-xs text-gray-400 mt-1">{series.providerName}</p>
 
         {/* Stats row */}
-        <div className="flex items-center gap-3 mt-3 text-xs text-gray-500">
+        <div className="flex items-center gap-3 mt-3 text-xs text-gray-400">
           <span className="flex items-center gap-1">
             <FileText className="w-3 h-3" /> {series.testCount} Tests
           </span>
@@ -72,13 +72,12 @@ export default function TestCard({ series, className }: TestCardProps) {
         {/* Price */}
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
           {series.priceInr === 0 ? (
-            <span className="text-base font-bold text-green-600">FREE</span>
+            <span className="text-sm font-bold text-green-700">FREE</span>
           ) : (
-            <span className="text-base font-bold text-gray-900">{formatPrice(series.priceInr)}</span>
+            <span className="text-sm font-bold text-gray-900">{formatPrice(series.priceInr)}</span>
           )}
-          <span className="text-xs bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium
-            group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-            View Details
+          <span className="text-xs text-gray-400 group-hover:text-[#1760f4] transition-colors font-medium">
+            View Details →
           </span>
         </div>
       </div>
