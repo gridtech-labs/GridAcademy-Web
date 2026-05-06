@@ -11,7 +11,6 @@ interface Props {
 }
 
 export default function ExamLevelSection({ exams }: Props) {
-  // Collect unique level names preserving insertion order
   const levels = ['All', ...Array.from(new Set(exams.map(e => e.examLevelName ?? 'Other')))];
   const [activeLevel, setActiveLevel] = useState('All');
 
@@ -28,7 +27,7 @@ export default function ExamLevelSection({ exams }: Props) {
             onClick={() => setActiveLevel(level)}
             className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors
               ${activeLevel === level
-                ? 'bg-indigo-600 text-white shadow-sm'
+                ? 'bg-[#1760f4] text-white shadow-sm'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
           >
@@ -49,9 +48,9 @@ export default function ExamLevelSection({ exams }: Props) {
 
 function ExamCardItem({ exam }: { exam: ExamCard }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-sm transition-shadow flex flex-col">
       {/* Thumbnail */}
-      <div className="relative h-32 bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center shrink-0">
+      <div className="relative h-32 bg-gray-100 flex items-center justify-center shrink-0">
         {exam.thumbnailUrl ? (
           <Image
             src={exam.thumbnailUrl}
@@ -61,7 +60,7 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
             className="object-cover"
           />
         ) : (
-          <BookOpen className="w-10 h-10 text-indigo-300" />
+          <BookOpen className="w-10 h-10 text-gray-300" />
         )}
         {exam.isFeatured && (
           <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
@@ -75,12 +74,12 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
         {/* Badges */}
         <div className="flex gap-1.5 flex-wrap mb-2">
           {exam.examLevelName && (
-            <span className="bg-indigo-50 text-indigo-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+            <span className="bg-gray-100 text-gray-600 text-[10px] font-semibold px-2 py-0.5 rounded-full">
               {exam.examLevelName}
             </span>
           )}
           {exam.examTypeName && (
-            <span className="bg-purple-50 text-purple-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+            <span className="bg-gray-100 text-gray-600 text-[10px] font-semibold px-2 py-0.5 rounded-full">
               {exam.examTypeName}
             </span>
           )}
@@ -102,7 +101,7 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
           </span>
           <Link
             href={`/exam/${exam.slug}`}
-            className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:underline">
+            className="text-xs font-semibold text-[#1760f4] hover:text-[#0e4dd4] hover:underline">
             View Details &rarr;
           </Link>
         </div>

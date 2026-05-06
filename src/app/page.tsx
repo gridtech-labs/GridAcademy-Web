@@ -12,9 +12,6 @@ import {
   Home, BookOpen, Trophy, BarChart2, Search
 } from 'lucide-react';
 
-// ── CSS Variables (injected as inline style on root) ──────────────────────────
-// Primary: #f97316  |  Sidebar: 260px  |  RightPanel: 300px
-
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface ExamLevel { id: number; name: string; examCount: number; }
 
@@ -46,7 +43,6 @@ function formatPrice(price: number): string {
   return `₹${price.toLocaleString('en-IN')}`;
 }
 
-// ── Exam type icon mapping (extendable) ───────────────────────────────────────
 function examTypeIcon(name: string | null): string {
   if (!name) return '📝';
   const map: Record<string, string> = {
@@ -69,7 +65,6 @@ function examTypeIcon(name: string | null): string {
 
 // ── Sidebar (tablet+) ─────────────────────────────────────────────────────────
 function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamTypeFilter[] }) {
-  // Count exams per exam type from the fetched list
   const typeCounts: Record<string, number> = {};
   exams.forEach(e => {
     if (e.examTypeName) typeCounts[e.examTypeName] = (typeCounts[e.examTypeName] ?? 0) + 1;
@@ -83,7 +78,7 @@ function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamT
       <div className="p-3">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1">Main Menu</p>
         <Link href="/"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-orange-600 bg-orange-50">
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-[#1760f4] bg-blue-50">
           <Home className="w-4 h-4" /> Home
         </Link>
         <Link href="/exams"
@@ -94,7 +89,7 @@ function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamT
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
           <FileText className="w-4 h-4 shrink-0" />
           <span>Free Tests</span>
-          <span className="ml-auto bg-orange-100 text-orange-600 text-xs font-bold px-1.5 py-0.5 rounded-full">Free</span>
+          <span className="ml-auto bg-green-100 text-green-700 text-xs font-bold px-1.5 py-0.5 rounded-full">Free</span>
         </Link>
         <Link href="/leaderboard"
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
@@ -106,7 +101,7 @@ function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamT
         </Link>
       </div>
 
-      {/* Exam type nav — dynamic from DB */}
+      {/* Exam type nav */}
       <div className="px-3 pb-3">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1 mt-2">Exam Categories</p>
         {examTypes.map(t => (
@@ -123,12 +118,11 @@ function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamT
 
       {/* Bottom CTA */}
       <div className="mt-auto p-3">
-        <div className="rounded-xl p-4 text-white text-sm"
-          style={{ background: 'linear-gradient(135deg,#f97316,#ea580c)' }}>
-          <p className="font-bold mb-1">🏫 Are you an educator?</p>
-          <p className="text-orange-100 text-xs mb-3">Upload tests &amp; reach lakhs of students.</p>
+        <div className="rounded-xl p-4 bg-[#1760f4] text-white text-sm">
+          <p className="font-bold mb-1">Are you an educator?</p>
+          <p className="text-blue-100 text-xs mb-3">Upload tests &amp; reach lakhs of students.</p>
           <Link href="/provider/register"
-            className="block text-center bg-white text-orange-600 font-bold text-xs py-2 rounded-lg hover:bg-orange-50 transition-colors">
+            className="block text-center bg-white text-[#1760f4] font-bold text-xs py-2 rounded-lg hover:bg-blue-50 transition-colors">
             Become a Provider
           </Link>
         </div>
@@ -139,9 +133,9 @@ function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamT
 
 // ── Right Panel (desktop only) ────────────────────────────────────────────────
 function RightPanel({ exams }: { exams: ExamCard[] }) {
-  const total   = exams.length;
-  const free    = exams.filter(e => e.priceInr === 0).length;
-  const tests   = exams.reduce((s, e) => s + e.testCount, 0);
+  const total    = exams.length;
+  const free     = exams.filter(e => e.priceInr === 0).length;
+  const tests    = exams.reduce((s, e) => s + e.testCount, 0);
   const featured = exams.filter(e => e.isFeatured).length;
 
   return (
@@ -150,14 +144,12 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
 
       {/* Platform Stats */}
       <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-          📊 Platform Stats
-        </h3>
+        <h3 className="text-sm font-bold text-gray-800 mb-3">Platform Stats</h3>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { icon: '📝', num: total, label: 'Total Exams' },
-            { icon: '🆓', num: free, label: 'Free Exams' },
-            { icon: '📋', num: tests, label: 'Mock Tests' },
+            { icon: '📝', num: total,    label: 'Total Exams' },
+            { icon: '🆓', num: free,     label: 'Free Exams' },
+            { icon: '📋', num: tests,    label: 'Mock Tests' },
             { icon: '⭐', num: featured, label: 'Featured' },
           ].map(s => (
             <div key={s.label} className="bg-gray-50 rounded-lg p-3 flex items-center gap-2">
@@ -171,37 +163,36 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
         </div>
       </div>
 
-      {/* Top Performers (placeholder leaderboard) */}
+      {/* Top Performers */}
       <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <h3 className="text-sm font-bold text-gray-800 mb-3">🏆 Top Performers</h3>
+        <h3 className="text-sm font-bold text-gray-800 mb-3">Top Performers</h3>
         {[
-          { rank: 1, name: 'Aakash Singh',   score: '96/100', cls: 'bg-yellow-100 text-yellow-800' },
-          { rank: 2, name: 'Priya Kumari',   score: '94/100', cls: 'bg-gray-100 text-gray-700' },
-          { rank: 3, name: 'Ravi Shankar',   score: '91/100', cls: 'bg-orange-100 text-orange-700' },
-          { rank: 4, name: 'Sunita Devi',    score: '89/100', cls: 'bg-gray-50 text-gray-500' },
-          { rank: 5, name: 'Manoj Yadav',    score: '87/100', cls: 'bg-gray-50 text-gray-500' },
+          { rank: 1, name: 'Aakash Singh', score: '96/100', cls: 'bg-yellow-100 text-yellow-800' },
+          { rank: 2, name: 'Priya Kumari', score: '94/100', cls: 'bg-gray-100 text-gray-700' },
+          { rank: 3, name: 'Ravi Shankar', score: '91/100', cls: 'bg-gray-100 text-gray-600' },
+          { rank: 4, name: 'Sunita Devi',  score: '89/100', cls: 'bg-gray-50 text-gray-500' },
+          { rank: 5, name: 'Manoj Yadav',  score: '87/100', cls: 'bg-gray-50 text-gray-500' },
         ].map(p => (
           <div key={p.rank} className="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
             <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shrink-0 ${p.cls}`}>
               {p.rank}
             </span>
             <span className="text-sm font-medium text-gray-800 flex-1 truncate">{p.name}</span>
-            <span className="text-sm font-bold text-orange-500">{p.score}</span>
+            <span className="text-sm font-bold text-[#1760f4]">{p.score}</span>
           </div>
         ))}
       </div>
 
       {/* Upcoming Deadlines */}
       <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <h3 className="text-sm font-bold text-gray-800 mb-3">📅 Upcoming Deadlines</h3>
+        <h3 className="text-sm font-bold text-gray-800 mb-3">Upcoming Deadlines</h3>
         {[
           { day: '30', mon: 'Apr', title: 'RRB ALP Application', sub: 'Last date to apply' },
           { day: '25', mon: 'May', title: 'UPSC Prelims 2026',   sub: 'Hall ticket from May 10' },
           { day: '10', mon: 'Jun', title: 'RRB ALP CBT 1',       sub: 'Admit card 7 days prior' },
         ].map(d => (
           <div key={d.title} className="flex gap-3 py-2.5 border-b border-gray-100 last:border-0">
-            <div className="shrink-0 rounded-lg px-2.5 py-2 text-center text-white"
-              style={{ background: '#f97316', minWidth: 44 }}>
+            <div className="shrink-0 rounded-lg px-2.5 py-2 text-center bg-[#1760f4] text-white" style={{ minWidth: 44 }}>
               <span className="block text-lg font-extrabold leading-none">{d.day}</span>
               <span className="text-xs font-semibold">{d.mon}</span>
             </div>
@@ -214,12 +205,11 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
       </div>
 
       {/* Provider CTA */}
-      <div className="rounded-xl p-5 text-white"
-        style={{ background: 'linear-gradient(135deg,#f97316,#ea580c)' }}>
-        <h3 className="text-sm font-bold mb-1">🎯 Are you a coaching institute?</h3>
-        <p className="text-orange-100 text-xs mb-3">Upload question banks, create mock tests &amp; reach lakhs of students.</p>
+      <div className="rounded-xl p-5 bg-[#1760f4] text-white">
+        <h3 className="text-sm font-bold mb-1">Are you a coaching institute?</h3>
+        <p className="text-blue-100 text-xs mb-3">Upload question banks, create mock tests &amp; reach lakhs of students.</p>
         <Link href="/provider/register"
-          className="block text-center bg-white text-orange-600 font-bold text-sm py-2 rounded-lg hover:bg-orange-50 transition-colors">
+          className="block text-center bg-white text-[#1760f4] font-bold text-sm py-2 rounded-lg hover:bg-blue-50 transition-colors">
           Become a Provider
         </Link>
       </div>
@@ -234,10 +224,10 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
     <Link href={`/exam/${exam.slug}`}
       className="group flex flex-col bg-white rounded-xl overflow-hidden transition-all duration-200
         border-t-[3px] border-t-transparent border border-gray-200
-        hover:shadow-md hover:border-orange-200 hover:border-t-orange-500">
+        hover:shadow-md hover:border-gray-300 hover:border-t-[#1760f4]">
 
       {/* Thumbnail or icon */}
-      <div className="relative h-28 bg-gradient-to-br from-orange-400 to-orange-600 overflow-hidden shrink-0">
+      <div className="relative h-28 bg-gray-100 overflow-hidden shrink-0">
         {exam.thumbnailUrl ? (
           <Image src={exam.thumbnailUrl} alt={exam.title} fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -248,7 +238,7 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
           </div>
         )}
         {exam.examLevelName && (
-          <span className="absolute top-2 left-2 bg-white/90 text-orange-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+          <span className="absolute top-2 left-2 bg-white text-gray-600 text-xs font-semibold px-2 py-0.5 rounded border border-gray-200">
             {exam.examLevelName}
           </span>
         )}
@@ -260,10 +250,10 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
       </div>
 
       <div className="p-3 flex flex-col flex-1">
-        <p className="text-xs text-orange-500 font-medium truncate">
+        <p className="text-xs text-gray-500 font-medium truncate">
           {exam.conductingBody ?? exam.examTypeName ?? exam.category ?? 'Government Exam'}
         </p>
-        <h3 className="text-sm font-bold text-gray-900 line-clamp-2 mt-0.5 group-hover:text-orange-600 transition-colors leading-snug">
+        <h3 className="text-sm font-bold text-gray-900 line-clamp-2 mt-0.5 group-hover:text-[#1760f4] transition-colors leading-snug">
           {exam.title}
         </h3>
         <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100 mt-2">
@@ -313,43 +303,22 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
   const { exams, examTypes } = await getHomeData();
   const activeCategory = searchParams?.category ?? '';
 
-  // Max 8 exam types shown as tabs (+ "All Exams" = 9 total)
   const tabExamTypes = examTypes.slice(0, 8);
 
-  // Filter by examTypeName (dynamic exam type from DB)
   const filteredExams = activeCategory
     ? exams.filter(e => e.examTypeName === activeCategory)
     : exams;
 
-  const featured = exams.filter(e => e.isFeatured);  // always from full list for hero
+  const featured = exams.filter(e => e.isFeatured);
   const latest   = filteredExams.slice(0, 16);
 
   return (
     <>
-      {/* CSS custom properties */}
       <style>{`
-        :root {
-          --primary: #f97316;
-          --primary-dark: #ea580c;
-          --topbar-h: 56px;
-        }
-        @media (min-width: 768px) { :root { --topbar-h: 56px; } }
-        @media (min-width: 1024px) { :root { --topbar-h: 56px; } }
+        :root { --topbar-h: 56px; }
       `}</style>
 
       <Header />
-
-      {/* ── Mobile exam alert strip ──────────────────────────────────── */}
-      <div className="lg:hidden flex items-center justify-between gap-3 px-4 py-2.5 text-white text-sm"
-        style={{ background: 'linear-gradient(90deg,#f97316,#ea580c)' }}>
-        <span className="font-medium text-xs sm:text-sm">
-          🚂 <strong>RRB ALP 2026</strong> – 5696 Vacancies Released! Apply by Apr 30
-        </span>
-        <Link href="/exam/rrb-alp-2026"
-          className="shrink-0 bg-white text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-orange-50 transition-colors">
-          View →
-        </Link>
-      </div>
 
       <div className="flex bg-gray-50 min-h-screen">
         {/* Left Sidebar */}
@@ -358,21 +327,19 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
         {/* Main content */}
         <main className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-5 pb-20 md:pb-6">
 
-          {/* ── Filter pills — dynamic exam types (max 9 incl. "All Exams") ── */}
+          {/* ── Filter pills ── */}
           <div className="overflow-x-auto scrollbar-hide mb-5 -mx-4 px-4 md:-mx-6 md:px-6">
             <div className="flex items-center gap-2 min-w-max">
-              {/* "All Exams" pill */}
               <Link
                 href="/"
                 className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
                   ${activeCategory === ''
-                    ? 'bg-orange-500 text-white border-orange-500'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
+                    ? 'bg-[#1760f4] text-white border-[#1760f4]'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-[#1760f4] hover:text-[#1760f4]'
                   }`}>
                 All Exams
               </Link>
 
-              {/* Dynamic exam type pills */}
               {tabExamTypes.map(t => {
                 const isActive = t.name === activeCategory;
                 return (
@@ -380,8 +347,8 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                     href={`/?category=${encodeURIComponent(t.name)}`}
                     className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
                       ${isActive
-                        ? 'bg-orange-500 text-white border-orange-500'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400 hover:text-orange-600'
+                        ? 'bg-[#1760f4] text-white border-[#1760f4]'
+                        : 'bg-white text-gray-700 border-gray-200 hover:border-[#1760f4] hover:text-[#1760f4]'
                       }`}>
                     {examTypeIcon(t.name)} {t.name}
                   </Link>
@@ -390,35 +357,32 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             </div>
           </div>
 
-          {/* ── Hero banner ─────────────────────────────────────────── */}
+          {/* ── Hero banner ── */}
           {featured.length > 0 && (
             <Link href={`/exam/${featured[0].slug}`}
-              className="block rounded-2xl overflow-hidden mb-6 group"
-              style={{ background: 'linear-gradient(135deg,#1e1b4b 0%,#312e81 45%,#1e3a5f 100%)' }}>
-              <div className="relative p-6 md:p-8">
+              className="block rounded-xl overflow-hidden mb-6 group border border-gray-200 bg-white hover:border-gray-300 transition-colors">
+              <div className="relative p-6 md:p-8 border-l-4 border-l-[#1760f4]">
                 <div className="max-w-lg">
-                  <div className="inline-flex items-center gap-1.5 mb-3 text-xs font-bold px-3 py-1 rounded-full"
-                    style={{ background: 'rgba(249,115,22,.2)', border: '1px solid rgba(249,115,22,.4)', color: '#fdba74' }}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse inline-block"></span>
-                    New Notification
+                  <div className="inline-flex items-center gap-1.5 mb-3 text-xs font-bold px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#1760f4]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1760f4] animate-pulse inline-block"></span>
+                    Featured
                   </div>
-                  <h2 className="text-white text-xl md:text-2xl font-extrabold leading-tight mb-2">
+                  <h2 className="text-gray-900 text-xl md:text-2xl font-extrabold leading-tight mb-2">
                     {featured[0].title}
                   </h2>
                   {featured[0].shortDescription && (
-                    <p className="text-indigo-200/80 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-500 text-sm mb-4 line-clamp-2">
                       {stripHtml(featured[0].shortDescription)}
                     </p>
                   )}
                   <div className="flex items-center gap-3 flex-wrap">
-                    <span className="bg-orange-500 text-white text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-orange-600 transition-colors">
+                    <span className="bg-[#1760f4] text-white text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-[#0e4dd4] transition-colors">
                       Start Preparation
                     </span>
-                    <span className="text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
-                      style={{ border: '1.5px solid rgba(255,255,255,.25)' }}>
+                    <span className="text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
                       View Syllabus
                     </span>
-                    <span className={`ml-auto text-sm font-bold ${featured[0].priceInr === 0 ? 'text-green-400' : 'text-white'}`}>
+                    <span className={`ml-auto text-sm font-bold ${featured[0].priceInr === 0 ? 'text-green-600' : 'text-gray-900'}`}>
                       {formatPrice(featured[0].priceInr)}
                     </span>
                   </div>
@@ -427,7 +391,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             </Link>
           )}
 
-          {/* ── Quick stats (mobile 2×2, tablet 4×1) ───────────────── */}
+          {/* ── Quick stats ── */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             {[
               { icon: '📝', num: `${exams.length}+`, label: 'Exams' },
@@ -445,7 +409,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             ))}
           </div>
 
-          {/* ── Exam cards grid ──────────────────────────────────────── */}
+          {/* ── Exam cards grid ── */}
           {latest.length > 0 && (
             <section>
               <div className="flex items-center justify-between mb-4">
@@ -453,8 +417,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                   {activeCategory ? `${activeCategory} Exams` : 'Explore Exams'}
                 </h2>
                 <Link href="/exams"
-                  className="text-sm font-semibold hover:opacity-80 flex items-center gap-1"
-                  style={{ color: '#f97316' }}>
+                  className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1">
                   View all <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -464,7 +427,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             </section>
           )}
 
-          {/* ── Empty state ──────────────────────────────────────────── */}
+          {/* ── Empty state ── */}
           {latest.length === 0 && (
             <div className="text-center py-20">
               <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -475,8 +438,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                     We&apos;re adding {activeCategory} exams soon. Check back shortly or browse all exams.
                   </p>
                   <Link href="/"
-                    className="mt-6 inline-flex items-center gap-2 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90"
-                    style={{ background: '#f97316' }}>
+                    className="mt-6 inline-flex items-center gap-2 text-white bg-[#1760f4] px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#0e4dd4] transition-colors">
                     View All Exams <ChevronRight className="w-4 h-4" />
                   </Link>
                 </>
@@ -487,8 +449,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                     We&apos;re adding new exams and mock tests. Register to get notified when they go live.
                   </p>
                   <Link href="/register"
-                    className="mt-6 inline-flex items-center gap-2 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90"
-                    style={{ background: '#f97316' }}>
+                    className="mt-6 inline-flex items-center gap-2 text-white bg-[#1760f4] px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#0e4dd4] transition-colors">
                     Get Notified <ChevronRight className="w-4 h-4" />
                   </Link>
                 </>
@@ -501,18 +462,18 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
         <RightPanel exams={exams} />
       </div>
 
-      {/* ── Mobile bottom navigation ─────────────────────────────────── */}
+      {/* ── Mobile bottom navigation ── */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 grid grid-cols-4"
         style={{ height: 60, boxShadow: '0 -2px 10px rgba(0,0,0,.06)' }}>
         {[
-          { icon: <Home className="w-5 h-5" />, label: 'Home',    href: '/',           active: true },
-          { icon: <Search className="w-5 h-5" />, label: 'Search', href: '/exams',     active: false },
-          { icon: <FileText className="w-5 h-5" />, label: 'Tests', href: '/tests',    active: false },
+          { icon: <Home className="w-5 h-5" />,     label: 'Home',    href: '/',          active: true },
+          { icon: <Search className="w-5 h-5" />,   label: 'Search',  href: '/exams',     active: false },
+          { icon: <FileText className="w-5 h-5" />, label: 'Tests',   href: '/tests',     active: false },
           { icon: <BookOpen className="w-5 h-5" />, label: 'Profile', href: '/dashboard', active: false },
         ].map(item => (
           <Link key={item.label} href={item.href}
             className={`flex flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors
-              ${item.active ? 'text-orange-500' : 'text-gray-500 hover:text-orange-500'}`}>
+              ${item.active ? 'text-[#1760f4]' : 'text-gray-500 hover:text-[#1760f4]'}`}>
             {item.icon}
             {item.label}
           </Link>
