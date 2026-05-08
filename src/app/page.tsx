@@ -434,7 +434,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                   View all <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {latest.map((e, i) => <ExamCardItem key={e.id} exam={e} index={i} />)}
               </div>
             </section>
