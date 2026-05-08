@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { ImportantDate } from '@/types/exam';
 import {
   BookOpen, Users, FileText, Trophy,
@@ -21,26 +23,41 @@ interface Tab {
 interface Props {
   tabs:           Tab[];
   importantDates: ImportantDate[];
+  slug:           string;
+  defaultTab?:    string;
 }
 
-export default function ExamDetailTabs({ tabs, importantDates }: Props) {
-  const [activeTab, setActiveTab] = useState(tabs[0]?.id ?? '');
-  const active = tabs.find(t => t.id === activeTab);
+export default function ExamDetailTabs({ tabs, importantDates, slug, defaultTab }: Props) {
+  const searchParams = useSearchParams();
+  const tabParam     = searchParams.get('tab');
+
+  // Active tab: URL param → defaultTab from server → first tab
+  const activeId = (tabParam && tabs.some(t => t.id === tabParam))
+    ? tabParam
+    : (defaultTab && tabs.some(t => t.id === defaultTab))
+      ? defaultTab
+      : (tabs[0]?.id ?? '');
+
+  const active = tabs.find(t => t.id === activeId);
+
+  const tabHref = (id: string) =>
+    id === tabs[0]?.id
+      ? `/exam/${slug}`                    // first tab = canonical URL (no ?tab=)
+      : `/exam/${slug}?tab=${id}`;
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 shadow-sm" style={{ overflow: 'clip' }}>
 
-      {/* Tab nav ─────────────────────────────────────────────────────────── */}
-
-      {/* Mobile: 3-column pill grid so nothing scrolls off-screen */}
+      {/* ── Mobile: 3-column pill grid ───────────────────────────────────── */}
       <div className="grid grid-cols-3 gap-px bg-gray-200 border-b border-gray-200 sm:hidden">
         {tabs.map(tab => {
-          const Icon = ICONS[tab.icon] ?? BookOpen;
-          const isActive = activeTab === tab.id;
+          const Icon     = ICONS[tab.icon] ?? BookOpen;
+          const isActive = activeId === tab.id;
           return (
-            <button
+            <Link
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              href={tabHref(tab.id)}
+              scroll={false}
               className={`
                 flex flex-col items-center justify-center gap-1 py-3 px-1 text-[11px] font-semibold
                 transition-all duration-150 focus:outline-none
@@ -52,24 +69,25 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
               <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-indigo-500' : 'text-gray-400'}`} />
               <span className="text-center leading-tight">{tab.label}</span>
               {isActive && <span className="block w-4 h-0.5 rounded-full bg-indigo-600 mt-0.5" />}
-            </button>
+            </Link>
           );
         })}
       </div>
 
-      {/* Desktop: single horizontal tab bar (hidden on mobile) */}
+      {/* ── Desktop: horizontal scrollable tab bar ───────────────────────── */}
       <div className="hidden sm:block border-b border-gray-200 bg-gray-50/80">
         <div
           className="flex overflow-x-auto"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}
         >
           {tabs.map(tab => {
-            const Icon = ICONS[tab.icon] ?? BookOpen;
-            const isActive = activeTab === tab.id;
+            const Icon     = ICONS[tab.icon] ?? BookOpen;
+            const isActive = activeId === tab.id;
             return (
-              <button
+              <Link
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                href={tabHref(tab.id)}
+                scroll={false}
                 className={`
                   flex items-center gap-2 px-5 py-4 text-sm font-semibold whitespace-nowrap shrink-0
                   border-b-2 transition-all duration-150 focus:outline-none
@@ -80,13 +98,13 @@ export default function ExamDetailTabs({ tabs, importantDates }: Props) {
               >
                 <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-indigo-500' : 'text-gray-400'}`} />
                 {tab.label}
-              </button>
+              </Link>
             );
           })}
         </div>
       </div>
 
-      {/* Tab content */}
+      {/* ── Tab content ──────────────────────────────────────────────────── */}
       <div className="p-6 md:p-8">
         {active?.id === 'dates' ? (
           <ImportantDatesTable dates={importantDates} />
@@ -108,7 +126,6 @@ function RichContent({ html }: { html: string }) {
 
   useEffect(() => {
     if (!ref.current) return;
-    // Wrap bare tables in a scroll container so they don't overflow on mobile
     ref.current.querySelectorAll('table').forEach(table => {
       if (table.parentElement?.classList.contains('table-scroll-wrapper')) return;
       const wrapper = document.createElement('div');
@@ -134,7 +151,7 @@ function ImportantDatesTable({ dates }: { dates: ImportantDate[] }) {
         <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
           <Calendar className="w-4 h-4 text-indigo-600" />
         </div>
-        <h3 className="font-bold text-gray-900 text-base">Important Dates & Schedule</h3>
+        <h3 className="font-bold text-gray-900 text-base">Important Dates &amp; Schedule</h3>
       </div>
       <div className="overflow-x-auto rounded-xl border border-gray-200">
         <table className="w-full text-sm">

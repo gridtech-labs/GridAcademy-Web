@@ -21,7 +21,7 @@ import {
 import { stripHtml } from '@/lib/utils';
 import { getStaticFaqs } from '@/lib/static-faqs';
 
-interface PageProps { params: { slug: string } }
+interface PageProps { params: { slug: string }; searchParams?: { tab?: string } }
 
 const SLUG_KEYWORDS: Record<string, string[]> = {
   "cuet-ug-2026-mock-paper": [
@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
 
       alternates: {
-        canonical: url,
+        canonical: url,   // always points to base URL regardless of ?tab=
       },
 
       ...((() => {
@@ -114,7 +114,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function ExamDetailPage({ params }: PageProps) {
+export default async function ExamDetailPage({ params, searchParams }: PageProps) {
   const session = await getServerSession(authOptions);
   const token   = (session?.user as any)?.accessToken as string | undefined;
 
@@ -420,7 +420,12 @@ export default async function ExamDetailPage({ params }: PageProps) {
           {/* Left: Tabs */}
           <div className="flex-1 min-w-0">
             {tabs.length > 0 ? (
-              <ExamDetailTabs tabs={tabs} importantDates={importantDates} />
+              <ExamDetailTabs
+                tabs={tabs}
+                importantDates={importantDates}
+                slug={exam.slug}
+                defaultTab={searchParams?.tab}
+              />
             ) : (
               <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center text-gray-400">
                 <BookOpen className="w-10 h-10 mx-auto mb-3 opacity-40" />
