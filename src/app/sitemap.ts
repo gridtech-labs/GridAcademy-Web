@@ -1,0 +1,52 @@
+import { MetadataRoute } from 'next';
+
+const BASE_URL = 'https://www.gridacademy.in';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
+
+const EXAM_CATEGORY_SLUGS = [
+  'ssc', 'banking', 'railways', 'upsc',
+  'police', 'defence', 'state-psc', 'teaching',
+];
+
+const STATIC_ROUTES: MetadataRoute.Sitemap = [
+  { url: BASE_URL,                         priority: 1.0,  changeFrequency: 'daily'   },
+  { url: `${BASE_URL}/exams`,              priority: 0.9,  changeFrequency: 'daily'   },
+  { url: `${BASE_URL}/tests`,              priority: 0.9,  changeFrequency: 'daily'   },
+  { url: `${BASE_URL}/about`,              priority: 0.5,  changeFrequency: 'monthly' },
+  { url: `${BASE_URL}/contact`,            priority: 0.5,  changeFrequency: 'monthly' },
+  { url: `${BASE_URL}/blog`,               priority: 0.6,  changeFrequency: 'weekly'  },
+  { url: `${BASE_URL}/privacy`,            priority: 0.3,  changeFrequency: 'yearly'  },
+  { url: `${BASE_URL}/terms`,              priority: 0.3,  changeFrequency: 'yearly'  },
+  { url: `${BASE_URL}/refund-policy`,      priority: 0.3,  changeFrequency: 'yearly'  },
+  { url: `${BASE_URL}/leaderboard`,        priority: 0.5,  changeFrequency: 'daily'   },
+];
+
+async function getExamSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_BASE}/api/exam-pages`, { next: { revalidate: 3600 } });
+    if (!res.ok) return [];
+    const json = await res.json();
+    const items: { slug: string }[] = Array.isArray(json) ? json : (json?.data ?? []);
+    return items.map(e => e.slug).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const examSlugs = await getExamSlugs();
+
+  const examCategoryRoutes: MetadataRoute.Sitemap = EXAM_CATEGORY_SLUGS.map(slug => ({
+    url: `${BASE_URL}/exams/${slug}`,
+    priority: 0.8,
+    changeFrequency: 'weekly',
+  }));
+
+  const examDetailRoutes: MetadataRoute.Sitemap = examSlugs.map(slug => ({
+    url: `${BASE_URL}/exam/${slug}`,
+    priority: 0.9,
+    changeFrequency: 'weekly',
+  }));
+
+  return [...STATIC_ROUTES, ...examCategoryRoutes, ...examDetailRoutes];
+}
