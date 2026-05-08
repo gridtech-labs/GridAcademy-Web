@@ -251,10 +251,10 @@ function ExamCardItem({ exam, index }: { exam: ExamCard; index: number }) {
         </div>
 
         {/* Row 2: title — allow up to 3 lines so long names fit */}
-        <h1 className="text-[15px] font-bold text-gray-900 leading-snug line-clamp-3
+        <h2 className="text-[26px] font-bold text-gray-900 leading-snug line-clamp-3
           group-hover:text-orange-600 transition-colors flex-1">
           {exam.title}
-        </h1>
+        </h2>
 
         {/* Row 3: conducting body */}
         <p className="text-xs text-gray-500 truncate">
