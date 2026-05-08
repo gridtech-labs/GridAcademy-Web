@@ -37,6 +37,7 @@ export interface ExamTest {
   totalQuestions: number;
   isFree: boolean;
   sortOrder: number;
+  attemptCount: number;
 }
 
 export interface ImportantDate {

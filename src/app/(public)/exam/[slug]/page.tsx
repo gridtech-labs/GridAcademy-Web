@@ -16,7 +16,7 @@ import { authOptions } from '@/lib/auth-options';
 import {
   Globe, Bell, Clock, FileText, Calendar,
   ChevronRight, BookOpen, Building2, Trophy,
-  Tag, ExternalLink, Users,
+  Tag, ExternalLink, Users, Lock,
 } from 'lucide-react';
 import { stripHtml } from '@/lib/utils';
 import { getStaticFaqs } from '@/lib/static-faqs';
@@ -25,35 +25,15 @@ interface PageProps { params: { slug: string }; searchParams?: { tab?: string } 
 
 const SLUG_KEYWORDS: Record<string, string[]> = {
   "cuet-ug-2026-mock-paper": [
-    "CUET mock test 2026",
-    "CUET UG mock paper",
-    "CUET practice test free",
-    "CUET sample paper",
-    "CUET online test",
+    "CUET mock test 2026", "CUET UG mock paper", "CUET practice test free",
+    "CUET sample paper", "CUET online test",
   ],
   "cuet-mock-test-2026-ug-real-exam-practice": [
-    "CUET mock test 2026",
-    "CUET UG mock test",
-    "CUET practice test online",
-    "CUET sample paper 2026",
-    "CUET exam preparation",
-    "CUET online test series",
-    "NTA CUET mock test",
-    "CUET test practice",
+    "CUET mock test 2026", "CUET UG mock test", "CUET practice test online",
+    "CUET sample paper 2026", "CUET exam preparation",
+    "CUET online test series", "NTA CUET mock test", "CUET test practice",
   ],
 };
-
-// export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-//   try {
-//     const exam = await api.get<ExamDetail>(`/api/exam-pages/${params.slug}`);
-//     if (!exam) return { title: 'Exam Details' };
-//     return {
-//       title: exam.metaTitle ?? exam.title,
-//       description: stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
-//       openGraph: exam.bannerUrl ? { images: [{ url: exam.bannerUrl }] } : undefined,
-//     };
-//   } catch { return { title: 'Exam Details' }; }
-// }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
@@ -61,57 +41,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!exam) return { title: "Exam Details" };
 
     const url = `https://www.gridacademy.in/exam/${params.slug}`;
-
     return {
       title: exam.metaTitle ?? exam.title,
-      description:
-        stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
-
-      alternates: {
-        canonical: url,   // always points to base URL regardless of ?tab=
-      },
-
+      description: stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
+      alternates: { canonical: url },
       ...((() => {
         const kw = exam.metaKeywords
           ? exam.metaKeywords.split(",").map(k => k.trim())
           : SLUG_KEYWORDS[params.slug];
         return kw ? { keywords: kw } : {};
       })()),
-
       openGraph: {
         title: exam.metaTitle ?? exam.title,
-        description:
-          stripHtml(exam.metaDescription ?? exam.shortDescription) || "",
-        url: url,
+        description: stripHtml(exam.metaDescription ?? exam.shortDescription) || "",
+        url,
         siteName: "GridAcademy",
-        images: [
-          {
-            url:
-              exam.bannerUrl ||
-              exam.thumbnailUrl ||
-              "https://www.gridacademy.in/og-image.jpg",
-            width: 1200,
-            height: 630,
-          },
-        ],
+        images: [{ url: exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg", width: 1200, height: 630 }],
         type: "article",
       },
-
       twitter: {
         card: "summary_large_image",
         title: exam.metaTitle ?? exam.title,
-        description:
-          stripHtml(exam.metaDescription ?? exam.shortDescription) || "",
-        images: [
-          exam.bannerUrl ||
-            exam.thumbnailUrl ||
-            "https://www.gridacademy.in/og-image.jpg",
-        ],
+        description: stripHtml(exam.metaDescription ?? exam.shortDescription) || "",
+        images: [exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg"],
       },
     };
-  } catch {
-    return { title: "Exam Details" };
-  }
+  } catch { return { title: "Exam Details" }; }
 }
 
 export default async function ExamDetailPage({ params, searchParams }: PageProps) {
@@ -125,43 +80,29 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
     exam = data;
   } catch { notFound(); }
 
-  // Check if user already has access (for paid exams)
   let hasAccess = false;
   let examOffers: any[] = [];
   if (exam.priceInr > 0) {
     const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
-    // Check access
     if (session && token) {
       try {
-        const accessRes = await fetch(`${API_BASE}/api/exam-payment/access/${exam.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-          cache: 'no-store',
+        const r = await fetch(`${API_BASE}/api/exam-payment/access/${exam.id}`, {
+          headers: { Authorization: `Bearer ${token}` }, cache: 'no-store',
         });
-        if (accessRes.ok) {
-          const accessJson = await accessRes.json();
-          hasAccess = (accessJson.data ?? accessJson)?.hasAccess === true;
-        }
+        if (r.ok) hasAccess = ((await r.json()).data ?? {})?.hasAccess === true;
       } catch { /* ignore */ }
     }
-    // Fetch available offers (public)
     try {
-      const offersRes = await fetch(`${API_BASE}/api/exam-payment/offers/${exam.id}`, { cache: 'no-store' });
-      if (offersRes.ok) {
-        const offersJson = await offersRes.json();
-        examOffers = offersJson.data ?? offersJson ?? [];
-      }
+      const r = await fetch(`${API_BASE}/api/exam-payment/offers/${exam.id}`, { cache: 'no-store' });
+      if (r.ok) examOffers = (await r.json()).data ?? [];
     } catch { /* ignore */ }
   }
 
   let importantDates: ImportantDate[] = [];
-  if (exam.importantDates) {
-    try { importantDates = JSON.parse(exam.importantDates); } catch { /* ignore */ }
-  }
+  if (exam.importantDates) { try { importantDates = JSON.parse(exam.importantDates); } catch { /* ignore */ } }
 
   let faqs: ExamFaq[] = [];
-  if (exam.faqs) {
-    try { faqs = JSON.parse(exam.faqs); } catch { /* ignore */ }
-  }
+  if (exam.faqs) { try { faqs = JSON.parse(exam.faqs); } catch { /* ignore */ } }
   if (faqs.length === 0) faqs = getStaticFaqs(exam.slug);
 
   const tabs = [
@@ -174,343 +115,190 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
     { id: 'result',      label: 'Result & Cut-off', icon: 'Tag',       content: (exam.resultInfo ?? '') + (exam.cutOff ? `\n\n${exam.cutOff}` : '') },
   ].filter(t => t.id === 'dates' ? importantDates.length > 0 : !!t.content);
 
-  const freeTest = exam.tests.find(t => t.isFree);
+  const sortedTests = [...exam.tests].sort((a, b) => a.sortOrder - b.sortOrder);
 
   return (
     <>
-    {/* JSON-LD Structured Data SEO */}
-<script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "EducationalOccupationalProgram",
-      name: exam.title,
-      description: stripHtml(exam.shortDescription || ""),
-      url: `https://www.gridacademy.in/exam/${exam.slug}`,
-      image:
-        exam.bannerUrl ||
-        exam.thumbnailUrl ||
-        "https://www.gridacademy.in/og-image.jpg",
-      provider: {
-        "@type": "Organization",
-        name: "GridAcademy",
-        url: "https://www.gridacademy.in",
-      },
-    }),
-  }}
-/>
-{faqs.length > 0 && (
-  <script
-    type="application/ld+json"
-    dangerouslySetInnerHTML={{
-      __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: faqs.map(faq => ({
-          "@type": "Question",
-          name: faq.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: faq.answer,
-          },
-        })),
-      }),
-    }}
-  />
-)}
-<script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: "https://www.gridacademy.in",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Exams",
-          item: "https://www.gridacademy.in/exams",
-        },
-        ...(exam.examLevelName
-          ? [
-              {
-                "@type": "ListItem",
-                position: 3,
-                name: exam.examLevelName,
-              },
-              {
-                "@type": "ListItem",
-                position: 4,
-                name: exam.title,
-                item: `https://www.gridacademy.in/exam/${exam.slug}`,
-              },
-            ]
-          : [
-              {
-                "@type": "ListItem",
-                position: 3,
-                name: exam.title,
-                item: `https://www.gridacademy.in/exam/${exam.slug}`,
-              },
-            ]),
-      ],
-    }),
-  }}
-/>
-    <div className="min-h-screen bg-gray-50">
-
-      {/* ── Breadcrumb ─────────────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-200">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
-    <nav
-      className="flex items-center gap-1.5 text-xs text-gray-500
-                 overflow-x-auto scrollbar-hide whitespace-nowrap"
-      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}
-    >
-      <Link href="/" className="hover:text-orange-500 transition-colors shrink-0">Home</Link>
-      <ChevronRight className="w-3 h-3 shrink-0" />
-      <Link href="/exams" className="hover:text-orange-500 transition-colors shrink-0">Exams</Link>
-      {exam.examLevelName && (
-        <>
-          <ChevronRight className="w-3 h-3 shrink-0" />
-          <span className="text-gray-500 shrink-0">{exam.examLevelName}</span>
-        </>
+      {/* ── JSON-LD Structured Data ──────────────────────────────────────── */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "EducationalOccupationalProgram",
+        name: exam.title, description: stripHtml(exam.shortDescription || ""),
+        url: `https://www.gridacademy.in/exam/${exam.slug}`,
+        image: exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg",
+        provider: { "@type": "Organization", name: "GridAcademy", url: "https://www.gridacademy.in" },
+      })}} />
+      {faqs.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org", "@type": "FAQPage",
+          mainEntity: faqs.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })),
+        })}} />
       )}
-      <ChevronRight className="w-3 h-3 shrink-0" />
-      {/* Last crumb: no truncate needed — whole nav scrolls now */}
-      <span className="text-gray-800 font-medium shrink-0">{exam.title}</span>
-    </nav>
-  </div>
-</div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.gridacademy.in" },
+          { "@type": "ListItem", position: 2, name: "Exams", item: "https://www.gridacademy.in/exams" },
+          ...(exam.examLevelName ? [
+            { "@type": "ListItem", position: 3, name: exam.examLevelName },
+            { "@type": "ListItem", position: 4, name: exam.title, item: `https://www.gridacademy.in/exam/${exam.slug}` },
+          ] : [
+            { "@type": "ListItem", position: 3, name: exam.title, item: `https://www.gridacademy.in/exam/${exam.slug}` },
+          ]),
+        ],
+      })}} />
 
-      {/* ── Hero ───────────────────────────────────────────────────────────────── */}
+      <div className="min-h-screen bg-gray-50">
 
-      {/* Banner strip — only shown when a banner/thumbnail image exists */}
-      {(exam.bannerUrl || exam.thumbnailUrl) && (
-        <div className="relative w-full h-48 md:h-64 overflow-hidden"
-          style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
-          <Image
-            src={exam.bannerUrl ?? exam.thumbnailUrl!}
-            alt={exam.title}
-            fill
-            priority
-            className="object-cover object-center opacity-30"
-            sizes="100vw"
-            unoptimized
-          />
-          {/* Radial glow */}
-          <div className="absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse at 70% 50%, rgba(249,115,22,.15), transparent 60%)' }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
-        </div>
-      )}
-
-      {/* Info section */}
-      <div className="text-white" style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-10">
-          <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center">
-
-            {/* Thumbnail / Logo */}
-            <div className={`shrink-0 ${(exam.bannerUrl || exam.thumbnailUrl) ? '-mt-14 md:-mt-16' : ''}`}>
-              {exam.thumbnailUrl ? (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden
-                  border-4 border-orange-400/40 shadow-2xl bg-white">
-                  <Image src={exam.thumbnailUrl} alt={exam.title}
-                    width={96} height={96} className="w-full h-full object-cover" unoptimized />
-                </div>
-              ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-4 border-orange-400/30
-                  flex items-center justify-center shadow-xl text-4xl"
-                  style={{ background: 'rgba(249,115,22,.2)' }}>
-                  📝
-                </div>
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="flex-1 min-w-0">
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2 mb-3">
-                {exam.examLevelName && (
-                  <span className="bg-orange-500/20 text-orange-300 border border-orange-400/30
-                    text-xs font-semibold px-3 py-1 rounded-full">
-                    {exam.examLevelName}
-                  </span>
-                )}
-                {exam.examTypeName && (
-                  <span className="bg-white/10 text-white border border-white/20
-                    text-xs font-semibold px-3 py-1 rounded-full">
-                    {exam.examTypeName}
-                  </span>
-                )}
-                {freeTest && (
-                  <span className="bg-green-500/20 text-green-300 border border-green-400/30
-                    text-xs font-semibold px-3 py-1 rounded-full">
-                    ✓ Free Test Available
-                  </span>
-                )}
-              </div>
-
-              <h1 className="text-2xl md:text-3xl font-extrabold leading-tight mb-2">
-                {exam.title}
-              </h1>
-
-              {exam.shortDescription && (
-                <p className="text-slate-400 text-sm md:text-base max-w-2xl mb-4 leading-relaxed">
-                  {stripHtml(exam.shortDescription)}
-                </p>
-              )}
-
-              {/* Meta row */}
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
-                {exam.conductingBody && (
-                  <span className="flex items-center gap-1.5">
-                    <Building2 className="w-4 h-4 shrink-0" />
-                    {exam.conductingBody}
-                  </span>
-                )}
-                <span className="flex items-center gap-1.5">
-                  <FileText className="w-4 h-4 shrink-0" />
-                  {exam.testCount} Mock Test{exam.testCount !== 1 ? 's' : ''} Available
-                </span>
-                {exam.officialWebsite && (
-                  <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 hover:text-orange-400 transition-colors underline underline-offset-2">
-                    <Globe className="w-4 h-4 shrink-0" />
-                    Official Website
-                  </a>
-                )}
-                {exam.notificationUrl && (
-                  <a href={exam.notificationUrl} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 hover:text-orange-400 transition-colors underline underline-offset-2">
-                    <Bell className="w-4 h-4 shrink-0" />
-                    Official Notification
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* CTA — free test button in hero */}
-            {freeTest && (
-              <div className="shrink-0 w-full md:w-auto">
-                <FreeTestButton
-                  testId={freeTest.testId}
-                  isLoggedIn={!!session}
-                  callbackUrl={`/exam/${exam.slug}`}
-                  token={token}
-                  variant="hero"
-                />
-              </div>
-            )}
+        {/* ── Breadcrumb ─────────────────────────────────────────────────── */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-2.5">
+            <nav className="flex items-center gap-1.5 text-xs text-gray-500 overflow-x-auto scrollbar-hide whitespace-nowrap"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+              <Link href="/" className="hover:text-orange-500 transition-colors shrink-0">Home</Link>
+              <ChevronRight className="w-3 h-3 shrink-0" />
+              <Link href="/exams" className="hover:text-orange-500 transition-colors shrink-0">Exams</Link>
+              {exam.examLevelName && (<><ChevronRight className="w-3 h-3 shrink-0" /><span className="shrink-0">{exam.examLevelName}</span></>)}
+              <ChevronRight className="w-3 h-3 shrink-0" />
+              <span className="text-gray-800 font-medium shrink-0">{exam.title}</span>
+            </nav>
           </div>
         </div>
-      </div>
 
-      {/* ── Main Content ───────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-normal">
+        {/* ── Hero ───────────────────────────────────────────────────────── */}
+        <div style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
+          {/* Optional banner image overlay */}
+          {(exam.bannerUrl || exam.thumbnailUrl) && (
+            <div className="relative w-full h-36 md:h-48 overflow-hidden">
+              <Image src={exam.bannerUrl ?? exam.thumbnailUrl!} alt={exam.title}
+                fill priority className="object-cover object-center opacity-20"
+                sizes="100vw" unoptimized />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0f172a]/80" />
+            </div>
+          )}
 
-          {/* Left: Tabs */}
-          <div className="flex-1 min-w-0">
-            {tabs.length > 0 ? (
-              <ExamDetailTabs
-                tabs={tabs}
-                importantDates={importantDates}
-                slug={exam.slug}
-                defaultTab={searchParams?.tab}
-              />
-            ) : (
-              <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center text-gray-400">
-                <BookOpen className="w-10 h-10 mx-auto mb-3 opacity-40" />
-                <p className="font-medium">Detailed information coming soon.</p>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+            <div className="flex flex-col md:flex-row gap-5 md:gap-8 items-start md:items-center">
+
+              {/* Thumbnail */}
+              <div className={`shrink-0 ${(exam.bannerUrl || exam.thumbnailUrl) ? 'md:-mt-12' : ''}`}>
+                {exam.thumbnailUrl ? (
+                  <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl bg-white">
+                    <Image src={exam.thumbnailUrl} alt={exam.title} width={80} height={80} className="w-full h-full object-cover" unoptimized />
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 rounded-2xl border-2 border-orange-400/30 flex items-center justify-center text-4xl shadow-xl"
+                    style={{ background: 'rgba(249,115,22,.15)' }}>📝</div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Right: Sidebar */}
-          <aside className="w-full lg:w-[300px] shrink-0 space-y-4 lg:sticky lg:top-20">
-
-            {/* ── Buy / Access card ── */}
-            {exam.priceInr > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                <div className="bg-orange-500 text-white text-center text-xs font-semibold py-1.5 tracking-wide">
-                  🔥 Limited Time Offer – Only ₹{exam.priceInr.toLocaleString('en-IN')}
-                </div>
-                <div className="px-5 py-4 border-b border-gray-100">
-                  <div className="flex items-center justify-center">
-                    <h3 className="text-right font-bold text-gray-900 text-sm md:text-lg">Start Full Mock Test – </h3>
-                    <span className="pl-1 text-sm md:text-lg font-extrabold text-orange-600">
-                      Only ₹{exam.priceInr.toLocaleString('en-IN')}
+              {/* Title + meta */}
+              <div className="flex-1 min-w-0 text-white">
+                <div className="flex flex-wrap gap-2 mb-2.5">
+                  {exam.examLevelName && (
+                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border border-orange-400/40 bg-orange-500/15 text-orange-300">
+                      {exam.examLevelName}
                     </span>
-                  </div>
+                  )}
+                  {exam.examTypeName && (
+                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border border-white/20 bg-white/10 text-white/80">
+                      {exam.examTypeName}
+                    </span>
+                  )}
+                  {sortedTests.some(t => t.isFree) && (
+                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border border-green-400/40 bg-green-500/15 text-green-300">
+                      ✓ Free Test Available
+                    </span>
+                  )}
                 </div>
-                <div className="px-5 py-4">
-                  <ExamBuyButton
-                    examPageId={exam.id}
-                    examTitle={exam.title}
-                    examSlug={exam.slug}
-                    priceInr={exam.priceInr}
-                    hasAccess={hasAccess}
-                    token={token}
-                    offers={examOffers}
-                  />
+
+                <h1 className="text-2xl md:text-3xl font-extrabold leading-tight mb-2">{exam.title}</h1>
+
+                {exam.shortDescription && (
+                  <p className="text-slate-400 text-sm max-w-2xl mb-3 leading-relaxed line-clamp-2">
+                    {stripHtml(exam.shortDescription)}
+                  </p>
+                )}
+
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm text-slate-400">
+                  {exam.conductingBody && (
+                    <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 shrink-0" />{exam.conductingBody}</span>
+                  )}
+                  <span className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 shrink-0" />{exam.testCount} Mock Test{exam.testCount !== 1 ? 's' : ''}</span>
+                  {exam.officialWebsite && (
+                    <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 hover:text-orange-400 transition-colors underline underline-offset-2">
+                      <Globe className="w-3.5 h-3.5 shrink-0" />Official Website
+                    </a>
+                  )}
                 </div>
               </div>
-            )}
+            </div>
+          </div>
+        </div>
 
-            {/* ── Available Tests card ── */}
-            {exam.tests.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                {/* Card header */}
-                <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-100 bg-gray-50">
-                  <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center shrink-0">
-                    <FileText className="w-3.5 h-3.5 text-orange-600" />
-                  </div>
-                  <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Available Tests</h3>
-                </div>
+        {/* ── Main content ───────────────────────────────────────────────── */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
-                <ul className="divide-y divide-gray-100">
-                  {exam.tests
-                    .sort((a, b) => a.sortOrder - b.sortOrder)
-                    .map(test => (
-                      <li key={test.testId} className="px-5 py-4">
-                        {/* Title + FREE badge */}
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <p className="text-sm font-semibold text-gray-900 leading-snug flex-1">
-                            {test.title}
-                          </p>
-                          {test.isFree ? (
-                            <span className="shrink-0 bg-green-50 text-green-700 border border-green-200
-                              text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
-                              FREE
-                            </span>
-                          ) : (
-                            <span className="shrink-0 bg-orange-50 text-orange-600 border border-orange-200
-                              text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
-                              PAID
-                            </span>
-                          )}
-                        </div>
-                        {/* Meta */}
-                        <div className="flex items-center gap-4 text-xs text-gray-500 mb-3.5">
-                          <span className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5 text-gray-400" />
-                            {test.durationMinutes} min
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <FileText className="w-3.5 h-3.5 text-gray-400" />
-                            {test.totalQuestions} Questions
-                          </span>
-                        </div>
-                        {/* CTA */}
+          {/* ── Test Cards ─────────────────────────────────────────────── */}
+          {sortedTests.length > 0 && (
+            <section>
+              <h2 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <div className="w-1 h-5 rounded-full bg-orange-500" />
+                Available Mock Tests
+              </h2>
+              <div className="space-y-3">
+                {sortedTests.map(test => (
+                  <div key={test.testId}
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
+
+                    {/* Left content */}
+                    <div className="flex-1 min-w-0">
+                      {/* Badge + attempts row */}
+                      <div className="flex items-center gap-2 mb-1.5">
                         {test.isFree ? (
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-green-500 text-white uppercase tracking-wide">
+                            FREE
+                          </span>
+                        ) : (
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-orange-500 text-white uppercase tracking-wide flex items-center gap-1">
+                            <Lock className="w-2.5 h-2.5" />PAID
+                          </span>
+                        )}
+                        {test.attemptCount > 0 && (
+                          <span className="text-xs text-gray-400 flex items-center gap-1">
+                            <Users className="w-3 h-3" />
+                            {test.attemptCount.toLocaleString('en-IN')} Attempts
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <p className="text-base font-bold text-gray-900 mb-2">{test.title}</p>
+
+                      {/* Meta */}
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+                        <span className="flex items-center gap-1.5">
+                          <FileText className="w-3.5 h-3.5 text-orange-400" />
+                          {test.totalQuestions} Questions
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-orange-400" />
+                          {test.durationMinutes} Minutes
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <div className="shrink-0 w-full sm:w-36">
+                      {test.isFree ? (
+                        <FreeTestButton
+                          testId={test.testId}
+                          isLoggedIn={!!session}
+                          callbackUrl={`/exam/${exam.slug}`}
+                          token={token}
+                        />
+                      ) : exam.priceInr > 0 ? (
+                        hasAccess ? (
                           <FreeTestButton
                             testId={test.testId}
                             isLoggedIn={!!session}
@@ -518,121 +306,111 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                             token={token}
                           />
                         ) : (
-                          <Link href={`/test/${exam.slug}`}
-                            className="flex items-center justify-center gap-2 w-full text-sm font-semibold
-                              bg-gray-50 text-gray-700 hover:bg-orange-500 hover:text-white
-                              py-2.5 rounded-xl transition-all border border-gray-200 hover:border-orange-500">
-                            View Test Details
-                          </Link>
-                        )}
-                      </li>
-                    ))}
-                </ul>
+                          <ExamBuyButton
+                            examPageId={exam.id}
+                            examTitle={exam.title}
+                            examSlug={exam.slug}
+                            priceInr={exam.priceInr}
+                            hasAccess={hasAccess}
+                            token={token}
+                            offers={examOffers}
+                          />
+                        )
+                      ) : (
+                        <Link href={`/test/${exam.slug}`}
+                          className="flex items-center justify-center gap-2 w-full text-sm font-semibold
+                            bg-gray-50 text-gray-700 hover:bg-orange-500 hover:text-white
+                            py-2.5 rounded-xl transition-all border border-gray-200 hover:border-orange-500">
+                          View Details
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
+            </section>
+          )}
 
-            {/* ── Exam Highlights card ── */}
+          {/* ── Exam info grid (highlights + key dates) ─────────────────── */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              exam.conductingBody && { icon: Building2, label: 'Conducting Body', value: exam.conductingBody },
+              exam.examLevelName  && { icon: Trophy,    label: 'Exam Level',      value: exam.examLevelName },
+              exam.examTypeName   && { icon: Tag,       label: 'Category',        value: exam.examTypeName },
+              exam.testCount > 0  && { icon: FileText,  label: 'Mock Tests',      value: `${exam.testCount} Tests` },
+            ].filter(Boolean).map((item: any, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 px-4 py-3 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
+                  <item.icon className="w-4 h-4 text-orange-500" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">{item.label}</p>
+                  <p className="text-xs font-bold text-gray-800 truncate">{item.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ── Tabs: Overview, Syllabus, etc. ──────────────────────────── */}
+          {tabs.length > 0 ? (
+            <ExamDetailTabs
+              tabs={tabs}
+              importantDates={importantDates}
+              slug={exam.slug}
+              defaultTab={searchParams?.tab}
+            />
+          ) : (
+            <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center text-gray-400">
+              <BookOpen className="w-10 h-10 mx-auto mb-3 opacity-40" />
+              <p className="font-medium">Detailed information coming soon.</p>
+            </div>
+          )}
+
+          {/* ── Important Dates table (standalone) ──────────────────────── */}
+          {importantDates.length > 0 && !tabs.some(t => t.id === 'dates') && (
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
               <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-100 bg-gray-50">
                 <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center shrink-0">
-                  <Trophy className="w-3.5 h-3.5 text-orange-600" />
+                  <Calendar className="w-3.5 h-3.5 text-orange-600" />
                 </div>
-                <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Exam Highlights</h3>
+                <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Key Dates</h3>
               </div>
-
               <ul className="divide-y divide-gray-100">
-                {([
-                  exam.conductingBody && { icon: Building2, label: 'Conducting Body', value: exam.conductingBody },
-                  exam.examLevelName  && { icon: Trophy,    label: 'Exam Level',       value: exam.examLevelName },
-                  exam.examTypeName   && { icon: Tag,       label: 'Category',         value: exam.examTypeName },
-                  exam.testCount > 0  && { icon: FileText,  label: 'Total Mock Tests', value: `${exam.testCount} Tests` },
-                ] as any[]).filter(Boolean).map((item: any, i: number) => (
-                  <li key={i} className="flex items-center gap-3.5 px-5 py-3.5">
-                    <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
-                      <item.icon className="w-4 h-4 text-orange-500" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-0.5">
-                        {item.label}
-                      </span>
-                      <span className="text-sm font-semibold text-gray-800 block truncate">{item.value}</span>
-                    </div>
+                {importantDates.map((d, i) => (
+                  <li key={i} className="flex items-center justify-between gap-3 px-5 py-3.5">
+                    <span className="text-sm text-gray-600">{d.label}</span>
+                    <span className="text-sm font-bold text-orange-600 whitespace-nowrap">{d.date}</span>
                   </li>
                 ))}
-
-                {exam.officialWebsite && (
-                  <li className="flex items-center gap-3.5 px-5 py-3.5">
-                    <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
-                      <Globe className="w-4 h-4 text-orange-500" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-0.5">
-                        Official Website
-                      </span>
-                      <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
-                        className="text-sm font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1 truncate">
-                        {new URL(exam.officialWebsite).hostname}
-                        <ExternalLink className="w-3 h-3 shrink-0" />
-                      </a>
-                    </div>
-                  </li>
-                )}
-
-                {exam.notificationUrl && (
-                  <li className="flex items-center gap-3.5 px-5 py-3.5">
-                    <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
-                      <Bell className="w-4 h-4 text-orange-500" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-0.5">
-                        Notification
-                      </span>
-                      <a href={exam.notificationUrl} target="_blank" rel="noopener noreferrer"
-                        className="text-sm font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1">
-                        Download PDF
-                        <ExternalLink className="w-3 h-3 shrink-0" />
-                      </a>
-                    </div>
-                  </li>
-                )}
               </ul>
             </div>
+          )}
 
-            {/* ── Key Dates card ── */}
-            {importantDates.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-100 bg-gray-50">
-                  <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center shrink-0">
-                    <Calendar className="w-3.5 h-3.5 text-orange-600" />
-                  </div>
-                  <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Key Dates</h3>
-                </div>
-                <ul className="divide-y divide-gray-100">
-                  {importantDates.slice(0, 6).map((d, i) => (
-                    <li key={i} className="flex items-center justify-between gap-3 px-5 py-3.5">
-                      <span className="text-sm text-gray-600 leading-snug">{d.label}</span>
-                      <span className="text-sm font-bold text-orange-600 whitespace-nowrap">{d.date}</span>
-                    </li>
-                  ))}
-                  {importantDates.length > 6 && (
-                    <li className="px-5 py-3.5">
-                      <button className="text-xs text-orange-600 font-semibold hover:underline w-full text-left">
-                        +{importantDates.length - 6} more dates
-                      </button>
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
-
-          </aside>
+          {/* ── Official links ───────────────────────────────────────────── */}
+          {(exam.officialWebsite || exam.notificationUrl) && (
+            <div className="flex flex-wrap gap-3">
+              {exam.officialWebsite && (
+                <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-orange-600 bg-white
+                    border border-orange-200 hover:border-orange-400 hover:bg-orange-50 px-4 py-2.5 rounded-xl transition-colors">
+                  <Globe className="w-4 h-4" />Official Website<ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
+              {exam.notificationUrl && (
+                <a href={exam.notificationUrl} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700 bg-white
+                    border border-gray-200 hover:border-orange-400 hover:text-orange-600 px-4 py-2.5 rounded-xl transition-colors">
+                  <Bell className="w-4 h-4" />Official Notification<ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
+            </div>
+          )}
         </div>
+
+        {/* ── FAQ ────────────────────────────────────────────────────────── */}
+        {faqs.length > 0 && <ExamFaqSection faqs={faqs} />}
+
       </div>
-
-      {/* ── FAQ Section ────────────────────────────────────────────────────────── */}
-      {faqs.length > 0 && <ExamFaqSection faqs={faqs} />}
-
-    </div>
     </>
   );
 }
