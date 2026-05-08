@@ -31,28 +31,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     CredentialsProvider({
-      id: 'otp',
-      name: 'OTP',
-      credentials: {
-        contact: { label: 'Email or Mobile', type: 'text' },
-        otp: { label: 'OTP', type: 'text' },
-      },
-      async authorize(credentials) {
-        if (!credentials?.contact || !credentials?.otp) return null;
-        try {
-          const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contact: credentials.contact, otp: credentials.otp }),
-          });
-          if (!res.ok) return null;
-          const json = await res.json();
-          const d = json.data;
-          return { id: String(d.userId), name: d.fullName, email: d.email, role: d.role, accessToken: d.accessToken };
-        } catch { return null; }
-      },
-    }),
-    CredentialsProvider({
       id: 'quick-access',
       name: 'Quick Access',
       credentials: {
