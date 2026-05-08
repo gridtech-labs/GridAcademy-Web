@@ -101,9 +101,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
   let importantDates: ImportantDate[] = [];
   if (exam.importantDates) { try { importantDates = JSON.parse(exam.importantDates); } catch { /* ignore */ } }
 
-  let faqs: ExamFaq[] = [];
-  if (exam.faqs) { try { faqs = JSON.parse(exam.faqs); } catch { /* ignore */ } }
-  if (faqs.length === 0) faqs = getStaticFaqs(exam.slug);
+  const faqs: ExamFaq[] = []; // FAQ section hidden
 
   const tabs = [
     { id: 'overview',    label: 'Overview',        icon: 'BookOpen',  content: exam.overview },
