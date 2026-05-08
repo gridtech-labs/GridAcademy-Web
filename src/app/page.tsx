@@ -5,7 +5,6 @@ import { api } from '@/lib/api-client';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ExamCard, ExamTypeFilter } from '@/types/exam';
 import {
   FileText, Star, ChevronRight, Zap,
@@ -217,56 +216,70 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
   );
 }
 
+// ── Card colour palette (cycles across cards) ────────────────────────────────
+const CARD_PALETTES = [
+  { bg: 'bg-orange-50',  topBorder: 'border-t-orange-400',  badgeBg: 'bg-orange-100',  badgeText: 'text-orange-700'  },
+  { bg: 'bg-amber-50',   topBorder: 'border-t-amber-400',   badgeBg: 'bg-amber-100',   badgeText: 'text-amber-700'   },
+  { bg: 'bg-yellow-50',  topBorder: 'border-t-yellow-400',  badgeBg: 'bg-yellow-100',  badgeText: 'text-yellow-700'  },
+  { bg: 'bg-lime-50',    topBorder: 'border-t-lime-500',    badgeBg: 'bg-lime-100',    badgeText: 'text-lime-700'    },
+  { bg: 'bg-teal-50',    topBorder: 'border-t-teal-500',    badgeBg: 'bg-teal-100',    badgeText: 'text-teal-700'    },
+  { bg: 'bg-sky-50',     topBorder: 'border-t-sky-500',     badgeBg: 'bg-sky-100',     badgeText: 'text-sky-700'     },
+  { bg: 'bg-indigo-50',  topBorder: 'border-t-indigo-400',  badgeBg: 'bg-indigo-100',  badgeText: 'text-indigo-700'  },
+  { bg: 'bg-rose-50',    topBorder: 'border-t-rose-400',    badgeBg: 'bg-rose-100',    badgeText: 'text-rose-700'    },
+];
+
 // ── Exam Card ─────────────────────────────────────────────────────────────────
-function ExamCardItem({ exam }: { exam: ExamCard }) {
-  const icon = examTypeIcon(exam.examTypeName ?? exam.category);
+function ExamCardItem({ exam, index }: { exam: ExamCard; index: number }) {
+  const p = CARD_PALETTES[index % CARD_PALETTES.length];
   return (
     <Link href={`/exam/${exam.slug}`}
-      className="group flex flex-col bg-white rounded-xl overflow-hidden transition-all duration-200
-        border-t-[3px] border-t-transparent border border-gray-200
-        hover:shadow-md hover:border-gray-300 hover:border-t-[#1760f4]">
+      className={`group flex flex-col rounded-xl border border-gray-200 border-t-4 ${p.topBorder} ${p.bg}
+        hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden`}>
 
-      {/* Thumbnail or icon */}
-      <div className="relative h-28 bg-gray-100 overflow-hidden shrink-0">
-        {exam.thumbnailUrl ? (
-          <Image src={exam.thumbnailUrl} alt={exam.title} fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            unoptimized />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-4xl">
-            {icon}
-          </div>
-        )}
-        {exam.examLevelName && (
-          <span className="absolute top-2 left-2 bg-white text-gray-600 text-xs font-semibold px-2 py-0.5 rounded border border-gray-200">
-            {exam.examLevelName}
-          </span>
-        )}
-        {exam.isFeatured && (
-          <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">
-            <Star className="w-2.5 h-2.5 inline fill-yellow-900" />
-          </span>
-        )}
-      </div>
+      <div className="p-4 flex flex-col gap-3 flex-1">
 
-      <div className="p-3 flex flex-col flex-1">
-        <p className="text-xs text-gray-500 font-medium truncate">
-          {exam.conductingBody ?? exam.examTypeName ?? exam.category ?? 'Government Exam'}
-        </p>
-        <h3 className="text-sm font-bold text-gray-900 line-clamp-2 mt-0.5 group-hover:text-[#1760f4] transition-colors leading-snug">
+        {/* Row 1: level badge + featured star */}
+        <div className="flex items-center justify-between gap-2 min-h-[26px]">
+          {exam.examLevelName ? (
+            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border border-current/10 ${p.badgeBg} ${p.badgeText}`}>
+              {exam.examLevelName}
+            </span>
+          ) : <span />}
+          {exam.isFeatured && (
+            <Star className="w-4 h-4 text-yellow-500 fill-yellow-400 shrink-0" />
+          )}
+        </div>
+
+        {/* Row 2: title — allow up to 3 lines so long names fit */}
+        <h3 className="text-[15px] font-bold text-gray-900 leading-snug line-clamp-3
+          group-hover:text-orange-600 transition-colors flex-1">
           {exam.title}
         </h3>
-        <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100 mt-2">
-          <span className="flex items-center gap-1 text-xs text-gray-400">
-            <FileText className="w-3 h-3" /> {exam.testCount} Tests
+
+        {/* Row 3: conducting body */}
+        <p className="text-xs text-gray-500 truncate">
+          {exam.conductingBody ?? exam.examTypeName ?? exam.category ?? 'Government Exam'}
+        </p>
+
+        {/* Row 4: tests count + free/price badge */}
+        <div className="flex items-center justify-between pt-2 border-t border-black/[0.06]">
+          <span className="flex items-center gap-1.5 text-xs font-medium text-gray-500">
+            <FileText className="w-3.5 h-3.5 shrink-0" />
+            {exam.testCount} Test{exam.testCount !== 1 ? 's' : ''}
           </span>
-          <span className={`text-sm font-bold ${exam.priceInr === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-            {exam.priceInr === 0
-              ? <span className="flex items-center gap-0.5"><Zap className="w-3 h-3" />Free</span>
-              : formatPrice(exam.priceInr)
-            }
-          </span>
+          {exam.priceInr === 0 ? (
+            <span className="flex items-center gap-1 text-xs font-bold text-green-700
+              bg-green-50 border border-green-200 px-2.5 py-0.5 rounded-full">
+              <Zap className="w-3 h-3" />Free
+            </span>
+          ) : (
+            <span className="text-xs font-bold text-gray-800 bg-white border border-gray-200
+              px-2.5 py-0.5 rounded-full">
+              ₹{exam.priceInr.toLocaleString('en-IN')}
+            </span>
+          )}
         </div>
+
       </div>
     </Link>
   );
@@ -421,8 +434,8 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                   View all <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {latest.map(e => <ExamCardItem key={e.id} exam={e} />)}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {latest.map((e, i) => <ExamCardItem key={e.id} exam={e} index={i} />)}
               </div>
             </section>
           )}
