@@ -3,7 +3,6 @@ export const dynamic = 'force-dynamic';
 
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { api } from '@/lib/api-client';
 import { ExamDetail, ExamFaq, ImportantDate } from '@/types/exam';
@@ -164,30 +163,8 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
 
         {/* ── Hero ───────────────────────────────────────────────────────── */}
         <div style={{ background: 'linear-gradient(135deg,#1e293b,#0f172a)' }}>
-          {/* Optional banner image overlay */}
-          {(exam.bannerUrl || exam.thumbnailUrl) && (
-            <div className="relative w-full h-36 md:h-48 overflow-hidden">
-              <Image src={exam.bannerUrl ?? exam.thumbnailUrl!} alt={exam.title}
-                fill priority className="object-cover object-center opacity-20"
-                sizes="100vw" unoptimized />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0f172a]/80" />
-            </div>
-          )}
-
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
             <div className="flex flex-col md:flex-row gap-5 md:gap-8 items-start md:items-center">
-
-              {/* Thumbnail */}
-              <div className={`shrink-0 ${(exam.bannerUrl || exam.thumbnailUrl) ? 'md:-mt-12' : ''}`}>
-                {exam.thumbnailUrl ? (
-                  <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl bg-white">
-                    <Image src={exam.thumbnailUrl} alt={exam.title} width={80} height={80} className="w-full h-full object-cover" unoptimized />
-                  </div>
-                ) : (
-                  <div className="w-20 h-20 rounded-2xl border-2 border-orange-400/30 flex items-center justify-center text-4xl shadow-xl"
-                    style={{ background: 'rgba(249,115,22,.15)' }}>📝</div>
-                )}
-              </div>
 
               {/* Title + meta */}
               <div className="flex-1 min-w-0 text-white">
