@@ -6,14 +6,21 @@ import ExamListingFilters from '@/components/exam/ExamListingFilters';
 import { notFound } from 'next/navigation';
 
 const EXAM_META: Record<string, { title: string; description: string }> = {
-  ssc:       { title: 'SSC Mock Tests', description: 'SSC CGL, CHSL, MTS, GD Constable mock tests' },
-  banking:   { title: 'Banking Mock Tests', description: 'IBPS PO, SBI PO, IBPS Clerk, SBI Clerk mock tests' },
-  railways:  { title: 'Railway Mock Tests', description: 'RRB NTPC, Group D, ALP mock tests' },
-  upsc:      { title: 'UPSC Mock Tests', description: 'UPSC Civil Services Prelims, CSAT mock tests' },
-  police:    { title: 'Police Mock Tests', description: 'Delhi Police, UP Police, SSC CPO mock tests' },
-  defence:   { title: 'Defence Mock Tests', description: 'NDA, CDS, AFCAT mock tests' },
+  // ── Category pages ────────────────────────────────────────────────────────
+  ssc:         { title: 'SSC Mock Tests', description: 'SSC CGL, CHSL, MTS, GD Constable mock tests' },
+  banking:     { title: 'Banking Mock Tests', description: 'IBPS PO, SBI PO, IBPS Clerk, SBI Clerk mock tests' },
+  railways:    { title: 'Railway Mock Tests', description: 'RRB NTPC, Group D, ALP mock tests' },
+  upsc:        { title: 'UPSC Mock Tests', description: 'UPSC Civil Services Prelims, CSAT mock tests' },
+  police:      { title: 'Police Mock Tests', description: 'Delhi Police, UP Police, SSC CPO mock tests' },
+  defence:     { title: 'Defence Mock Tests', description: 'NDA, CDS, AFCAT mock tests' },
   'state-psc': { title: 'State PSC Mock Tests', description: 'UPPSC, MPPSC, BPSC mock tests' },
-  teaching:  { title: 'Teaching Mock Tests', description: 'CTET, STET, KVS, NVS mock tests' },
+  teaching:    { title: 'Teaching Mock Tests', description: 'CTET, STET, KVS, NVS mock tests' },
+  // ── Individual exam slugs (linked from footer & nav) ──────────────────────
+  'ssc-cgl':      { title: 'SSC CGL Mock Tests 2025', description: 'Free SSC CGL Tier 1 & 2 mock tests, previous year papers and practice sets.' },
+  'ibps-po':      { title: 'IBPS PO Mock Tests 2025', description: 'Free IBPS PO Prelims and Mains mock tests with detailed solutions.' },
+  'rrb-ntpc':     { title: 'RRB NTPC Mock Tests 2025', description: 'Free RRB NTPC CBT 1 & CBT 2 mock tests and practice papers.' },
+  'upsc-prelims': { title: 'UPSC Prelims Mock Tests 2025', description: 'Free UPSC Civil Services Prelims (GS & CSAT) mock tests and previous year papers.' },
+  'sbi-po':       { title: 'SBI PO Mock Tests 2025', description: 'Free SBI PO Prelims and Mains mock tests with full-length practice papers.' },
 };
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
