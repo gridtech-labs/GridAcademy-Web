@@ -4,7 +4,12 @@ import Script from 'next/script';
 import './globals.css';
 import SessionProvider from '@/components/providers/SessionProvider';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   // (base URL for all SEO)
@@ -84,7 +89,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <head>
         {/* ✅ Google Analytics */}
         <Script
@@ -104,7 +109,7 @@ export default function RootLayout({
         </Script>
       </head>
 
-      <body className={`${inter.className} antialiased bg-gray-50`}>
+      <body className="font-sans antialiased bg-gray-50">
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
