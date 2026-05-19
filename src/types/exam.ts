@@ -95,6 +95,9 @@ export interface AttemptQuestion {
   displayOrder: number;
   displayOrderInSection: number;
   text: string;
+  /** Present when this question belongs to a reading-passage group */
+  passageTitle?: string | null;
+  passageText?: string | null;
   questionType: number; // 1=MCQ, 2=MSQ, 3=NAT (matches backend QuestionType enum)
   options: AttemptOption[];
   isVisited: boolean;
