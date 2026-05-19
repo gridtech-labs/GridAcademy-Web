@@ -98,6 +98,12 @@ function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamT
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
           <BarChart2 className="w-4 h-4" /> My Progress
         </Link>
+        <Link href="/career-guide"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          <span className="text-base leading-none">🧭</span>
+          <span>Career Guide</span>
+          <span className="ml-auto bg-violet-100 text-violet-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">New</span>
+        </Link>
       </div>
 
       {/* Exam type nav */}
@@ -420,6 +426,32 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* ── Career Guide Banner ── */}
+          <div className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 p-5 md:p-6 mb-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="text-4xl shrink-0 leading-none">🧭</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-violet-200 mb-0.5">
+                Free Career Guide
+              </p>
+              <h3 className="text-base md:text-lg font-extrabold text-white leading-snug">
+                Not sure which career to choose? Explore 100 options.
+              </h3>
+              <p className="text-sm text-violet-100 mt-1">
+                Discover paths across 8 personality types — Makers, Thinkers, Builders &amp; more. Most cost ₹0 to start.
+              </p>
+            </div>
+            <div className="flex flex-row sm:flex-col gap-2 shrink-0">
+              <Link href="/career-guide/quiz"
+                className="inline-flex items-center justify-center gap-1.5 bg-white text-violet-700 font-bold text-sm px-4 py-2.5 rounded-lg hover:bg-violet-50 transition-colors whitespace-nowrap shadow-sm">
+                🎯 Take the Quiz
+              </Link>
+              <Link href="/career-guide"
+                className="inline-flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap border border-white/20">
+                Browse 100 Careers
+              </Link>
+            </div>
           </div>
 
           {/* ── Exam cards grid ── */}
