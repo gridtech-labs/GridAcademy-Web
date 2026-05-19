@@ -428,8 +428,26 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             ))}
           </div>
 
+          {/* ── Exam cards grid ── */}
+          {latest.length > 0 && (
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-base font-bold text-gray-900">
+                  {activeCategory ? `${activeCategory} Exams` : 'Explore Exams'}
+                </h2>
+                <Link href="/exams"
+                  className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1">
+                  View all <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {latest.map((e, i) => <ExamCardItem key={e.id} exam={e} index={i} />)}
+              </div>
+            </section>
+          )}
+
           {/* ── Career Guide Banner ── */}
-          <div className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 p-5 md:p-6 mb-6 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 p-5 md:p-6 mt-8 mb-6 flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="text-4xl shrink-0 leading-none">🧭</div>
             <div className="flex-1 min-w-0">
               <p className="text-[11px] font-bold uppercase tracking-wider text-violet-200 mb-0.5">
@@ -453,24 +471,6 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
               </Link>
             </div>
           </div>
-
-          {/* ── Exam cards grid ── */}
-          {latest.length > 0 && (
-            <section>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-bold text-gray-900">
-                  {activeCategory ? `${activeCategory} Exams` : 'Explore Exams'}
-                </h2>
-                <Link href="/exams"
-                  className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1">
-                  View all <ChevronRight className="w-4 h-4" />
-                </Link>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {latest.map((e, i) => <ExamCardItem key={e.id} exam={e} index={i} />)}
-              </div>
-            </section>
-          )}
 
           {/* ── Empty state ── */}
           {latest.length === 0 && (
