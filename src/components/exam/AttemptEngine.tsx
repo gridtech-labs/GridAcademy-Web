@@ -407,28 +407,79 @@ export default function AttemptEngine({ attempt, token }: Props) {
 
   const currentAnswer = answers[activeQuestion.questionId];
 
-  return (
-    <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
+  // ── Shared question palette grid (used in both sidebar and drawer) ──────────
+  const QuestionPaletteGrid = ({ onSelect }: { onSelect?: () => void }) => (
+    <div className="flex-1 p-3 space-y-4 overflow-y-auto">
+      {sections.map((sec, secIdx) => (
+        <div key={sec.index}>
+          <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">
+            {sec.name}
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {sec.questions.map((q, qIdx) => {
+              const ans = answers[q.questionId];
+              const status = getNavStatus(q, ans);
+              const isActive = secIdx === activeSectionIdx && qIdx === activeQIdx;
+              return (
+                <button
+                  key={q.attemptQuestionId}
+                  onClick={() => { navigateTo(secIdx, qIdx); onSelect?.(); }}
+                  aria-label={`Q${q.displayOrder} — ${status}`}
+                  className={`w-9 h-9 rounded-lg text-xs font-bold transition-all touch-manipulation
+                    ${STATUS_COLORS[status]}
+                    ${isActive ? 'ring-2 ring-indigo-600 ring-offset-1 scale-110' : 'hover:scale-105'}`}
+                >
+                  {q.displayOrder}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
-      {/* ── Top bar ─────────────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-200 shadow-sm px-4 py-2 flex items-center justify-between shrink-0 z-20">
-        <div>
-          <p className="text-sm font-bold text-gray-900 truncate max-w-[200px] sm:max-w-md">
+  return (
+    /* h-[100dvh] accounts for iOS browser chrome shrinking the viewport —
+       avoids content being cut off under the address bar on mobile Safari. */
+    <div className="flex flex-col bg-gray-50" style={{ height: '100dvh' }}>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          TOP BAR
+          Desktop: title + "N questions" + timer + Submit button
+          Mobile : title + "Q X / N" + big timer (Submit lives in bottom nav)
+          ══════════════════════════════════════════════════════════════════════ */}
+      <div className="bg-white border-b border-gray-200 shadow-sm px-3 md:px-4 py-2 flex items-center justify-between shrink-0 z-20">
+        {/* Left: title + progress */}
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-bold text-gray-900 truncate max-w-[180px] sm:max-w-xs md:max-w-md leading-tight">
             {attempt.testTitle}
           </p>
-          <p className="text-xs text-gray-500">
+          {/* Mobile: show "Q X / N" inline */}
+          <p className="text-xs text-gray-500 md:hidden leading-tight mt-0.5">
+            Question <strong className="text-gray-800">{activeQuestion.displayOrder}</strong> of {stats.total}
+            {attempt.negativeMarkingEnabled && <span className="text-red-500"> · −ve</span>}
+          </p>
+          {/* Desktop: show total + negative marking */}
+          <p className="hidden md:block text-xs text-gray-500 leading-tight mt-0.5">
             {attempt.totalQuestions} Questions
             {attempt.negativeMarkingEnabled && ' · Negative marking enabled'}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className={`flex items-center gap-1.5 font-mono font-bold text-base ${timerColor}`}>
-            <Clock className="w-4 h-4" />
+
+        {/* Right: timer + submit */}
+        <div className="flex items-center gap-2 md:gap-3 shrink-0 ml-2">
+          {/* Timer — bigger on mobile since it's the only submit-context clue */}
+          <div className={`flex items-center gap-1 font-mono font-bold tabular-nums leading-none
+            text-xl md:text-base ${timerColor}`}>
+            <Clock className="w-4 h-4 hidden md:block" />
             {formatTime(timeLeft)}
           </div>
+          {/* Submit only visible in top bar on desktop; mobile uses bottom nav */}
           <button
             onClick={() => setShowSubmitDialog(true)}
-            className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5"
+            className="hidden md:flex bg-green-600 hover:bg-green-700 text-white text-sm font-semibold
+              px-4 py-2 rounded-lg transition-colors items-center gap-1.5"
           >
             <Send className="w-3.5 h-3.5" />
             Submit
@@ -436,17 +487,17 @@ export default function AttemptEngine({ attempt, token }: Props) {
         </div>
       </div>
 
-      {/* ── Section tabs ────────────────────────────────────────────────────── */}
+      {/* ── Section tabs (horizontal scroll) ──────────────────────────────────── */}
       {sections.length > 1 && (
-        <div className="bg-white border-b border-gray-200 flex overflow-x-auto shrink-0">
+        <div className="bg-white border-b border-gray-200 flex overflow-x-auto shrink-0 scrollbar-hide">
           {sections.map((sec, i) => (
             <button
               key={sec.index}
               onClick={() => navigateTo(i, 0)}
-              className={`px-5 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+              className={`px-4 md:px-5 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors touch-manipulation ${
                 i === activeSectionIdx
                   ? 'border-indigo-600 text-indigo-600 bg-indigo-50'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
               {sec.name}
@@ -455,139 +506,173 @@ export default function AttemptEngine({ attempt, token }: Props) {
         </div>
       )}
 
-      {/* ── Body ────────────────────────────────────────────────────────────── */}
-      <div className="flex flex-1 overflow-hidden">
+      {/* ══════════════════════════════════════════════════════════════════════
+          BODY — question panel (left) + sidebar (right, desktop only)
+          ══════════════════════════════════════════════════════════════════════ */}
+      <div className="flex flex-1 overflow-hidden min-h-0">
 
-        {/* Question panel
-            NOTE: use min-h-0 instead of overflow-hidden here so that iOS Safari
-            does not trap touch events inside the nested overflow-y-auto scroll
-            container — overflow:hidden on a flex ancestor is a known cause of
-            button click failures after scrolling on iOS. */}
+        {/* ── Question panel ─────────────────────────────────────────────────── */}
         <div className="flex-1 flex flex-col min-h-0">
-          {/* touch-pan-y tells the browser this axis scrolls, eliminating the
-              300 ms scroll-vs-tap ambiguity that blocks button clicks on iOS. */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 touch-pan-y">
 
-            {/* Question header */}
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <span className="inline-block bg-indigo-100 text-indigo-700 text-xs font-semibold px-2.5 py-1 rounded-full mb-2">
-                  {activeQuestion.sectionName} · Q{activeQuestion.displayOrder}
-                </span>
-                <div className="flex gap-2 text-xs text-gray-500">
-                  <span className="bg-green-50 text-green-700 px-2 py-0.5 rounded">
-                    +{activeQuestion.marksForCorrect} marks
+          {/* Scrollable question content
+              touch-pan-y: eliminates 300 ms scroll-vs-tap delay on iOS Safari.
+              min-h-0 on parent: prevents overflow:hidden from trapping iOS touches. */}
+          <div className="flex-1 overflow-y-auto touch-pan-y">
+            <div className="px-4 py-4 md:px-6 md:py-6">
+
+              {/* ── Question meta row ── */}
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="bg-indigo-100 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                    Q {activeQuestion.displayOrder}
+                  </span>
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                    {activeQuestion.sectionName}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2 py-1 rounded-full">
+                    +{activeQuestion.marksForCorrect}
                   </span>
                   {activeQuestion.negativeMarks > 0 && (
-                    <span className="bg-red-50 text-red-700 px-2 py-0.5 rounded">
-                      -{activeQuestion.negativeMarks} negative
+                    <span className="text-xs font-semibold text-red-600 bg-red-50 border border-red-200 px-2 py-1 rounded-full">
+                      −{activeQuestion.negativeMarks}
                     </span>
                   )}
-                  <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded capitalize">
-                    {activeQuestion.questionType === QT_MCQ ? 'Single Correct' :
-                     activeQuestion.questionType === QT_MSQ ? 'Multi Correct' : 'Numerical'}
-                  </span>
                 </div>
               </div>
-            </div>
 
-            {/* ── Passage block (shown when backend provides dedicated passage fields) ── */}
-            {(activeQuestion.passageTitle || activeQuestion.passageText) && (
-              <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
-                <div className="px-4 py-2 bg-amber-100 border-b border-amber-200 flex items-center gap-2">
-                  <span className="text-sm">📖</span>
-                  <p className="text-xs font-bold text-amber-800 uppercase tracking-wide">
-                    {activeQuestion.passageTitle ?? 'Read the following passage'}
-                  </p>
+              {/* Question type hint — helpful on mobile */}
+              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3">
+                {activeQuestion.questionType === QT_MCQ
+                  ? 'Single Correct Answer'
+                  : activeQuestion.questionType === QT_MSQ
+                  ? 'Multiple Correct Answers — select all that apply'
+                  : 'Numerical Answer Type'}
+              </p>
+
+              {/* ── Passage block ── */}
+              {(activeQuestion.passageTitle || activeQuestion.passageText) && (
+                <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
+                  <div className="px-4 py-2 bg-amber-100 border-b border-amber-200 flex items-center gap-2">
+                    <span>📖</span>
+                    <p className="text-xs font-bold text-amber-800 uppercase tracking-wide">
+                      {activeQuestion.passageTitle ?? 'Read the following passage'}
+                    </p>
+                  </div>
+                  {activeQuestion.passageText && (
+                    <div
+                      className="px-4 py-3 text-sm text-gray-800 leading-relaxed overflow-y-auto max-h-40 md:max-h-56 touch-pan-y prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: activeQuestion.passageText }}
+                    />
+                  )}
                 </div>
-                {activeQuestion.passageText && (
-                  /* Passage has its own scrollable box so it doesn't force the
-                     whole question panel to scroll off-screen on small phones. */
-                  <div
-                    className="px-4 py-3 text-sm text-gray-800 leading-relaxed overflow-y-auto max-h-40 md:max-h-56 touch-pan-y prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: activeQuestion.passageText }}
+              )}
+
+              {/* ── Question text ──
+                  prose-base gives 16 px body text which is readable without zooming.
+                  prose-sm was 14 px — too small for exam conditions on a phone. */}
+              <div
+                className="prose prose-base max-w-none text-gray-900 mb-5 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: activeQuestion.text }}
+              />
+
+              {/* ── Answer area ── */}
+              {activeQuestion.questionType === QT_NAT ? (
+                <div className="max-w-sm">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Enter your answer:
+                  </label>
+                  <input
+                    type="number"
+                    step="any"
+                    inputMode="decimal"
+                    value={natInput}
+                    onChange={e => handleNatInput(e.target.value)}
+                    placeholder="Type your answer here…"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl text-xl font-mono
+                      focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                   />
-                )}
-              </div>
-            )}
+                  {currentAnswer?.numericalValue !== undefined ? (
+                    <p className="text-sm text-green-600 mt-2 font-semibold">
+                      ✓ Saved: {currentAnswer.numericalValue}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-gray-400 mt-1.5">No answer saved yet</p>
+                  )}
+                </div>
+              ) : (
+                /* pb-6 so the last option clears the mobile bottom nav bar */
+                <div className="space-y-3 pb-6">
+                  {activeQuestion.options.map(opt => {
+                    const isSelected = currentAnswer?.selectedOptionIds?.includes(opt.id) ?? false;
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() => handleOptionSelect(opt.id)}
+                        /* touch-manipulation removes the 300 ms double-tap delay
+                           and prevents scroll-gesture from swallowing taps — iOS Safari critical. */
+                        className={`w-full flex items-center gap-3 px-4 py-4 rounded-xl border-2
+                          text-left transition-all touch-manipulation active:scale-[0.99] ${
+                          isSelected
+                            ? 'border-indigo-600 bg-indigo-50 shadow-sm'
+                            : 'border-gray-200 bg-white active:bg-gray-50'
+                        }`}
+                      >
+                        {/* Option label circle — 36px, thumb-friendly */}
+                        <span className={`shrink-0 w-9 h-9 rounded-full border-2 flex items-center
+                          justify-center text-sm font-bold transition-colors ${
+                          isSelected
+                            ? 'border-indigo-600 bg-indigo-600 text-white'
+                            : 'border-gray-300 bg-white text-gray-600'
+                        }`}>
+                          {opt.label}
+                        </span>
+                        {/* Option text — text-base for readability */}
+                        <span
+                          className="flex-1 text-base text-gray-800 leading-snug prose prose-sm max-w-none"
+                          dangerouslySetInnerHTML={{ __html: opt.text }}
+                        />
+                        {/* Selected tick */}
+                        {isSelected && (
+                          <svg className="shrink-0 w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </button>
+                    );
+                  })}
 
-            {/* Question text */}
-            <div
-              className="prose prose-sm max-w-none text-gray-900 mb-6"
-              dangerouslySetInnerHTML={{ __html: activeQuestion.text }}
-            />
-
-            {/* Options / NAT input */}
-            {activeQuestion.questionType === QT_NAT ? (
-              <div className="max-w-xs">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Enter your answer:
-                </label>
-                <input
-                  type="number"
-                  step="any"
-                  value={natInput}
-                  onChange={e => handleNatInput(e.target.value)}
-                  placeholder="Type numerical answer..."
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-base font-mono focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-                />
-                {currentAnswer?.numericalValue !== undefined && (
-                  <p className="text-xs text-green-600 mt-1.5 font-medium">
-                    Saved: {currentAnswer.numericalValue}
-                  </p>
-                )}
-              </div>
-            ) : (
-              /* pb-4 spacer so the last option is never flush with the action
-                 bar edge on small phones (avoids the "tap falls outside" zone). */
-              <div className="space-y-3 pb-4">
-                {activeQuestion.options.map(opt => {
-                  const isSelected = currentAnswer?.selectedOptionIds?.includes(opt.id) ?? false;
-                  return (
+                  {/* Clear response — small text link below options on mobile */}
+                  {currentAnswer && (
+                    currentAnswer.selectedOptionIds?.length > 0 ||
+                    currentAnswer.numericalValue !== undefined
+                  ) && (
                     <button
-                      key={opt.id}
-                      onClick={() => handleOptionSelect(opt.id)}
-                      /* touch-manipulation: removes the 300 ms double-tap delay
-                         and prevents scroll-gesture ambiguity from swallowing
-                         taps on buttons — critical for iOS Safari. */
-                      className={`w-full flex items-start gap-3 px-4 py-3.5 rounded-xl border-2 text-left transition-all touch-manipulation ${
-                        isSelected
-                          ? 'border-indigo-600 bg-indigo-50'
-                          : 'border-gray-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/30'
-                      }`}
+                      onClick={handleClearResponse}
+                      className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors touch-manipulation mt-1"
                     >
-                      <span className={`shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-colors ${
-                        isSelected
-                          ? 'border-indigo-600 bg-indigo-600 text-white'
-                          : 'border-gray-300 text-gray-500'
-                      }`}>
-                        {opt.label}
-                      </span>
-                      <span
-                        className="flex-1 text-sm text-gray-800 leading-relaxed prose prose-sm max-w-none"
-                        dangerouslySetInnerHTML={{ __html: opt.text }}
-                      />
+                      <X className="w-3 h-3" />
+                      Clear response
                     </button>
-                  );
-                })}
-              </div>
-            )}
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Bottom action bar — 2 rows on mobile, 1 row on sm+ */}
-          <div className="bg-white border-t border-gray-200 px-3 py-2 shrink-0">
-            {/* Row 1 (mobile): Clear + Mark | Row 2 (mobile): Prev + Next */}
-            <div className="grid grid-cols-2 gap-2 sm:hidden">
+          {/* ── Desktop bottom action bar ────────────────────────────────────── */}
+          <div className="hidden md:flex items-center justify-between gap-2 bg-white border-t border-gray-200 px-4 py-2.5 shrink-0">
+            <div className="flex gap-2">
               <button
                 onClick={handleClearResponse}
-                className="flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50"
+                className="px-4 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 flex items-center gap-1.5"
               >
-                <X className="w-3.5 h-3.5" />
-                Clear
+                <X className="w-3.5 h-3.5" /> Clear
               </button>
               <button
                 onClick={handleMarkForReview}
-                className={`flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm rounded-lg transition-colors ${
+                className={`px-4 py-2 text-sm rounded-lg flex items-center gap-1.5 transition-colors ${
                   currentAnswer?.isMarkedForReview
                     ? 'bg-orange-500 text-white border border-orange-500'
                     : 'border border-orange-400 text-orange-600 hover:bg-orange-50'
@@ -596,79 +681,95 @@ export default function AttemptEngine({ attempt, token }: Props) {
                 <Flag className="w-3.5 h-3.5" />
                 {currentAnswer?.isMarkedForReview ? 'Marked' : 'Mark & Next'}
               </button>
+            </div>
+            <div className="flex gap-2">
               <button
                 onClick={goPrev}
                 disabled={isFirst}
-                className="flex items-center justify-center gap-1 px-3 py-2.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-1 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
-                <ChevronLeft className="w-4 h-4" />
-                Prev
+                <ChevronLeft className="w-4 h-4" /> Prev
               </button>
               <button
                 onClick={goNext}
                 disabled={isLast}
-                className="flex items-center justify-center gap-1 px-3 py-2.5 text-sm bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-1 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg disabled:cursor-not-allowed transition-colors"
               >
-                Next
-                <ChevronRight className="w-4 h-4" />
+                Next <ChevronRight className="w-4 h-4" />
               </button>
             </div>
-            {/* Single row on sm+ */}
-            <div className="hidden sm:flex items-center justify-between gap-2">
-              <div className="flex gap-2">
-                <button
-                  onClick={handleClearResponse}
-                  className="px-4 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 flex items-center gap-1.5"
-                >
-                  <X className="w-3.5 h-3.5" />
-                  Clear
-                </button>
-                <button
-                  onClick={handleMarkForReview}
-                  className={`px-4 py-2 text-sm rounded-lg flex items-center gap-1.5 transition-colors ${
-                    currentAnswer?.isMarkedForReview
-                      ? 'bg-orange-500 text-white border border-orange-500'
-                      : 'border border-orange-400 text-orange-600 hover:bg-orange-50'
-                  }`}
-                >
-                  <Flag className="w-3.5 h-3.5" />
-                  {currentAnswer?.isMarkedForReview ? 'Marked' : 'Mark & Next'}
-                </button>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={goPrev}
-                  disabled={isFirst}
-                  className="flex items-center gap-1 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  Prev
-                </button>
-                <button
-                  onClick={goNext}
-                  disabled={isLast}
-                  className="flex items-center gap-1 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg disabled:cursor-not-allowed transition-colors"
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+          </div>
+
+          {/* ══════════════════════════════════════════════════════════════════
+              MOBILE BOTTOM NAVIGATION BAR
+              4 equal thumb-zone buttons fixed at the bottom of the screen.
+              Last question: Next slot turns into a green Submit button.
+              ══════════════════════════════════════════════════════════════════ */}
+          <div
+            className="md:hidden grid grid-cols-4 bg-white border-t-2 border-gray-100 shrink-0"
+            style={{ minHeight: 64, paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+          >
+            {/* ← Prev */}
+            <button
+              onClick={goPrev}
+              disabled={isFirst}
+              className="flex flex-col items-center justify-center gap-0.5 py-2 disabled:opacity-30 touch-manipulation active:bg-gray-50 transition-colors"
+            >
+              <ChevronLeft className="w-5 h-5 text-gray-600" />
+              <span className="text-[10px] font-semibold text-gray-500">Prev</span>
+            </button>
+
+            {/* 📋 Questions palette — shows answered / total */}
+            <button
+              onClick={() => setShowNavDrawer(true)}
+              className="flex flex-col items-center justify-center gap-0.5 py-2 bg-indigo-50 touch-manipulation active:bg-indigo-100 transition-colors"
+            >
+              <LayoutGrid className="w-5 h-5 text-indigo-600" />
+              <span className="text-[10px] font-bold text-indigo-600">{stats.answered}/{stats.total}</span>
+            </button>
+
+            {/* 🏁 Mark for review */}
+            <button
+              onClick={handleMarkForReview}
+              className={`flex flex-col items-center justify-center gap-0.5 py-2 touch-manipulation transition-colors ${
+                currentAnswer?.isMarkedForReview ? 'bg-orange-50 active:bg-orange-100' : 'active:bg-gray-50'
+              }`}
+            >
+              <Flag className={`w-5 h-5 ${currentAnswer?.isMarkedForReview ? 'text-orange-500 fill-orange-100' : 'text-gray-400'}`} />
+              <span className={`text-[10px] font-semibold ${currentAnswer?.isMarkedForReview ? 'text-orange-500' : 'text-gray-400'}`}>
+                {currentAnswer?.isMarkedForReview ? 'Marked' : 'Mark'}
+              </span>
+            </button>
+
+            {/* Next → or ✅ Submit (on last question) */}
+            <button
+              onClick={isLast ? () => setShowSubmitDialog(true) : goNext}
+              className={`flex flex-col items-center justify-center gap-0.5 py-2 touch-manipulation transition-colors ${
+                isLast ? 'bg-green-600 active:bg-green-700' : 'bg-indigo-600 active:bg-indigo-700'
+              }`}
+            >
+              {isLast
+                ? <Send className="w-5 h-5 text-white" />
+                : <ChevronRight className="w-5 h-5 text-white" />}
+              <span className="text-[10px] font-bold text-white">
+                {isLast ? 'Submit' : 'Next'}
+              </span>
+            </button>
           </div>
         </div>
 
-        {/* Sidebar: Question navigation */}
+        {/* ── Sidebar: Question navigation (desktop only) ──────────────────── */}
         <div className="hidden md:flex md:flex-col w-64 border-l border-gray-200 bg-white overflow-y-auto shrink-0">
           {/* Legend */}
           <div className="p-4 border-b border-gray-100">
             <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Legend</p>
             <div className="grid grid-cols-2 gap-1.5">
               {[
-                { label: 'Not Visited', cls: STATUS_COLORS.notVisited },
+                { label: 'Not Visited',  cls: STATUS_COLORS.notVisited },
                 { label: 'Not Answered', cls: STATUS_COLORS.notAnswered },
-                { label: 'Answered', cls: STATUS_COLORS.answered },
-                { label: 'Marked', cls: STATUS_COLORS.markedForReview },
-                { label: 'Ans + Marked', cls: STATUS_COLORS.answeredAndMarked },
+                { label: 'Answered',     cls: STATUS_COLORS.answered },
+                { label: 'Marked',       cls: STATUS_COLORS.markedForReview },
+                { label: 'Ans+Marked',   cls: STATUS_COLORS.answeredAndMarked },
               ].map(l => (
                 <div key={l.label} className="flex items-center gap-1.5">
                   <div className={`w-4 h-4 rounded-full shrink-0 ${l.cls}`} />
@@ -678,38 +779,10 @@ export default function AttemptEngine({ attempt, token }: Props) {
             </div>
           </div>
 
-          {/* Sections and question buttons */}
-          <div className="flex-1 p-3 space-y-4 overflow-y-auto">
-            {sections.map((sec, secIdx) => (
-              <div key={sec.index}>
-                <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">
-                  {sec.name}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {sec.questions.map((q, qIdx) => {
-                    const ans = answers[q.questionId];
-                    const status = getNavStatus(q, ans);
-                    const isActive = secIdx === activeSectionIdx && qIdx === activeQIdx;
-                    return (
-                      <button
-                        key={q.attemptQuestionId}
-                        onClick={() => navigateTo(secIdx, qIdx)}
-                        title={`Q${q.displayOrder}`}
-                        className={`w-8 h-8 rounded-lg text-xs font-bold transition-all
-                          ${STATUS_COLORS[status]}
-                          ${isActive ? 'ring-2 ring-indigo-600 ring-offset-1 scale-110' : 'hover:scale-105'}`}
-                      >
-                        {q.displayOrder}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
+          <QuestionPaletteGrid />
 
           {/* Stats */}
-          <div className="p-4 border-t border-gray-100 grid grid-cols-2 gap-2 text-xs text-center">
+          <div className="p-4 border-t border-gray-100 grid grid-cols-2 gap-2 text-xs text-center shrink-0">
             <div className="bg-green-50 rounded-lg p-2">
               <p className="font-bold text-green-700 text-base">{stats.answered}</p>
               <p className="text-green-600">Answered</p>
@@ -720,7 +793,7 @@ export default function AttemptEngine({ attempt, token }: Props) {
             </div>
             <div className="bg-red-50 rounded-lg p-2">
               <p className="font-bold text-red-700 text-base">
-                {stats.total - stats.answered - stats.notVisited}
+                {Math.max(0, stats.total - stats.answered - stats.notVisited)}
               </p>
               <p className="text-red-600">Not Answered</p>
             </div>
@@ -732,76 +805,64 @@ export default function AttemptEngine({ attempt, token }: Props) {
         </div>
       </div>
 
-      {/* ── Mobile: floating question palette button ────────────────────────── */}
-      <button
-        onClick={() => setShowNavDrawer(true)}
-        className="md:hidden fixed bottom-20 right-4 z-30 bg-indigo-600 text-white rounded-full w-13 h-13 p-3 shadow-xl flex items-center justify-center gap-1.5 touch-manipulation"
-        aria-label="Open question palette"
-      >
-        <LayoutGrid className="w-5 h-5 shrink-0" />
-        <span className="text-xs font-bold leading-none">{stats.answered}/{stats.total}</span>
-      </button>
-
-      {/* ── Mobile: question palette drawer (full-screen overlay) ───────────── */}
+      {/* ══════════════════════════════════════════════════════════════════════════
+          MOBILE: Question palette — full-screen drawer
+          ══════════════════════════════════════════════════════════════════════════ */}
       {showNavDrawer && (
         <div className="md:hidden fixed inset-0 z-50 flex flex-col bg-white">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 shrink-0">
-            <h3 className="font-bold text-gray-900 text-base">Question Palette</h3>
+            <div>
+              <h3 className="font-bold text-gray-900 text-base">Question Palette</h3>
+              <p className="text-xs text-gray-500">Tap any question to jump to it</p>
+            </div>
             <button
               onClick={() => setShowNavDrawer(false)}
-              className="p-1.5 rounded-lg hover:bg-gray-100 touch-manipulation"
+              className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 touch-manipulation"
               aria-label="Close palette"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-gray-600" />
             </button>
           </div>
 
           {/* Stats strip */}
           <div className="grid grid-cols-4 gap-2 px-4 py-3 border-b border-gray-100 shrink-0">
-            <div className="bg-green-50 rounded-lg p-2 text-center">
-              <p className="font-bold text-green-700 text-lg leading-none">{stats.answered}</p>
-              <p className="text-[10px] text-green-600 mt-0.5">Answered</p>
-            </div>
-            <div className="bg-orange-50 rounded-lg p-2 text-center">
-              <p className="font-bold text-orange-700 text-lg leading-none">{stats.marked}</p>
-              <p className="text-[10px] text-orange-600 mt-0.5">Marked</p>
-            </div>
-            <div className="bg-red-50 rounded-lg p-2 text-center">
-              <p className="font-bold text-red-700 text-lg leading-none">
-                {Math.max(0, stats.total - stats.answered - stats.notVisited)}
-              </p>
-              <p className="text-[10px] text-red-600 mt-0.5">Not Ans.</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-2 text-center">
-              <p className="font-bold text-gray-700 text-lg leading-none">{stats.notVisited}</p>
-              <p className="text-[10px] text-gray-500 mt-0.5">Not Visited</p>
-            </div>
+            {[
+              { n: stats.answered,  label: 'Answered',    cls: 'bg-green-50 text-green-700' },
+              { n: stats.marked,    label: 'Marked',      cls: 'bg-orange-50 text-orange-700' },
+              { n: Math.max(0, stats.total - stats.answered - stats.notVisited), label: 'Not Ans.', cls: 'bg-red-50 text-red-700' },
+              { n: stats.notVisited, label: 'Not Seen',   cls: 'bg-gray-50 text-gray-600' },
+            ].map(s => (
+              <div key={s.label} className={`rounded-xl p-2.5 text-center ${s.cls}`}>
+                <p className="text-xl font-extrabold leading-none">{s.n}</p>
+                <p className="text-[10px] font-medium mt-0.5">{s.label}</p>
+              </div>
+            ))}
           </div>
 
           {/* Legend */}
-          <div className="px-4 py-2 border-b border-gray-100 shrink-0">
+          <div className="px-4 py-2.5 border-b border-gray-100 shrink-0">
             <div className="flex flex-wrap gap-x-4 gap-y-1.5">
               {[
-                { label: 'Not Visited',    cls: STATUS_COLORS.notVisited },
-                { label: 'Not Answered',   cls: STATUS_COLORS.notAnswered },
-                { label: 'Answered',       cls: STATUS_COLORS.answered },
-                { label: 'Marked',         cls: STATUS_COLORS.markedForReview },
-                { label: 'Ans + Marked',   cls: STATUS_COLORS.answeredAndMarked },
+                { label: 'Not Visited',  cls: STATUS_COLORS.notVisited },
+                { label: 'Not Answered', cls: STATUS_COLORS.notAnswered },
+                { label: 'Answered',     cls: STATUS_COLORS.answered },
+                { label: 'Marked',       cls: STATUS_COLORS.markedForReview },
+                { label: 'Ans+Marked',   cls: STATUS_COLORS.answeredAndMarked },
               ].map(l => (
                 <div key={l.label} className="flex items-center gap-1.5">
                   <div className={`w-4 h-4 rounded-full shrink-0 ${l.cls}`} />
-                  <span className="text-[10px] text-gray-600">{l.label}</span>
+                  <span className="text-[11px] text-gray-600">{l.label}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Question grid — scrollable */}
+          {/* Question grid — thumb-friendly w-11 h-11 buttons */}
           <div className="flex-1 overflow-y-auto p-4 space-y-5">
             {sections.map((sec, secIdx) => (
               <div key={sec.index}>
-                <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">
+                <p className="text-xs font-bold text-gray-500 mb-2.5 uppercase tracking-wide">
                   {sec.name}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -813,10 +874,10 @@ export default function AttemptEngine({ attempt, token }: Props) {
                       <button
                         key={q.attemptQuestionId}
                         onClick={() => { navigateTo(secIdx, qIdx); setShowNavDrawer(false); }}
-                        aria-label={`Question ${q.displayOrder} — ${status}`}
-                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all touch-manipulation
+                        aria-label={`Q${q.displayOrder} — ${status}`}
+                        className={`w-11 h-11 rounded-xl text-sm font-bold touch-manipulation
                           ${STATUS_COLORS[status]}
-                          ${isActive ? 'ring-2 ring-indigo-600 ring-offset-1 scale-110' : ''}`}
+                          ${isActive ? 'ring-2 ring-indigo-600 ring-offset-2 scale-110' : 'active:scale-95'}`}
                       >
                         {q.displayOrder}
                       </button>
@@ -825,23 +886,25 @@ export default function AttemptEngine({ attempt, token }: Props) {
                 </div>
               </div>
             ))}
+            {/* Bottom spacer for safe area */}
+            <div style={{ height: 'env(safe-area-inset-bottom, 16px)' }} />
           </div>
         </div>
       )}
 
-      {/* ── Tab switch warning dialog ────────────────────────────────────────── */}
+      {/* ── Tab switch warning ───────────────────────────────────────────────── */}
       {showTabWarning && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center">
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl text-center">
             <AlertTriangle className="w-12 h-12 text-orange-500 mx-auto mb-3" />
             <h3 className="text-lg font-bold text-gray-900 mb-2">Warning!</h3>
             <p className="text-gray-600 text-sm mb-1">You switched away from the exam.</p>
-            <p className="text-red-600 text-sm font-semibold mb-4">
-              Warning {tabSwitchCount}/3 — your test will be auto-submitted on the 3rd switch.
+            <p className="text-red-600 text-sm font-semibold mb-5">
+              {tabSwitchCount}/3 — exam auto-submits on the 3rd switch.
             </p>
             <button
               onClick={() => setShowTabWarning(false)}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-xl transition-colors"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition-colors touch-manipulation"
             >
               OK, I understand
             </button>
@@ -849,46 +912,39 @@ export default function AttemptEngine({ attempt, token }: Props) {
         </div>
       )}
 
-      {/* ── Submit confirmation dialog ───────────────────────────────────────── */}
+      {/* ── Submit confirmation ──────────────────────────────────────────────── */}
       {showSubmitDialog && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
-            <h3 className="text-lg font-bold text-gray-900 mb-1">Submit Test?</h3>
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <h3 className="text-xl font-bold text-gray-900 mb-1">Submit Test?</h3>
             <p className="text-gray-500 text-sm mb-5">You cannot change answers after submitting.</p>
 
             <div className="grid grid-cols-2 gap-3 mb-5">
-              <div className="bg-green-50 rounded-xl p-3 text-center">
-                <p className="text-2xl font-bold text-green-700">{stats.answered}</p>
-                <p className="text-xs text-green-600 mt-0.5">Answered</p>
-              </div>
-              <div className="bg-orange-50 rounded-xl p-3 text-center">
-                <p className="text-2xl font-bold text-orange-700">{stats.marked}</p>
-                <p className="text-xs text-orange-600 mt-0.5">Marked</p>
-              </div>
-              <div className="bg-red-50 rounded-xl p-3 text-center">
-                <p className="text-2xl font-bold text-red-700">
-                  {stats.total - stats.answered - stats.notVisited}
-                </p>
-                <p className="text-xs text-red-600 mt-0.5">Not Answered</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <p className="text-2xl font-bold text-gray-700">{stats.notVisited}</p>
-                <p className="text-xs text-gray-500 mt-0.5">Not Visited</p>
-              </div>
+              {[
+                { n: stats.answered, label: 'Answered', cls: 'bg-green-50', num: 'text-green-700', txt: 'text-green-600' },
+                { n: stats.marked,   label: 'Marked',   cls: 'bg-orange-50', num: 'text-orange-700', txt: 'text-orange-600' },
+                { n: Math.max(0, stats.total - stats.answered - stats.notVisited), label: 'Not Answered', cls: 'bg-red-50', num: 'text-red-700', txt: 'text-red-600' },
+                { n: stats.notVisited, label: 'Not Visited', cls: 'bg-gray-50', num: 'text-gray-700', txt: 'text-gray-500' },
+              ].map(s => (
+                <div key={s.label} className={`${s.cls} rounded-xl p-3 text-center`}>
+                  <p className={`text-2xl font-bold ${s.num}`}>{s.n}</p>
+                  <p className={`text-xs mt-0.5 ${s.txt}`}>{s.label}</p>
+                </div>
+              ))}
             </div>
 
             <div className="flex gap-3">
               <button
                 onClick={() => setShowSubmitDialog(false)}
                 disabled={submitting}
-                className="flex-1 px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 disabled:opacity-50"
+                className="flex-1 px-4 py-3.5 border border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 disabled:opacity-50 touch-manipulation"
               >
                 Go Back
               </button>
               <button
                 onClick={() => handleSubmit(false)}
                 disabled={submitting}
-                className="flex-1 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3.5 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2 touch-manipulation"
               >
                 {submitting && (
                   <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
@@ -896,7 +952,7 @@ export default function AttemptEngine({ attempt, token }: Props) {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                   </svg>
                 )}
-                {submitting ? 'Submitting...' : 'Submit Now'}
+                {submitting ? 'Submitting…' : 'Submit Now'}
               </button>
             </div>
           </div>
