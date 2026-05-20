@@ -16,6 +16,7 @@ import {
   Clock,
   Send,
   X,
+  LayoutGrid,
 } from 'lucide-react';
 import { AttemptStart, AttemptQuestion, AnswerState } from '@/types/exam';
 
@@ -122,8 +123,13 @@ export default function AttemptEngine({ attempt, token }: Props) {
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
   const [showTabWarning, setShowTabWarning] = useState(false);
   const [natInput, setNatInput] = useState('');
+  const [showNavDrawer, setShowNavDrawer] = useState(false);
 
   const saveDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Tracks the answer waiting to be flushed so navigation never drops a save
+  const pendingSave = useRef<{ qid: string; state: AnswerState } | null>(null);
+  // Guards against auto-submitting on the very first render when timeLeft === 0
+  const hasStartedTimer = useRef(false);
 
   const activeSection = sections[activeSectionIdx];
   const activeQuestion: AttemptQuestion | undefined =
@@ -141,11 +147,16 @@ export default function AttemptEngine({ attempt, token }: Props) {
   }, [activeQuestion?.questionId]);
 
   // ── Timer countdown ─────────────────────────────────────────────────────────
+  // hasStartedTimer guards against auto-submit firing on the very first render
+  // when timeLeft initialises to 0 (e.g. an attempt resumed right at expiry).
+  // The server-side page already redirects submitted/timed-out attempts to the
+  // result page, so the client never needs to submit before the UI is visible.
   useEffect(() => {
     if (timeLeft <= 0) {
-      handleSubmit(true);
+      if (hasStartedTimer.current) handleSubmit(true);
       return;
     }
+    hasStartedTimer.current = true;
     const id = setInterval(() => setTimeLeft(t => t - 1), 1000);
     return () => clearInterval(id);
   }, [timeLeft]);
@@ -197,19 +208,25 @@ export default function AttemptEngine({ attempt, token }: Props) {
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, []);
 
-  // ── Save answer to backend (debounced) ──────────────────────────────────────
+  // ── Save answer to backend (debounced, 500 ms) ──────────────────────────────
+  // pendingSave tracks the in-flight payload so navigateTo() can flush it
+  // immediately instead of letting the debounce cancel the previous question's save.
   const persistAnswer = useCallback(
     (qid: string, state: AnswerState) => {
       if (saveDebounce.current) clearTimeout(saveDebounce.current);
+      pendingSave.current = { qid, state };
       saveDebounce.current = setTimeout(() => {
+        const pending = pendingSave.current;
+        if (!pending) return;
+        pendingSave.current = null;
         fetch(`${API_BASE}/api/assessment/attempts/${attemptId}/answer`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({
-            questionId: qid,
-            selectedOptionIds: state.selectedOptionIds,
-            numericalValue: state.numericalValue ?? null,
-            isClear: state.isClear,
+            questionId: pending.qid,
+            selectedOptionIds: pending.state.selectedOptionIds,
+            numericalValue: pending.state.numericalValue ?? null,
+            isClear: pending.state.isClear,
           }),
         }).catch(() => {});
       }, 500);
@@ -258,8 +275,11 @@ export default function AttemptEngine({ attempt, token }: Props) {
     if (!activeQuestion) return;
     const qid = activeQuestion.questionId;
     const num = parseFloat(value);
-    if (value === '' || value === '-') {
+    if (value === '') {
       updateAnswer(qid, { numericalValue: undefined, isClear: true });
+    } else if (value === '-') {
+      // User is mid-typing a negative number — keep existing backend state
+      // so a 500 ms pause while typing '-5' doesn't wipe the saved answer.
     } else if (!isNaN(num)) {
       updateAnswer(qid, { numericalValue: num, isClear: false });
     }
@@ -289,6 +309,24 @@ export default function AttemptEngine({ attempt, token }: Props) {
 
   // ── Navigation ──────────────────────────────────────────────────────────────
   const navigateTo = (secIdx: number, qIdx: number) => {
+    // Flush any pending debounced save immediately so fast question-switching
+    // never silently drops the previous question's answer.
+    if (saveDebounce.current && pendingSave.current) {
+      clearTimeout(saveDebounce.current);
+      saveDebounce.current = null;
+      const { qid, state } = pendingSave.current;
+      pendingSave.current = null;
+      fetch(`${API_BASE}/api/assessment/attempts/${attemptId}/answer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          questionId: qid,
+          selectedOptionIds: state.selectedOptionIds,
+          numericalValue: state.numericalValue ?? null,
+          isClear: state.isClear,
+        }),
+      }).catch(() => {});
+    }
     setActiveSectionIdx(secIdx);
     setActiveQIdx(qIdx);
   };
@@ -693,6 +731,103 @@ export default function AttemptEngine({ attempt, token }: Props) {
           </div>
         </div>
       </div>
+
+      {/* ── Mobile: floating question palette button ────────────────────────── */}
+      <button
+        onClick={() => setShowNavDrawer(true)}
+        className="md:hidden fixed bottom-20 right-4 z-30 bg-indigo-600 text-white rounded-full w-13 h-13 p-3 shadow-xl flex items-center justify-center gap-1.5 touch-manipulation"
+        aria-label="Open question palette"
+      >
+        <LayoutGrid className="w-5 h-5 shrink-0" />
+        <span className="text-xs font-bold leading-none">{stats.answered}/{stats.total}</span>
+      </button>
+
+      {/* ── Mobile: question palette drawer (full-screen overlay) ───────────── */}
+      {showNavDrawer && (
+        <div className="md:hidden fixed inset-0 z-50 flex flex-col bg-white">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 shrink-0">
+            <h3 className="font-bold text-gray-900 text-base">Question Palette</h3>
+            <button
+              onClick={() => setShowNavDrawer(false)}
+              className="p-1.5 rounded-lg hover:bg-gray-100 touch-manipulation"
+              aria-label="Close palette"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+
+          {/* Stats strip */}
+          <div className="grid grid-cols-4 gap-2 px-4 py-3 border-b border-gray-100 shrink-0">
+            <div className="bg-green-50 rounded-lg p-2 text-center">
+              <p className="font-bold text-green-700 text-lg leading-none">{stats.answered}</p>
+              <p className="text-[10px] text-green-600 mt-0.5">Answered</p>
+            </div>
+            <div className="bg-orange-50 rounded-lg p-2 text-center">
+              <p className="font-bold text-orange-700 text-lg leading-none">{stats.marked}</p>
+              <p className="text-[10px] text-orange-600 mt-0.5">Marked</p>
+            </div>
+            <div className="bg-red-50 rounded-lg p-2 text-center">
+              <p className="font-bold text-red-700 text-lg leading-none">
+                {Math.max(0, stats.total - stats.answered - stats.notVisited)}
+              </p>
+              <p className="text-[10px] text-red-600 mt-0.5">Not Ans.</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-2 text-center">
+              <p className="font-bold text-gray-700 text-lg leading-none">{stats.notVisited}</p>
+              <p className="text-[10px] text-gray-500 mt-0.5">Not Visited</p>
+            </div>
+          </div>
+
+          {/* Legend */}
+          <div className="px-4 py-2 border-b border-gray-100 shrink-0">
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+              {[
+                { label: 'Not Visited',    cls: STATUS_COLORS.notVisited },
+                { label: 'Not Answered',   cls: STATUS_COLORS.notAnswered },
+                { label: 'Answered',       cls: STATUS_COLORS.answered },
+                { label: 'Marked',         cls: STATUS_COLORS.markedForReview },
+                { label: 'Ans + Marked',   cls: STATUS_COLORS.answeredAndMarked },
+              ].map(l => (
+                <div key={l.label} className="flex items-center gap-1.5">
+                  <div className={`w-4 h-4 rounded-full shrink-0 ${l.cls}`} />
+                  <span className="text-[10px] text-gray-600">{l.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Question grid — scrollable */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-5">
+            {sections.map((sec, secIdx) => (
+              <div key={sec.index}>
+                <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">
+                  {sec.name}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {sec.questions.map((q, qIdx) => {
+                    const ans = answers[q.questionId];
+                    const status = getNavStatus(q, ans);
+                    const isActive = secIdx === activeSectionIdx && qIdx === activeQIdx;
+                    return (
+                      <button
+                        key={q.attemptQuestionId}
+                        onClick={() => { navigateTo(secIdx, qIdx); setShowNavDrawer(false); }}
+                        aria-label={`Question ${q.displayOrder} — ${status}`}
+                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all touch-manipulation
+                          ${STATUS_COLORS[status]}
+                          ${isActive ? 'ring-2 ring-indigo-600 ring-offset-1 scale-110' : ''}`}
+                      >
+                        {q.displayOrder}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Tab switch warning dialog ────────────────────────────────────────── */}
       {showTabWarning && (

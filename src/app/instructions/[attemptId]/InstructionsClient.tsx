@@ -59,9 +59,17 @@ export default function InstructionsClient({ info, token }: Props) {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
 
-      {/* Back to dashboard */}
+      {/* Back to dashboard — warn user that the attempt stays open */}
       <button
-        onClick={() => router.push('/dashboard')}
+        onClick={() => {
+          if (window.confirm(
+            'Your test attempt is already created and the timer will run.\n\n' +
+            'If you leave now you can resume from the dashboard.\n\n' +
+            'Leave anyway?'
+          )) {
+            router.push('/dashboard');
+          }
+        }}
         className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors"
       >
         <ChevronLeft className="w-4 h-4" />

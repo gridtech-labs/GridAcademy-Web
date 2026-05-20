@@ -40,7 +40,16 @@ export default function DashboardStartButton({ assignmentId, token }: Props) {
 
       if (!startRes.ok) {
         const err = await startRes.json().catch(() => ({}));
-        throw new Error(err?.message ?? 'Failed to start attempt');
+        const msg: string = err?.message ?? '';
+        // If an in-progress attempt already exists the backend embeds the UUID
+        // in the message. Parse it out and resume directly instead of showing
+        // a raw error with an internal ID.
+        const uuidMatch = msg.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+        if (uuidMatch) {
+          router.push(`/instructions/${uuidMatch[0]}`);
+          return;
+        }
+        throw new Error(msg || 'Failed to start attempt');
       }
 
       const startJson = await startRes.json();
