@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { stripHtml } from '@/lib/utils';
 import { getStaticFaqs } from '@/lib/static-faqs';
+import { getStaticMeta, isHindi, buildExamDescription, buildExamTitle } from '@/lib/static-meta';
 
 interface PageProps { params: { slug: string }; searchParams?: { tab?: string } }
 
@@ -40,9 +41,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!exam) return { title: "Exam Details" };
 
     const url = `https://www.gridacademy.in/exam/${params.slug}`;
+    const override = getStaticMeta(params.slug);
+    const hasFree = exam.tests?.some(t => t.isFree) ?? false;
+
+    const rawDesc = stripHtml(exam.metaDescription ?? exam.shortDescription ?? '');
+    const dbDescOk = !!rawDesc && !isHindi(rawDesc) && rawDesc.length <= 160;
+
+    const title = override?.title ?? exam.metaTitle ?? buildExamTitle(exam.title);
+    const description = override?.description ?? (dbDescOk ? rawDesc : buildExamDescription(exam.title, hasFree));
+
     return {
-      title: exam.metaTitle ?? exam.title,
-      description: stripHtml(exam.metaDescription ?? exam.shortDescription) || undefined,
+      title,
+      description,
       alternates: { canonical: url },
       ...((() => {
         const kw = exam.metaKeywords
@@ -51,8 +61,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         return kw ? { keywords: kw } : {};
       })()),
       openGraph: {
-        title: exam.metaTitle ?? exam.title,
-        description: stripHtml(exam.metaDescription ?? exam.shortDescription) || "",
+        title,
+        description,
         url,
         siteName: "GridAcademy",
         images: [{ url: exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg", width: 1200, height: 630 }],
@@ -60,8 +70,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
       twitter: {
         card: "summary_large_image",
-        title: exam.metaTitle ?? exam.title,
-        description: stripHtml(exam.metaDescription ?? exam.shortDescription) || "",
+        title,
+        description,
         images: [exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg"],
       },
     };
@@ -100,7 +110,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
   let importantDates: ImportantDate[] = [];
   if (exam.importantDates) { try { importantDates = JSON.parse(exam.importantDates); } catch { /* ignore */ } }
 
-  const faqs: ExamFaq[] = []; // FAQ section hidden
+  const faqs: ExamFaq[] = getStaticFaqs(params.slug);
 
   const tabs = [
     { id: 'overview',    label: 'Overview',        icon: 'BookOpen',  content: exam.overview },

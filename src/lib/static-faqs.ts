@@ -1,6 +1,7 @@
 import { ExamFaq } from '@/types/exam';
 
-const staticFaqs: Record<string, ExamFaq[]> = {
+// Exact-slug FAQs (highest priority)
+const slugFaqs: Record<string, ExamFaq[]> = {
   'cuet-english-previous-year-question-paper': [
     {
       question: 'What is the CUET English exam?',
@@ -129,6 +130,230 @@ const staticFaqs: Record<string, ExamFaq[]> = {
   ],
 };
 
+// Generic category FAQs — matched by keywords in the slug
+const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
+  {
+    keywords: ['ssc-cgl'],
+    faqs: [
+      {
+        question: 'Is the SSC CGL mock test on GridAcademy free?',
+        answer:
+          'Yes. GridAcademy offers free SSC CGL Tier 1 mock tests based on the latest 2026 exam pattern, with instant results and detailed analysis.',
+      },
+      {
+        question: 'Are the mock tests based on the latest 2026 exam pattern?',
+        answer:
+          'Yes, all SSC CGL practice sets follow the latest 2026 exam pattern and include previous year questions.',
+      },
+      {
+        question: 'Do I get a performance analysis after the test?',
+        answer:
+          'Yes, every test provides an instant result with section-wise accuracy, speed, and rank comparison.',
+      },
+      {
+        question: 'What sections are covered in SSC CGL Tier 1?',
+        answer:
+          'SSC CGL Tier 1 covers four sections: General Intelligence & Reasoning, General Awareness, Quantitative Aptitude, and English Comprehension — 25 questions each for a total of 100 questions in 60 minutes.',
+      },
+      {
+        question: 'Is there negative marking in SSC CGL?',
+        answer:
+          'Yes. Each correct answer awards +2 marks, and each wrong answer deducts 0.5 marks. Unattempted questions carry no penalty.',
+      },
+    ],
+  },
+  {
+    keywords: ['ssc-chsl'],
+    faqs: [
+      {
+        question: 'Is the SSC CHSL mock test on GridAcademy free?',
+        answer:
+          'Yes. GridAcademy offers free SSC CHSL mock tests based on the latest exam pattern, with instant results and detailed section-wise analysis.',
+      },
+      {
+        question: 'What is the SSC CHSL exam pattern?',
+        answer:
+          'SSC CHSL Tier 1 is a Computer Based Test of 100 questions (60 minutes) covering English Language, General Intelligence, Quantitative Aptitude, and General Awareness — 25 questions per section. Each correct answer carries +2 marks with 0.5 negative marking.',
+      },
+      {
+        question: 'Do I get a performance analysis after the test?',
+        answer:
+          'Yes, every GridAcademy mock test gives instant results with section-wise accuracy, time spent, and rank comparison among all test takers.',
+      },
+      {
+        question: 'What posts are filled through SSC CHSL?',
+        answer:
+          'SSC CHSL fills posts like Lower Division Clerk (LDC), Junior Secretariat Assistant (JSA), Postal Assistant (PA), Sorting Assistant (SA), and Data Entry Operator (DEO) across various central government departments.',
+      },
+    ],
+  },
+  {
+    keywords: ['ssc-mts', 'ssc-gd'],
+    faqs: [
+      {
+        question: 'Is this SSC mock test on GridAcademy free?',
+        answer:
+          'Yes. GridAcademy offers free SSC mock tests based on the latest exam pattern, with instant results and detailed analysis.',
+      },
+      {
+        question: 'Are the mock tests based on the latest exam pattern?',
+        answer:
+          'Yes, all GridAcademy SSC practice sets are updated to reflect the latest exam pattern and syllabus.',
+      },
+      {
+        question: 'Do I get a performance analysis after the test?',
+        answer:
+          'Yes, every test provides instant results with section-wise accuracy, speed, and rank comparison.',
+      },
+    ],
+  },
+  {
+    keywords: ['cuet'],
+    faqs: [
+      {
+        question: 'Is the CUET mock test on GridAcademy free?',
+        answer:
+          'Yes. GridAcademy offers free CUET mock tests based on the latest NTA exam pattern, with instant results and detailed section-wise performance analysis.',
+      },
+      {
+        question: 'Are the mock tests based on the latest CUET 2026 pattern?',
+        answer:
+          'Yes, all CUET practice sets on GridAcademy follow the latest 2026 exam pattern issued by NTA, covering the correct question types and marking scheme.',
+      },
+      {
+        question: 'Do I get a performance analysis after the test?',
+        answer:
+          'Yes, every test provides an instant result with section-wise accuracy, time analysis, and rank comparison among all test takers.',
+      },
+      {
+        question: 'What subjects are covered in CUET UG 2026?',
+        answer:
+          'CUET UG 2026 includes Section IA (13 languages), Section IB (20 additional languages), Section II (27 domain subjects), and Section III (General Test). Candidates choose subjects based on their preferred university programs.',
+      },
+      {
+        question: 'Is there negative marking in CUET 2026?',
+        answer:
+          'Yes. Each correct answer carries +5 marks and each wrong answer deducts 1 mark. Unattempted questions carry no penalty.',
+      },
+    ],
+  },
+  {
+    keywords: ['rrb', 'railway', 'ntpc', 'group-d', 'alp', 'rpf'],
+    faqs: [
+      {
+        question: 'Is the Railway mock test on GridAcademy free?',
+        answer:
+          'Yes. GridAcademy offers free Railway mock tests based on the latest RRB exam pattern, with instant results and detailed performance analysis.',
+      },
+      {
+        question: 'Are the mock tests based on the latest 2026 exam pattern?',
+        answer:
+          'Yes, all Railway practice sets on GridAcademy are updated to match the latest RRB exam pattern and official syllabus.',
+      },
+      {
+        question: 'Do I get a performance analysis after the test?',
+        answer:
+          'Yes, every test provides instant results with subject-wise accuracy, time spent per question, and rank comparison.',
+      },
+      {
+        question: 'Is there negative marking in RRB exams?',
+        answer:
+          'Yes, RRB CBT 1 and CBT 2 (Part A) have negative marking — 1/3 of the marks assigned to a question are deducted for each wrong answer.',
+      },
+    ],
+  },
+  {
+    keywords: ['ibps', 'sbi', 'banking', 'bank-po', 'bank-clerk', 'rrb-po', 'rrb-clerk'],
+    faqs: [
+      {
+        question: 'Is the Banking mock test on GridAcademy free?',
+        answer:
+          'Yes. GridAcademy offers free Banking mock tests (IBPS PO, SBI PO, Clerk, etc.) based on the latest exam pattern, with instant results and detailed analysis.',
+      },
+      {
+        question: 'Are the mock tests based on the latest 2026 exam pattern?',
+        answer:
+          'Yes, all Banking practice sets are updated to the latest exam pattern and syllabus issued by IBPS, SBI, and RBI.',
+      },
+      {
+        question: 'Do I get a performance analysis after the test?',
+        answer:
+          'Yes, every test provides instant results with section-wise accuracy, speed analysis, and rank comparison among all test takers.',
+      },
+      {
+        question: 'What sections are covered in Banking exams?',
+        answer:
+          'Most Banking prelim exams cover English Language, Quantitative Aptitude, and Reasoning Ability. The Mains exam additionally includes General/Financial Awareness and a Computer Aptitude section.',
+      },
+      {
+        question: 'Is there negative marking in IBPS and SBI exams?',
+        answer:
+          'Yes. For objective type questions, 0.25 marks are deducted for each wrong answer in most Banking exams. Descriptive sections have no negative marking.',
+      },
+    ],
+  },
+  {
+    keywords: ['upsc', 'ias', 'civil-services'],
+    faqs: [
+      {
+        question: 'Is the UPSC mock test on GridAcademy free?',
+        answer:
+          'Yes. GridAcademy offers free UPSC Prelims mock tests based on the latest exam pattern, with instant results and detailed subject-wise analysis.',
+      },
+      {
+        question: 'Are the mock tests based on the latest UPSC 2026 pattern?',
+        answer:
+          'Yes, all UPSC practice sets follow the latest UPSC CSE Prelims pattern — 100 questions in 2 hours for GS Paper I and 80 questions in 2 hours for CSAT.',
+      },
+      {
+        question: 'Do I get a performance analysis after the test?',
+        answer:
+          'Yes, every test provides an instant result with subject-wise accuracy, time spent, and rank comparison among all test takers.',
+      },
+      {
+        question: 'Is there negative marking in UPSC Prelims?',
+        answer:
+          'Yes. Each correct answer in UPSC Prelims carries +2 marks, and each wrong answer deducts 0.66 marks (1/3 of the allotted marks). Unattempted questions carry no penalty.',
+      },
+    ],
+  },
+  {
+    keywords: ['neet'],
+    faqs: [
+      {
+        question: 'Is the NEET mock test on GridAcademy free?',
+        answer:
+          'Yes. GridAcademy offers free NEET mock tests based on the latest NTA exam pattern, with instant results and subject-wise performance analysis.',
+      },
+      {
+        question: 'Are the mock tests based on the latest NEET 2026 pattern?',
+        answer:
+          'Yes, all NEET practice sets follow the latest exam pattern — 180 questions across Physics, Chemistry, and Biology (Botany + Zoology) with a total of 720 marks.',
+      },
+      {
+        question: 'Do I get a performance analysis after the test?',
+        answer:
+          'Yes, every test provides an instant result with subject and chapter-wise accuracy, time analysis, and rank comparison.',
+      },
+      {
+        question: 'Is there negative marking in NEET 2026?',
+        answer:
+          'Yes. Each correct answer carries +4 marks and each wrong answer deducts 1 mark. Unattempted questions carry no penalty.',
+      },
+    ],
+  },
+];
+
 export function getStaticFaqs(slug: string): ExamFaq[] {
-  return staticFaqs[slug] ?? [];
+  // Exact slug match takes priority
+  if (slugFaqs[slug]) return slugFaqs[slug];
+
+  // Fall back to category keyword matching
+  for (const category of categoryFaqs) {
+    if (category.keywords.some(kw => slug.includes(kw))) {
+      return category.faqs;
+    }
+  }
+
+  return [];
 }

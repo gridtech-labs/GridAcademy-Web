@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { getAllPosts } from '@/lib/blog-posts';
 
 const BASE_URL = 'https://www.gridacademy.in';
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
@@ -48,5 +49,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly',
   }));
 
-  return [...STATIC_ROUTES, ...examCategoryRoutes, ...examDetailRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map(post => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    priority: 0.7,
+    changeFrequency: 'monthly' as const,
+    lastModified: new Date(post.publishedAt),
+  }));
+
+  return [...STATIC_ROUTES, ...examCategoryRoutes, ...examDetailRoutes, ...blogRoutes];
 }

@@ -292,18 +292,18 @@ function ExamCardItem({ exam, index }: { exam: ExamCard; index: number }) {
 }
 
 export const metadata: Metadata = {
-  title: "GridAcademy — India's Best Mock Test Platform",
+  title: "GridAcademy — Free Mock Tests for SSC, Banking, Railway & UPSC",
   description:
-    "Prepare for SSC, Banking, Railway, UPSC and more with expert-created mock tests.",
+    "Free mock tests for SSC CGL, IBPS PO, RRB NTPC, UPSC, CUET & NEET. Latest 2026 exam pattern, previous year papers, instant results and performance analysis.",
 
   alternates: {
     canonical: "https://www.gridacademy.in/",
   },
 
   openGraph: {
-    title: "GridAcademy — India's Best Mock Test Platform",
+    title: "GridAcademy — Free Mock Tests for SSC, Banking, Railway & UPSC",
     description:
-      "Prepare for SSC, Banking, Railway, UPSC and more with expert-created mock tests.",
+      "Free mock tests for SSC CGL, IBPS PO, RRB NTPC, UPSC, CUET & NEET. Latest 2026 exam pattern, previous year papers, instant results and performance analysis.",
     url: "https://www.gridacademy.in/",
     siteName: "GridAcademy",
     images: [
@@ -336,6 +336,37 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
       <style>{`
         :root { --topbar-h: 56px; }
       `}</style>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Are GridAcademy mock tests free?",
+            acceptedAnswer: { "@type": "Answer", text: "Most mock tests on GridAcademy are completely free. Select premium test series with full solutions and in-depth analytics are available at a nominal fee (starting at ₹7), but every exam page includes at least one free test you can attempt without signing up." },
+          },
+          {
+            "@type": "Question",
+            name: "Do I need an account to take a test?",
+            acceptedAnswer: { "@type": "Answer", text: "You can browse all exams and view test details without an account. To attempt a test and save your results and progress, you need to sign up — it is free and takes under a minute." },
+          },
+          {
+            "@type": "Question",
+            name: "How accurate is the exam pattern used in the mock tests?",
+            acceptedAnswer: { "@type": "Answer", text: "All tests are updated to match the latest official exam pattern and syllabus. Our educators track official notifications from SSC, IBPS, RRB, NTA, and other conducting bodies, and update question sets promptly after any pattern change." },
+          },
+          {
+            "@type": "Question",
+            name: "Can I review my answers after finishing a test?",
+            acceptedAnswer: { "@type": "Answer", text: "Yes. After every test you get an instant result screen with section-wise accuracy, time-per-question analysis, a full answer key, and detailed explanations for each question." },
+          },
+          {
+            "@type": "Question",
+            name: "Which exams are currently available on GridAcademy?",
+            acceptedAnswer: { "@type": "Answer", text: "GridAcademy currently covers SSC (CGL, CHSL, MTS, GD Constable), Banking (IBPS PO, IBPS Clerk, SBI PO, SBI Clerk), Railway (RRB NTPC, Group D, ALP, RPF), UPSC Prelims, CUET UG, NEET, and various defence and state-level exams." },
+          },
+        ],
+      })}} />
 
       <Header />
 
@@ -345,6 +376,11 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
 
         {/* Main content */}
         <main className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-5 pb-20 md:pb-6">
+
+          {/* ── Page H1 ── */}
+          <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 mb-4">
+            Free Mock Tests for SSC, CUET, Railway, Banking &amp; UPSC Exams
+          </h1>
 
           {/* ── Filter pills ── */}
           <div className="overflow-x-auto scrollbar-hide mb-5 -mx-4 px-4 md:-mx-6 md:px-6">
@@ -471,6 +507,91 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
               </Link>
             </div>
           </div>
+
+          {/* ── About + FAQ ── */}
+          <section className="mt-10 space-y-8">
+
+            {/* About GridAcademy */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-8 space-y-6">
+              <h2 className="text-lg font-extrabold text-gray-900">About GridAcademy</h2>
+
+              <div className="space-y-4 text-sm text-gray-600 leading-relaxed">
+                <p>
+                  GridAcademy is India&apos;s fast-growing mock test platform built for government exam aspirants.
+                  Whether you are preparing for SSC CGL, IBPS PO, RRB NTPC, UPSC Prelims, CUET, NEET, or RPF Constable,
+                  you will find full-length practice papers, previous year question sets, and topic-wise tests — all in one
+                  place, mostly free. Every test on GridAcademy is created or curated by educators from reputed coaching
+                  institutes across India, so the difficulty and pattern match what you will face on exam day.
+                  Thousands of students use GridAcademy every month to benchmark their preparation, find weak spots, and
+                  build the speed and accuracy needed to clear competitive exams.
+                </p>
+
+                <div>
+                  <h3 className="font-bold text-gray-800 mb-2">Exams we cover</h3>
+                  <p>
+                    GridAcademy covers all major national-level competitive exams. Under <strong>SSC</strong> you will find
+                    mock tests for CGL, CHSL, MTS, and GD Constable. For <strong>Banking</strong> aspirants we have IBPS PO,
+                    IBPS Clerk, SBI PO, SBI Clerk, and RBI Grade B practice sets. <strong>Railway</strong> preparation is
+                    covered through RRB NTPC, RRB Group D, and RRB ALP. <strong>UPSC</strong> aspirants can practice with
+                    Prelims GS Paper I and CSAT tests. We also cover <strong>CUET UG</strong> for university admissions,
+                    <strong> NEET</strong> for medical entrance, and state-level exams including Delhi Police, RPF Constable,
+                    and various State PSC exams. New exams are added within days of an official notification.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-gray-800 mb-2">Why mock tests matter</h3>
+                  <p>
+                    Research on exam preparation consistently shows that active practice testing — not just passive reading —
+                    is the most effective way to retain information and improve performance under timed conditions.
+                    A full-length mock test simulates real exam conditions: time pressure, question variety, and the mental
+                    stamina required to stay focused for 60–120 minutes straight. GridAcademy&apos;s tests include a detailed
+                    post-attempt analysis that breaks down your accuracy by section, flags questions you answered incorrectly,
+                    and compares your score against thousands of other students who took the same paper. This tells you exactly
+                    where you are losing marks — so you can fix it before the actual exam, not after. Most tests are free,
+                    so there is no barrier to starting your preparation today.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
+              <h2 className="text-lg font-extrabold text-gray-900 mb-5">Frequently Asked Questions</h2>
+              <dl className="divide-y divide-gray-100">
+                {[
+                  {
+                    q: 'Are GridAcademy mock tests free?',
+                    a: 'Most mock tests on GridAcademy are completely free. Select premium test series with full solutions and in-depth analytics are available at a nominal fee (starting at ₹7), but every exam page includes at least one free test you can attempt without signing up.',
+                  },
+                  {
+                    q: 'Do I need an account to take a test?',
+                    a: 'You can browse all exams and view test details without an account. To attempt a test and save your results and progress, you need to sign up — it is free and takes under a minute.',
+                  },
+                  {
+                    q: 'How accurate is the exam pattern used in the mock tests?',
+                    a: 'All tests are updated to match the latest official exam pattern and syllabus. Our educators track official notifications from SSC, IBPS, RRB, NTA, and other conducting bodies, and update question sets promptly after any pattern change.',
+                  },
+                  {
+                    q: 'Can I review my answers after finishing a test?',
+                    a: 'Yes. After every test you get an instant result screen with section-wise accuracy, time-per-question analysis, a full answer key, and detailed explanations for each question so you can learn from your mistakes.',
+                  },
+                  {
+                    q: 'Which exams are currently available on GridAcademy?',
+                    a: 'GridAcademy currently covers SSC (CGL, CHSL, MTS, GD Constable), Banking (IBPS PO, IBPS Clerk, SBI PO, SBI Clerk), Railway (RRB NTPC, Group D, ALP, RPF), UPSC Prelims, CUET UG, NEET, and various defence and state-level exams. New exams are added regularly.',
+                  },
+                ].map(({ q, a }) => (
+                  <details key={q} className="group py-4 cursor-pointer list-none">
+                    <summary className="flex items-center justify-between gap-3 font-semibold text-sm text-gray-800 marker:hidden list-none">
+                      {q}
+                      <span className="shrink-0 text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+                    </summary>
+                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">{a}</p>
+                  </details>
+                ))}
+              </dl>
+            </div>
+          </section>
 
           {/* ── Empty state ── */}
           {latest.length === 0 && (
