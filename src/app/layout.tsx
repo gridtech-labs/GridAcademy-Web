@@ -91,6 +91,34 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
+        {/* Organization + WebSite structured data for AI search and brand recognition */}
+        <Script id="schema-organization" type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "GridAcademy",
+            "url": "https://www.gridacademy.in",
+            "logo": "https://www.gridacademy.in/logo.png",
+            "description": "GridAcademy is an Indian mock test platform offering free mock tests, previous year papers and practice sets for SSC, CUET, Railway, Banking, UPSC and NEET exams.",
+            "sameAs": [
+              "https://www.instagram.com/gridacademy.in/"
+            ]
+          })}
+        </Script>
+        <Script id="schema-website" type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "GridAcademy",
+            "url": "https://www.gridacademy.in",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://www.gridacademy.in/exams?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          })}
+        </Script>
+
         {/* ✅ Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-Z3KQZWY3X6"
