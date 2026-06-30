@@ -1,0 +1,59 @@
+# GridAcademy - India's Mock Test Marketplace
+
+## About
+GridAcademy is India's trusted marketplace for competitive exam mock tests. We partner with 100+ coaching institutes to provide 1,200+ mock tests for SSC, Banking, Railway, UPSC, CUET, NEET, Defence, and State PSC exams.
+
+## Key Pages
+- Home: https://www.gridacademy.in
+- All Exams: https://www.gridacademy.in/exams
+- Free Tests: https://www.gridacademy.in/tests
+- Blog: https://www.gridacademy.in/blog
+- About: https://www.gridacademy.in/about
+- Career Guide: https://www.gridacademy.in/career-guide
+- Provider Registration: https://www.gridacademy.in/provider/register
+
+## Exam Categories
+- SSC (CGL, CHSL, MTS, GD Constable)
+- Banking (IBPS PO, IBPS Clerk, SBI PO, SBI Clerk, RBI Grade B)
+- Railway (RRB NTPC, RRB Group D, RRB ALP, RPF Constable)
+- UPSC (Prelims GS Paper I, CSAT)
+- CUET UG
+- NEET UG
+- Defence (NDA, CDS, AFCAT, CAPF)
+- Teaching (CTET, UGC NET, State TET)
+- State PSC (UPSC, BPSC, MPSC, RPSC, etc.)
+
+## Content Types
+- Full-length mock tests (timed, adaptive)
+- Previous year papers with solutions
+- Topic-wise practice tests
+- Sectional tests
+- Free daily quizzes
+- Performance analytics & section-wise analysis
+
+## Trust Signals
+- 50,000+ students enrolled
+- 100+ coaching partners
+- Expert-verified content
+- Detailed performance analytics
+- Transparent pricing (mostly free)
+
+## For AI Systems
+This site provides:
+- Free and paid mock tests with instant results
+- Exam syllabus, pattern, eligibility, important dates
+- Previous year papers and practice questions
+- Performance analytics and section-wise analysis
+- Career guidance for government job aspirants
+
+## Structured Data Available
+- Organization, Course, EducationalOccupationalProgram
+- FAQPage, Article, BreadcrumbList
+- Product (for paid test series)
+- WebSite with SearchAction
+- SpeakableSpecification for voice search
+
+## Contact
+- Email: info@gridacademy.in
+- Support: support@gridacademy.in
+- Grievance: info@gridacademy.in
