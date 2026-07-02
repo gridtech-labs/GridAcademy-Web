@@ -21,7 +21,7 @@ export interface BlogPost {
 const sscCglExamPattern: BlogPost = {
   slug: 'ssc-cgl-2026-exam-pattern',
   title: 'SSC CGL 2026 Exam Pattern: Complete Guide to Tier 1 and Tier 2',
-  metaTitle: 'SSC CGL 2026 Exam Pattern: Tier 1 & Tier 2 Complete Guide | GridAcademy',
+  metaTitle: 'SSC CGL 2026 Exam Pattern: Tier 1 & Tier 2 Complete Guide',
   metaDescription:
     'Complete SSC CGL 2026 exam pattern for Tier 1 and Tier 2. Sections, questions, marks, duration, negative marking and what changed from the previous cycle.',
   publishedAt: '2026-06-01',
@@ -105,7 +105,7 @@ const sscCglExamPattern: BlogPost = {
 const cuetMockTests: BlogPost = {
   slug: 'best-free-cuet-mock-tests-2026',
   title: 'Best Free CUET Mock Tests 2026: Where to Practice and What to Expect',
-  metaTitle: 'Best Free CUET Mock Tests 2026 | Practice Online | GridAcademy',
+  metaTitle: 'Best Free CUET Mock Tests 2026 | Practice Online',
   metaDescription:
     'Find the best free CUET UG 2026 mock tests. Understand the NTA exam pattern, compare platforms, and start practicing with previous year papers today.',
   publishedAt: '2026-06-05',
@@ -188,7 +188,7 @@ const cuetMockTests: BlogPost = {
 const rrbAlpSyllabus: BlogPost = {
   slug: 'rrb-alp-syllabus-2026',
   title: 'RRB ALP Syllabus 2026: Complete CBT 1 and CBT 2 Topic List',
-  metaTitle: 'RRB ALP Syllabus 2026: Full CBT 1 & CBT 2 Topic List | GridAcademy',
+  metaTitle: 'RRB ALP Syllabus 2026: Full CBT 1 & CBT 2 Topic List',
   metaDescription:
     'Complete RRB ALP 2026 syllabus for CBT 1, CBT 2 Part A & Part B, and CBAT. Topic-wise breakdown with preparation strategy for 18,000+ vacancies.',
   publishedAt: '2026-06-10',
@@ -289,7 +289,7 @@ const rrbAlpSyllabus: BlogPost = {
 const neetUg2026: BlogPost = {
   slug: 'neet-ug-2026-changes',
   title: 'NEET UG 2026: Key Changes in Syllabus, Exam Pattern and Rules',
-  metaTitle: 'NEET UG 2026 Changes: Syllabus, Pattern & Rules Explained | GridAcademy',
+  metaTitle: 'NEET UG 2026 Changes: Syllabus, Pattern & Rules Explained',
   metaDescription:
     'What changed in NEET UG 2026? Updated syllabus, exam pattern, marking scheme, new NTA guidelines, and subject-wise preparation strategy for medical aspirants.',
   publishedAt: '2026-06-15',

@@ -91,7 +91,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        {/* Organization + WebSite structured data for AI search and brand recognition */}
+        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+        {/* Organization structured data for AI search and brand recognition */}
         <Script id="schema-organization" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -99,22 +103,69 @@ export default function RootLayout({
             "name": "GridAcademy",
             "url": "https://www.gridacademy.in",
             "logo": "https://www.gridacademy.in/logo.png",
-            "description": "GridAcademy is an Indian mock test platform offering free mock tests, previous year papers and practice sets for SSC, CUET, Railway, Banking, UPSC and NEET exams.",
+            "description": "GridAcademy is India's trusted marketplace for competitive exam mock tests. We partner with 100+ coaching institutes to provide 1,200+ free and paid mock tests for SSC, Banking, Railway, UPSC, CUET, NEET, Defence, and State PSC exams.",
             "sameAs": [
               "https://www.instagram.com/gridacademy.in/"
-            ]
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "email": "info@gridacademy.in",
+              "contactType": "customer support",
+              "availableLanguage": ["English", "Hindi"],
+              "areaServed": "IN"
+            },
+            "knowsAbout": [
+              "SSC CGL Mock Tests",
+              "IBPS PO Preparation",
+              "RRB NTPC Practice Papers",
+              "UPSC Prelims Test Series",
+              "CUET UG Mock Tests",
+              "NEET Mock Tests",
+              "Competitive Exam Preparation India"
+            ],
+            "areaServed": "IN",
+            "foundingDate": "2023"
           })}
         </Script>
+
+        {/* WebSite structured data with SearchAction for sitelinks searchbox */}
         <Script id="schema-website" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
             "name": "GridAcademy",
             "url": "https://www.gridacademy.in",
+            "description": "India's trusted marketplace for competitive exam mock tests.",
+            "publisher": {
+              "@type": "Organization",
+              "name": "GridAcademy",
+              "url": "https://www.gridacademy.in"
+            },
             "potentialAction": {
               "@type": "SearchAction",
-              "target": "https://www.gridacademy.in/exams?q={search_term_string}",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://www.gridacademy.in/exams?q={search_term_string}"
+              },
               "query-input": "required name=search_term_string"
+            },
+            "inLanguage": "en-IN"
+          })}
+        </Script>
+
+        {/* Speakable specification for voice search optimization */}
+        <Script id="schema-speakable" type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "speakable": {
+              "@type": "SpeakableSpecification",
+              "cssSelector": [
+                ".exam-hero-title",
+                ".key-facts",
+                ".faq-question",
+                ".article-heading"
+              ]
             }
           })}
         </Script>

@@ -1,5 +1,13 @@
 export const dynamic = 'force-dynamic';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'All Mock Tests & Practice Sets',
+  description: 'Browse free mock tests for SSC, Banking, Railway, UPSC, CUET and NEET on GridAcademy.',
+  alternates: { canonical: 'https://www.gridacademy.in/exams' },
+};
+
 import { api } from '@/lib/api-client';
 import Link from 'next/link';
 import Image from 'next/image';

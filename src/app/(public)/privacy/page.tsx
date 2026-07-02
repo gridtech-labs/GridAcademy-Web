@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — GridAcademy',
+  title: 'Privacy Policy',
   description: 'How GridAcademy collects, uses, and protects your personal information.',
+  alternates: { canonical: 'https://www.gridacademy.in/privacy' },
 };
 
 export default function PrivacyPage() {

@@ -2,8 +2,9 @@ import { Metadata } from 'next';
 import { BookOpen, Target, Users, TrendingUp, Shield, Award } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Us — GridAcademy',
+  title: 'About Us',
   description: 'Learn about GridAcademy, India\'s trusted marketplace for competitive exam mock tests.',
+  alternates: { canonical: 'https://www.gridacademy.in/about' },
 };
 
 const stats = [
