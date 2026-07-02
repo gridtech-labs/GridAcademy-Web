@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: 'GridAcademy',
       type: 'article',
       publishedTime: post.publishedAt,
+      modifiedTime: post.publishedAt,
+      images: [{ url: 'https://www.gridacademy.in/og-image.jpg', width: 1200, height: 630 }],
     },
   };
 }
@@ -65,9 +67,31 @@ export default function BlogPostPage({ params }: PageProps) {
             '@type': 'Article',
             headline: post.title,
             description: post.metaDescription,
-            datePublished: post.publishedAt,
-            publisher: { '@type': 'Organization', name: 'GridAcademy', url: 'https://www.gridacademy.in' },
             url: `https://www.gridacademy.in/blog/${post.slug}`,
+            datePublished: post.publishedAt,
+            dateModified: post.publishedAt,
+            image: {
+              '@type': 'ImageObject',
+              url: 'https://www.gridacademy.in/og-image.jpg',
+            },
+            author: {
+              '@type': 'Organization',
+              name: 'GridAcademy',
+              url: 'https://www.gridacademy.in',
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: 'GridAcademy',
+              url: 'https://www.gridacademy.in',
+              logo: {
+                '@type': 'ImageObject',
+                url: 'https://www.gridacademy.in/logo.png',
+              },
+            },
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `https://www.gridacademy.in/blog/${post.slug}`,
+            },
           }),
         }}
       />
@@ -137,6 +161,28 @@ export default function BlogPostPage({ params }: PageProps) {
             </dl>
           </section>
         )}
+
+        {/* Author Bio - E-E-A-T Signal */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <div className="flex gap-4">
+            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
+              <span className="text-xl font-bold text-orange-600">GA</span>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="font-semibold text-gray-900">GridAcademy Team</span>
+                <span className="text-xs text-gray-500">Content & Research</span>
+              </div>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Expert-curated content from GridAcademy&apos;s team of educators and competitive exam specialists.
+                100+ coaching partners. 50,000+ students. Transparent, verified, exam-aligned.
+              </p>
+              <div className="flex gap-3 mt-2">
+                <Link href="/about" className="text-xs text-gray-400 hover:text-orange-500 transition-colors">About GridAcademy</Link>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* CTA */}
         <div className="mt-12 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 p-6 text-white">

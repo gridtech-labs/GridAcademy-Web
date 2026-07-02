@@ -4,7 +4,7 @@ import { Clock, Tag, ChevronRight } from 'lucide-react';
 import { getAllPosts } from '@/lib/blog-posts';
 
 export const metadata: Metadata = {
-  title: 'Blog — Exam Tips, Preparation Guides & Syllabus Updates | GridAcademy',
+  title: 'Blog — Exam Tips, Preparation Guides & Syllabus Updates',
   description:
     'Expert articles on SSC CGL, CUET, RRB ALP, NEET and more — exam patterns, syllabus breakdowns, preparation strategies and free mock test guides.',
   alternates: { canonical: 'https://www.gridacademy.in/blog' },

@@ -23,6 +23,26 @@ import { getStaticMeta, isHindi, buildExamDescription, buildExamTitle } from '@/
 
 interface PageProps { params: { slug: string }; searchParams?: { tab?: string } }
 
+const CONDUCTING_BODY_URLS: [RegExp, { name: string; url: string }][] = [
+  [/staff selection commission|^ssc$/i,            { name: 'Staff Selection Commission', url: 'https://ssc.gov.in' }],
+  [/ibps/i,                                         { name: 'IBPS', url: 'https://www.ibps.in' }],
+  [/state bank of india|^sbi$/i,                   { name: 'State Bank of India', url: 'https://sbi.co.in' }],
+  [/railway recruitment board|^rrb/i,               { name: 'Railway Recruitment Board', url: 'https://indianrailways.gov.in' }],
+  [/railway protection force|^rpf$/i,               { name: 'Railway Protection Force', url: 'https://indianrailways.gov.in' }],
+  [/union public service commission|^upsc$/i,       { name: 'UPSC', url: 'https://upsc.gov.in' }],
+  [/national testing agency|^nta$/i,                { name: 'National Testing Agency', url: 'https://nta.ac.in' }],
+  [/central board of secondary education|^cbse$/i,  { name: 'CBSE', url: 'https://www.cbse.gov.in' }],
+  [/defence|^nda$|^cds$|^afcat$/i,                 { name: 'Ministry of Defence', url: 'https://www.joinindianarmy.nic.in' }],
+];
+
+function getFallbackOfficial(conductingBody: string | null): { name: string; url: string } | null {
+  if (!conductingBody) return null;
+  for (const [pattern, info] of CONDUCTING_BODY_URLS) {
+    if (pattern.test(conductingBody)) return info;
+  }
+  return null;
+}
+
 const SLUG_KEYWORDS: Record<string, string[]> = {
   "cuet-ug-2026-mock-paper": [
     "CUET mock test 2026", "CUET UG mock paper", "CUET practice test free",
@@ -47,7 +67,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const rawDesc = stripHtml(exam.metaDescription ?? exam.shortDescription ?? '');
     const dbDescOk = !!rawDesc && !isHindi(rawDesc) && rawDesc.length <= 160;
 
-    const title = override?.title ?? exam.metaTitle ?? buildExamTitle(exam.title);
+    const title = (override?.title ?? exam.metaTitle ?? buildExamTitle(exam.title))
+      .replace(/\s*\|\s*GridAcademy$/, '');
     const description = override?.description ?? (dbDescOk ? rawDesc : buildExamDescription(exam.title, hasFree));
 
     return {
@@ -123,16 +144,31 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
   ].filter(t => t.id === 'dates' ? importantDates.length > 0 : !!t.content);
 
   const sortedTests = [...exam.tests].sort((a, b) => a.sortOrder - b.sortOrder);
+  const fallbackOfficial = getFallbackOfficial(exam.conductingBody);
+  const officialUrl = exam.officialWebsite ?? fallbackOfficial?.url ?? null;
+  const officialName = exam.conductingBody ?? fallbackOfficial?.name ?? 'Official Website';
 
   return (
     <>
       {/* ── JSON-LD Structured Data ──────────────────────────────────────── */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org", "@type": "EducationalOccupationalProgram",
+        "@context": "https://schema.org", "@type": ["Course", "EducationalOccupationalProgram"],
         name: exam.title, description: stripHtml(exam.shortDescription || ""),
         url: `https://www.gridacademy.in/exam/${exam.slug}`,
         image: exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg",
         provider: { "@type": "Organization", name: "GridAcademy", url: "https://www.gridacademy.in" },
+        offers: exam.priceInr === 0 ? {
+          "@type": "Offer", price: "0", priceCurrency: "INR", availability: "https://schema.org/Free"
+        } : {
+          "@type": "Offer", price: exam.priceInr, priceCurrency: "INR", availability: "https://schema.org/InStock"
+        },
+        hasCourseInstance: {
+          "@type": "CourseInstance",
+          courseMode: "online",
+          courseWorkload: `PT${exam.tests[0]?.durationMinutes || 60}M`
+        },
+        educationalLevel: exam.examLevelName,
+        teaches: exam.examTypeName
       })}} />
       {faqs.length > 0 && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
@@ -209,15 +245,87 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                     <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 shrink-0" />{exam.conductingBody}</span>
                   )}
                   <span className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 shrink-0" />{exam.testCount} Mock Test{exam.testCount !== 1 ? 's' : ''}</span>
-                  {exam.officialWebsite && (
-                    <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
+                  {officialUrl && (
+                    <a href={officialUrl} target="_blank" rel="noopener noreferrer"
                       className="flex items-center gap-1.5 hover:text-orange-400 transition-colors underline underline-offset-2">
-                      <Globe className="w-3.5 h-3.5 shrink-0" />Official Website
+                      <Globe className="w-3.5 h-3.5 shrink-0" />{officialName}
                     </a>
                   )}
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* ── Key Facts Box (AEO optimization - direct answers for AI snippets) ───── */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-6 mb-8 z-10 relative">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-4 sm:p-6" itemScope itemType="https://schema.org/ItemList">
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2" itemProp="name">
+              <span className="w-5 h-5 text-orange-500">⚡</span>
+              Quick Facts
+            </h3>
+            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-sm">
+              {exam.conductingBody && (
+                <div className="flex flex-col gap-1">
+                  <dt className="text-gray-400 text-xs uppercase tracking-wide">Conducting Body</dt>
+                  <dd className="font-semibold text-gray-900" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                    <span itemProp="name">{exam.conductingBody}</span>
+                  </dd>
+                </div>
+              )}
+              {exam.examLevelName && (
+                <div className="flex flex-col gap-1">
+                  <dt className="text-gray-400 text-xs uppercase tracking-wide">Exam Level</dt>
+                  <dd className="font-semibold text-gray-900" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                    <span itemProp="name">{exam.examLevelName}</span>
+                  </dd>
+                </div>
+              )}
+              {exam.examTypeName && (
+                <div className="flex flex-col gap-1">
+                  <dt className="text-gray-400 text-xs uppercase tracking-wide">Category</dt>
+                  <dd className="font-semibold text-gray-900" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                    <span itemProp="name">{exam.examTypeName}</span>
+                  </dd>
+                </div>
+              )}
+              {sortedTests.length > 0 && (
+                <>
+                  <div className="flex flex-col gap-1">
+                    <dt className="text-gray-400 text-xs uppercase tracking-wide">Total Tests</dt>
+                    <dd className="font-semibold text-gray-900" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                      <span itemProp="name">{exam.testCount}</span>
+                    </dd>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <dt className="text-gray-400 text-xs uppercase tracking-wide">Free Tests</dt>
+                    <dd className="font-semibold text-green-600" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                      <span itemProp="name">{sortedTests.filter(t => t.isFree).length}</span>
+                    </dd>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <dt className="text-gray-400 text-xs uppercase tracking-wide">Duration</dt>
+                    <dd className="font-semibold text-gray-900" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                      <span itemProp="name">{sortedTests[0]?.durationMinutes} min</span>
+                    </dd>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <dt className="text-gray-400 text-xs uppercase tracking-wide">Questions</dt>
+                    <dd className="font-semibold text-gray-900" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                      <span itemProp="name">{sortedTests[0]?.totalQuestions}</span>
+                    </dd>
+                  </div>
+                </>
+              )}
+              {exam.priceInr !== undefined && (
+                <div className="flex flex-col gap-1">
+                  <dt className="text-gray-400 text-xs uppercase tracking-wide">Price</dt>
+                  <dd className="font-semibold text-gray-900" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                    <span itemProp="name">{exam.priceInr === 0 ? 'Free' : `₹${exam.priceInr.toLocaleString('en-IN')}`}</span>
+                  </dd>
+                </div>
+              )}
+            </dl>
           </div>
         </div>
 
@@ -372,13 +480,13 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
           )}
 
           {/* ── Official links ───────────────────────────────────────────── */}
-          {(exam.officialWebsite || exam.notificationUrl) && (
+          {(officialUrl || exam.notificationUrl) && (
             <div className="flex flex-wrap gap-3">
-              {exam.officialWebsite && (
-                <a href={exam.officialWebsite} target="_blank" rel="noopener noreferrer"
+              {officialUrl && (
+                <a href={officialUrl} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm font-semibold text-orange-600 bg-white
                     border border-orange-200 hover:border-orange-400 hover:bg-orange-50 px-4 py-2.5 rounded-xl transition-colors">
-                  <Globe className="w-4 h-4" />Official Website<ExternalLink className="w-3.5 h-3.5" />
+                  <Globe className="w-4 h-4" />{officialName}<ExternalLink className="w-3.5 h-3.5" />
                 </a>
               )}
               {exam.notificationUrl && (

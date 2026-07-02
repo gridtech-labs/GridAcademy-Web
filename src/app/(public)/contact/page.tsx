@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Mail, Phone, Clock, Send, CheckCircle, AlertCircle, MapPin, BookOpen } from 'lucide-react';
-import type { Metadata } from 'next';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });

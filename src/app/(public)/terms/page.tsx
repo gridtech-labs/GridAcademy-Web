@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — GridAcademy',
+  title: 'Terms of Service',
   description: 'Terms and conditions governing use of the GridAcademy platform.',
+  alternates: { canonical: 'https://www.gridacademy.in/terms' },
 };
 
 export default function TermsPage() {

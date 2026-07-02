@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Refund Policy — GridAcademy',
+  title: 'Refund Policy',
   description: 'GridAcademy refund and cancellation policy for mock test purchases.',
+  alternates: { canonical: 'https://www.gridacademy.in/refund-policy' },
 };
 
 export default function RefundPolicyPage() {

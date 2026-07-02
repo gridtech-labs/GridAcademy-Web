@@ -4,9 +4,10 @@ import { getAllPosts } from '@/lib/blog-posts';
 const BASE_URL = 'https://www.gridacademy.in';
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
 
-const EXAM_CATEGORY_SLUGS = [
+const ALL_CATEGORY_SLUGS = [
   'ssc', 'banking', 'railways', 'upsc',
   'police', 'defence', 'state-psc', 'teaching',
+  'cuet', 'neet',
 ];
 
 const STATIC_ROUTES: MetadataRoute.Sitemap = [
@@ -34,13 +35,36 @@ async function getExamSlugs(): Promise<string[]> {
   }
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const examSlugs = await getExamSlugs();
+async function getPopulatedCategorySlugs(): Promise<string[]> {
+  const results = await Promise.all(
+    ALL_CATEGORY_SLUGS.map(async (slug) => {
+      try {
+        const res = await fetch(
+          `${API_BASE}/api/storefront/tests?categorySlug=${slug}&page=1&pageSize=1`,
+          { next: { revalidate: 3600 } },
+        );
+        if (!res.ok) return null;
+        const json = await res.json();
+        const items: unknown[] = json?.data?.items ?? json?.items ?? (Array.isArray(json) ? json : []);
+        return items.length > 0 ? slug : null;
+      } catch {
+        return null;
+      }
+    }),
+  );
+  return results.filter((s): s is string => s !== null);
+}
 
-  const examCategoryRoutes: MetadataRoute.Sitemap = EXAM_CATEGORY_SLUGS.map(slug => ({
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [examSlugs, populatedCategories] = await Promise.all([
+    getExamSlugs(),
+    getPopulatedCategorySlugs(),
+  ]);
+
+  const examCategoryRoutes: MetadataRoute.Sitemap = populatedCategories.map(slug => ({
     url: `${BASE_URL}/exams/${slug}`,
     priority: 0.8,
-    changeFrequency: 'weekly',
+    changeFrequency: 'weekly' as const,
   }));
 
   const examDetailRoutes: MetadataRoute.Sitemap = examSlugs.map(slug => ({
