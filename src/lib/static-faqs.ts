@@ -96,6 +96,34 @@ const slugFaqs: Record<string, ExamFaq[]> = {
     },
   ],
 
+  'rpf-recruitment-2026': [
+    {
+      question: 'How many vacancies are expected in RPF 2026?',
+      answer:
+        'The exact vacancy count for RPF 2026 will be announced in the official notification. Based on previous cycles — RPF Constable 2018 had ~9,739 vacancies and RPF SI 2024 had ~4,660 vacancies — the 2026 recruitment is expected to notify thousands of Constable and SI posts. Candidates should check the official Indian Railways and RRB websites for confirmed figures.',
+    },
+    {
+      question: 'When will the RPF 2026 recruitment notification be released?',
+      answer:
+        'The RPF 2026 official notification has not yet been released as of mid-2026. RPF Constable and SI notifications typically follow a multi-year cycle. Candidates are advised to bookmark the official RPF and RRB websites and monitor GridAcademy for the latest exam updates.',
+    },
+    {
+      question: 'Who conducts the RPF Constable and SI recruitment?',
+      answer:
+        'RPF Constable and Sub-Inspector recruitment is conducted by the Railway Recruitment Board (RRB) under the Ministry of Railways, Government of India.',
+    },
+    {
+      question: 'What is the exam pattern for RPF Constable CBT 2026?',
+      answer:
+        'The RPF Constable Computer Based Test consists of 120 objective questions (90 minutes): General Awareness / Current Affairs (50 questions), Arithmetic (35 questions), and General Intelligence & Reasoning (35 questions). There is 1/3 negative marking for each wrong answer.',
+    },
+    {
+      question: 'Is the RPF mock test on GridAcademy free?',
+      answer:
+        'Yes. GridAcademy offers free RPF Constable mock tests based on the latest exam pattern, with instant results and section-wise performance analysis to help you prepare effectively.',
+    },
+  ],
+
   'ssc-cgl-t1-2025-paper': [
     {
       question: 'What is SSC CGL Tier 1?',

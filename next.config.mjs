@@ -9,6 +9,20 @@ const nextConfig = {
       { protocol: 'https', hostname: 'gridacademy-production.up.railway.app' },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/exam/rrb-alp-2026-assistant-loco-pilot-recruitment-exam',
+        destination: '/exam/rrb-alp-mock-test-series',
+        permanent: true,
+      },
+      {
+        source: '/exam/cuet-english-previous-year-question-paper',
+        destination: '/exam/cuet-ug-previous-year-papers-pyp',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     const apiBase = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
     return [
