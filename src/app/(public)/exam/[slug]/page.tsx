@@ -132,21 +132,24 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
   if (exam.importantDates) { try { importantDates = JSON.parse(exam.importantDates); } catch { /* ignore */ } }
 
   const faqs: ExamFaq[] = getStaticFaqs(params.slug);
+  const staticMeta = getStaticMeta(params.slug);
+  const displayConductingBody = staticMeta?.conductingBody ?? exam.conductingBody;
+  const effectiveDates = importantDates.length > 0 ? importantDates : (staticMeta?.importantDates ?? []);
 
   const tabs = [
-    { id: 'overview',    label: 'Overview',        icon: 'BookOpen',  content: exam.overview },
+    { id: 'overview',    label: 'Overview',        icon: 'BookOpen',  content: exam.overview ?? staticMeta?.overview ?? null },
     { id: 'eligibility', label: 'Eligibility',     icon: 'Users',     content: exam.eligibility },
     { id: 'syllabus',    label: 'Syllabus',         icon: 'FileText',  content: exam.syllabus },
     { id: 'pattern',     label: 'Exam Pattern',     icon: 'Trophy',    content: exam.examPattern },
     { id: 'dates',       label: 'Important Dates',  icon: 'Calendar',  content: null },
     { id: 'apply',       label: 'How To Apply',     icon: 'Bell',      content: exam.howToApply },
     { id: 'result',      label: 'Result & Cut-off', icon: 'Tag',       content: (exam.resultInfo ?? '') + (exam.cutOff ? `\n\n${exam.cutOff}` : '') },
-  ].filter(t => t.id === 'dates' ? importantDates.length > 0 : !!t.content);
+  ].filter(t => t.id === 'dates' ? effectiveDates.length > 0 : !!t.content);
 
   const sortedTests = [...exam.tests].sort((a, b) => a.sortOrder - b.sortOrder);
-  const fallbackOfficial = getFallbackOfficial(exam.conductingBody);
+  const fallbackOfficial = getFallbackOfficial(displayConductingBody ?? null);
   const officialUrl = exam.officialWebsite ?? fallbackOfficial?.url ?? null;
-  const officialName = exam.conductingBody ?? fallbackOfficial?.name ?? 'Official Website';
+  const officialName = displayConductingBody ?? fallbackOfficial?.name ?? 'Official Website';
 
   return (
     <>
@@ -241,8 +244,8 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                 )}
 
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm text-slate-400">
-                  {exam.conductingBody && (
-                    <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 shrink-0" />{exam.conductingBody}</span>
+                  {displayConductingBody && (
+                    <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 shrink-0" />{displayConductingBody}</span>
                   )}
                   <span className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 shrink-0" />{exam.testCount} Mock Test{exam.testCount !== 1 ? 's' : ''}</span>
                   {officialUrl && (
@@ -265,11 +268,11 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
               Quick Facts
             </h3>
             <dl className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-sm">
-              {exam.conductingBody && (
+              {displayConductingBody && (
                 <div className="flex flex-col gap-1">
                   <dt className="text-gray-400 text-xs uppercase tracking-wide">Conducting Body</dt>
                   <dd className="font-semibold text-gray-900" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                    <span itemProp="name">{exam.conductingBody}</span>
+                    <span itemProp="name">{displayConductingBody}</span>
                   </dd>
                 </div>
               )}
@@ -427,7 +430,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
           {/* ── Exam info grid (highlights + key dates) ─────────────────── */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              exam.conductingBody && { icon: Building2, label: 'Conducting Body', value: exam.conductingBody },
+              displayConductingBody && { icon: Building2, label: 'Conducting Body', value: displayConductingBody },
               exam.examLevelName  && { icon: Trophy,    label: 'Exam Level',      value: exam.examLevelName },
               exam.examTypeName   && { icon: Tag,       label: 'Category',        value: exam.examTypeName },
               exam.testCount > 0  && { icon: FileText,  label: 'Mock Tests',      value: `${exam.testCount} Tests` },
@@ -448,7 +451,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
           {tabs.length > 0 ? (
             <ExamDetailTabs
               tabs={tabs}
-              importantDates={importantDates}
+              importantDates={effectiveDates}
               slug={exam.slug}
               defaultTab={searchParams?.tab}
             />
@@ -460,7 +463,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
           )}
 
           {/* ── Important Dates table (standalone) ──────────────────────── */}
-          {importantDates.length > 0 && !tabs.some(t => t.id === 'dates') && (
+          {effectiveDates.length > 0 && !tabs.some(t => t.id === 'dates') && (
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
               <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-100 bg-gray-50">
                 <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center shrink-0">
@@ -469,7 +472,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                 <h3 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Key Dates</h3>
               </div>
               <ul className="divide-y divide-gray-100">
-                {importantDates.map((d, i) => (
+                {effectiveDates.map((d, i) => (
                   <li key={i} className="flex items-center justify-between gap-3 px-5 py-3.5">
                     <span className="text-sm text-gray-600">{d.label}</span>
                     <span className="text-sm font-bold text-orange-600 whitespace-nowrap">{d.date}</span>
