@@ -217,3 +217,30 @@ body {
   font-weight: 600 !important;
   color: #1f2937 !important;
 }
+
+/* ── KaTeX rendering safety (exam questions & options) ──────────────
+   The question/option HTML comes from the API with pre-rendered KaTeX
+   markup. katex.min.css (imported in layout.tsx) styles it; these rules
+   are defensive + mobile-friendly. */
+
+/* Keep the MathML fallback hidden even if the stylesheet is slow/blocked,
+   so it can never leak as duplicate text (e.g. "3154π 77"). */
+.katex-mathml {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* Tailwind Typography (prose) restyles descendants and can distort KaTeX;
+   let KaTeX control its own spacing/whitespace. */
+.prose .katex,
+.katex { white-space: normal; }
+.prose :where(.katex *) { color: inherit; }
+
+/* Wide formulas scroll inside their container instead of breaking the
+   page width on mobile. */
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
