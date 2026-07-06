@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronRight, Clock, Tag } from 'lucide-react';
+import { ChevronRight, Clock, Tag, Download } from 'lucide-react';
 import { getAllPosts, getPost } from '@/lib/blog-posts';
 
 interface PageProps { params: { slug: string } }
@@ -184,8 +184,25 @@ export default function BlogPostPage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* Download CTA */}
+        {post.downloadCta && (
+          <div className="mt-12 rounded-xl border-2 border-orange-400 bg-orange-50 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex-1">
+              <p className="font-extrabold text-gray-900 text-base mb-0.5">Get the printable study tracker</p>
+              <p className="text-sm text-gray-600">Day-by-day targets, formula sheet reminders and MCQ counts — one page, print-ready.</p>
+            </div>
+            <a
+              href={post.downloadCta.url}
+              className="shrink-0 inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              {post.downloadCta.label}
+            </a>
+          </div>
+        )}
+
         {/* CTA */}
-        <div className="mt-12 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 p-6 text-white">
+        <div className="mt-8 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 p-6 text-white">
           <p className="font-extrabold text-lg mb-1">Ready to practice?</p>
           <p className="text-orange-100 text-sm mb-4">
             Take a free mock test on GridAcademy — latest 2026 exam pattern, instant results and detailed analysis.
