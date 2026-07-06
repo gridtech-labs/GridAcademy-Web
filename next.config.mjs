@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ensures private PDFs are bundled into the standalone production output
+  experimental: {
+    outputFileTracingIncludes: {
+      '/api/download/neet-week2': ['./src/app/NEET-2027-Week-2-Target-8-14-july.pdf'],
+    },
+  },
   images: {
     remotePatterns: [
       { protocol: 'http',  hostname: 'localhost' },

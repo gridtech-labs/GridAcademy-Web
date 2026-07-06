@@ -14,6 +14,7 @@ export interface BlogPost {
   excerpt: string;
   content: string; // HTML — internally authored, safe for dangerouslySetInnerHTML
   faqs: BlogFaq[];
+  downloadCta?: { label: string; url: string };
 }
 
 // ─── Articles ────────────────────────────────────────────────────────────────
@@ -368,9 +369,141 @@ const neetUg2026: BlogPost = {
   ],
 };
 
+const neet2027Week2: BlogPost = {
+  slug: 'neet-2027-week-2-study-plan-july-8-14',
+  title: 'NEET 2027 Week 2 Study Plan (8–14 July): Vectors, Atomic Structure & Cell Biology',
+  metaTitle: 'NEET 2027 Week 2 Study Plan | 8–14 July Daily Tracker',
+  metaDescription:
+    'Complete NEET 2027 Week 2 daily study plan for 8–14 July. Day-by-day targets for Physics (Vectors, Laws of Motion), Chemistry (Atomic Structure, Periodic Table), and Biology (Cell Biology, Biomolecules, Cell Division).',
+  publishedAt: '2026-07-07',
+  category: 'NEET',
+  readingTimeMinutes: 8,
+  excerpt:
+    'Week 2 of the NEET 2027 Phase 1 Foundation Block runs from 8 to 14 July. Here is the complete day-by-day study tracker — Physics, Chemistry, and Biology targets for each day, plus Mini Test Day and Full Revision Day strategy.',
+  content: `
+<p>Week 2 of the NEET 2027 Phase 1 Foundation Block is built around one goal: establishing solid conceptual foundations before the syllabus gets harder. This is not a week to rush. Physics transitions from Scalars to Newton's Laws, Chemistry covers the architecture of the atom and the periodic table, and Biology goes deep into cell structure, biomolecules, and cell division — three high-weightage chapters that together account for a significant chunk of NEET Biology marks every year. Follow this day-by-day plan precisely, and you will end the week with five core chapters locked in, a mini-test to benchmark your performance, and a full revision day to clear backlog before Week 3 begins.</p>
+
+<p><strong>Download the full printable tracker PDF</strong> for Week 2 (8–14 July) on GridAcademy — it includes the daily schedule, formula sheet reminders, and MCQ targets in one page: <a href="/resources/neet-2027-week2">Download NEET 2027 Week 2 Target PDF</a>.</p>
+
+<h2>Week 2 at a Glance</h2>
+<ul>
+  <li><strong>Physics:</strong> Vectors (Parts 1 &amp; 2) → Laws of Motion (Parts 1 &amp; 2) → Friction</li>
+  <li><strong>Chemistry:</strong> Atomic Structure (Parts 1 &amp; 2) → Periodic Classification (Parts 1 &amp; 2) → Periodicity in Properties</li>
+  <li><strong>Biology:</strong> Cell: Unit of Life (Parts 1 &amp; 2) → Biomolecules (Carbs + Proteins + Lipids + Nucleic Acids + Enzymes) → Cell Cycle &amp; Division</li>
+  <li><strong>Sunday 13 July:</strong> Mini Test Day — 60 MCQs Physics, 60 MCQs Chemistry, 180 MCQs Biology</li>
+  <li><strong>Monday 14 July:</strong> Full Revision Day — backlog clearance, formula recall, NCERT active retrieval, mock error analysis</li>
+</ul>
+
+<h2>8 July (Tuesday) — Vectors Part 1 | Atomic Structure Part 1 | Cell: Unit of Life Part 1</h2>
+
+<h3>Physics: Vectors Part 1</h3>
+<p>Start with the conceptual foundation: the difference between scalars and vectors, and why the distinction matters in mechanics. Cover <strong>Addition of Vectors</strong> (triangle law and parallelogram law), <strong>Resolution of Vectors</strong> into rectangular components, and <strong>Unit Vectors</strong>. Read the NCERT chapter fully before attempting the formula sheet. Target: 30–40 MCQs on scalar/vector addition and resolution.</p>
+
+<h3>Chemistry: Atomic Structure Part 1</h3>
+<p>Cover the Aufbau Principle, Aufbau Diagrams, and Hund's Rule in one sitting — these three rules together explain how electrons fill orbitals. Then move to writing complete <strong>Electronic Configurations</strong> for elements 1–36. This is rote + pattern recognition; drill it until configurations come without looking. Read the NCERT chapter and fill in the formula sheet. Target: 40–50 MCQs.</p>
+
+<h3>Biology: Cell: Unit of Life Part 1</h3>
+<p>Open with Cell Theory (three postulates — know them verbatim). Then distinguish <strong>Prokaryotic vs Eukaryotic</strong> cells in a comparison table: nucleus, organelles, size, examples. Finish with <strong>Cell Organelles &amp; Functions</strong> — mitochondria, chloroplast, ribosomes, Golgi apparatus, ER, lysosomes, vacuoles. Draw each organelle diagram from memory after reading. Do NCERT Read + Diagrams. Target: 100 MCQs.</p>
+
+<h2>9 July (Wednesday) — Vectors Part 2 | Atomic Structure Part 2 | Cell: Unit of Life (Complete)</h2>
+
+<h3>Physics: Vectors Part 2</h3>
+<p>Move into operations: <strong>Subtraction of Vectors</strong>, <strong>Multiplication of Vectors</strong> (scalar/dot product and vector/cross product), and <strong>Important Numericals</strong>. The cross product formula and right-hand rule are the most commonly tested items in NEET Physics from this chapter. Do not skip the numericals — Vectors numericals appear in NEET in the context of Work (dot product) and Torque (cross product). Target: 30–40 MCQs.</p>
+
+<h3>Chemistry: Atomic Structure Part 2</h3>
+<p>Cover the four <strong>Quantum Numbers</strong> (n, l, m, s) with their allowed values and physical meaning. Then learn the <strong>Shapes of s, p, d Orbitals</strong> — NEET has asked directly about orbital shapes and the number of nodes. Study <strong>Energy Level Diagrams</strong> and work through all NCERT examples in this chapter. NCERT examples in Atomic Structure are frequently lifted directly into NEET questions. Target: 40–50 MCQs.</p>
+
+<h3>Biology: Cell: Unit of Life (Complete)</h3>
+<p>Complete the chapter with three remaining topics: <strong>Plasma Membrane</strong> (fluid mosaic model, Singer and Nicolson, selective permeability), <strong>Cell Wall &amp; Cytoskeleton</strong> (composition differences in plant vs fungal vs bacterial walls), and <strong>Plant vs Animal Cell</strong> comparison. After reading, draw and label both cell types from scratch — this active retrieval locks the diagram details far better than passive re-reading. Target: 100 MCQs.</p>
+
+<h2>10 July (Thursday) — Laws of Motion Part 1 | Periodic Classification Part 1 | Biomolecules (Carbs + Proteins)</h2>
+
+<h3>Physics: Laws of Motion Part 1</h3>
+<p>Cover Newton's three laws with precise statements (not paraphrases — NEET tests exact wording). The distinction between <strong>mass and weight</strong> (scalar vs vector, kg vs N) appears in direct questions. Understand the concept of inertia and how each law follows from it. Fill in the formula sheet: F = ma, W = mg, action-reaction pairs. Target: 30–40 MCQs.</p>
+
+<h3>Chemistry: Periodic Classification Part 1</h3>
+<p>Cover the <strong>Modern Periodic Law</strong> (properties are periodic functions of atomic number, not atomic mass — Mendeleev's error corrected by Moseley). Learn the features of the modern periodic table: 7 periods, 18 groups, and why period lengths are 2, 8, 8, 18, 18, 32, 32. Understand <strong>Groups &amp; Periods</strong> and the block classification (s, p, d, f). Short notes are the tool here — build a one-page summary of the block structure. Target: 40–50 MCQs.</p>
+
+<h3>Biology: Biomolecules — Carbohydrates &amp; Proteins</h3>
+<p>Biomolecules is one of the highest-yield Biology chapters in NEET. Start with <strong>Carbohydrate Classifications</strong> (monosaccharides, disaccharides, polysaccharides) and their functions (energy storage, structural roles). Then cover <strong>Protein Structure &amp; Functions</strong> — primary, secondary, tertiary, quaternary structure; peptide bonds; examples of structural vs functional proteins. Diagrams are non-negotiable here — draw the peptide bond and protein folding levels. Target: 100 MCQs.</p>
+
+<h2>11 July (Friday) — Laws of Motion Part 2 | Periodic Classification Part 2 | Biomolecules (Complete)</h2>
+
+<h3>Physics: Laws of Motion Part 2</h3>
+<p>Apply Newton's Laws to real systems: <strong>Applications of Laws</strong> (Atwood's machine, connected bodies, pulley systems), <strong>System of Particles Intro</strong> (centre of mass concept), and <strong>Pseudo Force Basics</strong> (non-inertial frames). The Important Numericals for Laws of Motion are the payoff for the week — a machine-like approach to FBD (free body diagram) → apply F = ma → solve is all you need. Drill at least 15 numericals today. Target: 30–40 MCQs.</p>
+
+<h3>Chemistry: Periodic Classification Part 2</h3>
+<p>Deepen the periodic table understanding with <strong>Electronic Configurations</strong> of exceptions (Cr, Cu, and their patterns), <strong>Position in Periodic Table</strong> from configuration (period = highest principal quantum number; group from valence electrons), and <strong>Anomalous Properties</strong> (why H, Be, and B don't fit simple periodic trends). Short notes. Target: 40–50 MCQs.</p>
+
+<h3>Biology: Biomolecules (Complete)</h3>
+<p>Finish the chapter with three remaining biomolecule classes. <strong>Lipids</strong>: types (triglycerides, phospholipids, sterols) and their roles (energy reserve, membrane structure, hormones). <strong>Nucleic Acids</strong>: structure of DNA and RNA, types of RNA (mRNA, tRNA, rRNA), and the difference in their sugar (deoxyribose vs ribose) and bases (DNA has Thymine; RNA has Uracil). <strong>Enzymes</strong>: structure (apoenzyme + cofactor = holoenzyme), mechanism (lock-and-key and induced-fit), and types of inhibitors (competitive vs non-competitive). Target: 100 MCQs.</p>
+
+<h2>12 July (Saturday) — Friction | Periodicity in Properties | Cell Cycle &amp; Division</h2>
+
+<h3>Physics: Friction</h3>
+<p>This is the last Physics content day before the mini test. Cover <strong>Static and Kinetic Friction</strong> (and the key inequality: static friction ≤ μₛN, while kinetic friction = μₖN). Learn the <strong>Coefficient of Friction</strong> (μ = tan θ at limiting friction angle), <strong>Angle of Friction and Angle of Repose</strong> (both equal arctan μ — a frequently tested relationship), and <strong>Rolling Friction Basics</strong>. Formula sheet is critical today. Target: 30–40 MCQs.</p>
+
+<h3>Chemistry: Periodicity in Properties</h3>
+<p>This is the most graph-heavy Chemistry section in Week 2. Draw the trend charts for all four properties: <strong>Atomic and Ionic Radii</strong> (decreases across period, increases down group), <strong>Ionization Enthalpy</strong> (increases across period with exceptions at Be/B and N/O), <strong>Electron Gain Enthalpy</strong> (generally increases; Cl &gt; F anomaly), and <strong>Electronegativity</strong> (Pauling scale, F is highest). Know the exceptions by heart — NEET loves testing the anomalies (Be vs B, N vs O, F vs Cl). Target: 40–50 MCQs with Trend Charts.</p>
+
+<h3>Biology: Cell Cycle &amp; Division</h3>
+<p>Cover the complete cell cycle: <strong>G1 → S → G2 → M phase</strong> (interphase + mitosis). Then go through the five stages of <strong>Mitosis</strong> (Prophase, Metaphase, Anaphase, Telophase, Cytokinesis) with what happens at each stage — NEET asks about spindle formation in Metaphase, chromatid separation in Anaphase, and the significance (growth, repair, asexual reproduction). Then cover <strong>Meiosis</strong>: Meiosis I (reductive division, crossing over in Prophase I, four substages) and Meiosis II (mitosis-like, equational division). The significance of meiosis (variation, halving chromosome number) is a direct NEET question. Draw the complete cell cycle diagram. Target: 100 MCQs.</p>
+
+<h2>13 July (Sunday) — Mini Test Day</h2>
+<p>Do not study new content today. This is a pure performance day. The targets from the PDF:</p>
+<ul>
+  <li><strong>Physics:</strong> Attempt 60 MCQs covering Vectors, Laws of Motion, and Friction. After completing, analyze every mistake and identify the formula or concept that caused it. Do a Formula Recall session — write every formula from the week's Physics chapters from memory, without looking.</li>
+  <li><strong>Chemistry:</strong> Attempt 60 MCQs covering Atomic Structure, Periodic Classification, and Periodicity in Properties. After completing, review Trend Charts from memory — draw all four property trend graphs before checking your notes. Revise only the weak topics you identified from wrong answers.</li>
+  <li><strong>Biology:</strong> Attempt 180 MCQs covering Cell: Unit of Life, Biomolecules, and Cell Cycle &amp; Division. After completing, use Active Recall Flashcards — write the key fact from one side, the answer on the other, for every wrong answer.</li>
+</ul>
+<p>The goal of Mini Test Day is not your score — it is the quality of your mistake analysis. A student who attempts 300 MCQs and reviews every wrong answer systematically will outperform one who attempts 300 and moves on. GridAcademy's NEET mock tests are tagged by chapter, so you can build a targeted 60-MCQ set for exactly these topics and get instant section-wise accuracy data after each attempt.</p>
+
+<h2>14 July (Monday) — Full Revision Day (Backlog Clearance)</h2>
+<p>The final day of Week 2 is not a rest day — it is a structured clearance session. The tracker specifies four activities:</p>
+<ul>
+  <li><strong>Quick Notes Revision:</strong> Go through every short note and formula sheet from the week. Do not re-read chapters — only your condensed notes.</li>
+  <li><strong>Formula &amp; Trend Sheet Recall:</strong> Write Physics formulas and Chemistry trend charts entirely from memory. Check against your notes. Any gap is a target for re-revision.</li>
+  <li><strong>NCERT High-Yield Active Retrieval:</strong> For each Biology chapter covered this week, close the book and write down the 5 most testable facts. Then open NCERT and check what you missed.</li>
+  <li><strong>Complete Mock Error Analysis:</strong> Return to every wrong answer from Sunday's Mini Test Day. For each one, write the correct concept in your own words. This is the final consolidation step before Week 3 begins.</li>
+</ul>
+<p>By the end of 14 July, you should be confident on Vectors, Laws of Motion, Friction, Atomic Structure, Periodic Classification, Periodicity in Properties, Cell: Unit of Life, Biomolecules, and Cell Cycle &amp; Division — nine sub-topics with strong NEET weightage. That is a strong foundation for the chapters ahead in Phase 1.</p>
+  `,
+  faqs: [
+    {
+      question: 'What topics are covered in NEET 2027 Week 2 (8–14 July)?',
+      answer:
+        'Week 2 covers Physics: Vectors (Parts 1 & 2), Laws of Motion (Parts 1 & 2), and Friction. Chemistry: Atomic Structure (Parts 1 & 2), Periodic Classification (Parts 1 & 2), and Periodicity in Properties. Biology: Cell: Unit of Life (complete), Biomolecules (Carbohydrates, Proteins, Lipids, Nucleic Acids, Enzymes), and Cell Cycle & Division. Sunday 13 July is Mini Test Day and Monday 14 July is Full Revision Day.',
+    },
+    {
+      question: 'How many MCQs should I attempt per day in the Week 2 plan?',
+      answer:
+        'The plan targets 30–40 MCQs per Physics chapter, 40–50 MCQs per Chemistry chapter, and 100 MCQs per Biology chapter — roughly 170–190 MCQs daily across all three subjects. On Mini Test Day (13 July), the targets are 60 Physics MCQs + 60 Chemistry MCQs + 180 Biology MCQs.',
+    },
+    {
+      question: 'Which NEET 2027 Biology chapters are covered in Week 2?',
+      answer:
+        'Three Biology chapters are covered: Cell: Unit of Life (cell theory, organelles, plasma membrane, plant vs animal cell), Biomolecules (carbohydrates, proteins, lipids, nucleic acids, enzymes), and Cell Cycle & Division (mitosis and meiosis). All three are high-weightage chapters that consistently appear in NEET.',
+    },
+    {
+      question: 'What is the purpose of Mini Test Day in the Week 2 tracker?',
+      answer:
+        'Mini Test Day (Sunday 13 July) is a full-week assessment day, not a rest day. You attempt 60 MCQs in Physics, 60 in Chemistry, and 180 in Biology, then analyse every wrong answer. The goal is mistake classification (knowledge gap, reading error, or time error) and targeted weak-topic revision — not your raw score.',
+    },
+    {
+      question: 'Where can I download the NEET 2027 Week 2 Target PDF?',
+      answer:
+        'The NEET 2027 Week 2 Target PDF (8–14 July) is available free on GridAcademy at gridacademy.in/resources/neet-2027-week2. It contains the complete day-by-day tracker, chapter-wise targets, formula sheet reminders, and the Mini Test Day and Full Revision Day structure in a printable format.',
+    },
+  ],
+  downloadCta: {
+    label: 'Download NEET 2027 Week 2 Target PDF (Free)',
+    url: '/resources/neet-2027-week2',
+  },
+};
+
 // ─── Exports ─────────────────────────────────────────────────────────────────
 
-const POSTS: BlogPost[] = [sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
+const POSTS: BlogPost[] = [neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
 
 export function getAllPosts(): BlogPost[] {
   return POSTS;
