@@ -501,9 +501,162 @@ const neet2027Week2: BlogPost = {
   },
 };
 
+const rpfRecruitment2026: BlogPost = {
+  slug: 'rpf-recruitment-2026-constable-si-complete-guide',
+  title: 'RPF Recruitment 2026: Complete Guide for Constable & Sub-Inspector',
+  metaTitle: 'RPF Recruitment 2026: Constable & SI Vacancies, Exam Pattern, Eligibility',
+  metaDescription:
+    'Everything you need to know about RPF Recruitment 2026 — expected vacancies, eligibility criteria, CBT exam pattern, selection process, and preparation strategy for Constable and Sub-Inspector posts.',
+  publishedAt: '2026-07-08',
+  category: 'Railway',
+  readingTimeMinutes: 9,
+  excerpt:
+    'RPF Constable and Sub-Inspector recruitment 2026 is expected to open with 8,000+ Constable vacancies and 450–500 SI vacancies under the Railway Recruitment Board. Here is the complete guide — eligibility, exam pattern, selection stages, and how to prepare.',
+  content: `
+<p>The Railway Protection Force (RPF) is one of the most sought-after uniformed service opportunities in India — a central government job with job security, regular pay revision, and the prestige of serving directly under the Ministry of Railways. RPF Recruitment 2026, conducted by the <strong>Railway Recruitment Board (RRB)</strong>, is expected to bring thousands of vacancies for Constable and Sub-Inspector posts across Indian Railways zones. If you have been waiting for this notification, now is the time to start your preparation — the last recruitment cycle (2024) saw fierce competition, and 2026 is expected to be no different.</p>
+
+<p>This guide covers everything: vacancy expectations, eligibility conditions, the complete selection process, the Computer Based Test (CBT) exam pattern, and a preparation strategy you can start today.</p>
+
+<h2>What Is RPF and What Do RPF Personnel Do?</h2>
+<p>The Railway Protection Force is a security force constituted under the Railway Protection Force Act, 1957. Unlike the Railway Protection Special Force (RPSF), RPF personnel are deployed across individual railway zones and are responsible for:</p>
+<ul>
+  <li>Protection of railway property from theft, damage, and unlawful possession</li>
+  <li>Protection of passengers and passenger areas from anti-social elements</li>
+  <li>Anti-trespassing operations on railway tracks and stations</li>
+  <li>Escorting trains in sensitive routes and assisting in law enforcement on railway premises</li>
+</ul>
+<p>RPF personnel work alongside the Government Railway Police (GRP) and hold powers to arrest, detain, and prosecute offenders under relevant railway and penal statutes. It is a combat force with a structured rank system — Constable being the entry-level uniformed post and Sub-Inspector (SI) the supervisory entry-level post.</p>
+
+<h2>RPF Recruitment 2026: Expected Vacancies</h2>
+<p>The official notification for RPF 2026 has not been released as of mid-2026. Based on the 2024 recruitment cycle and historical patterns, the expected vacancy estimates are:</p>
+<ul>
+  <li><strong>RPF Constable:</strong> ~8,000+ total vacancies (including male and female candidates across all zones and categories)</li>
+  <li><strong>RPF Sub-Inspector (SI):</strong> ~450–500 vacancies</li>
+</ul>
+<p>Vacancies are distributed across Indian Railways zones (Central, Western, Northern, Southern, Eastern, South Central, South Eastern, North Central, North Western, South Western, East Central, East Coast, North Eastern, Northeast Frontier, West Central) and categories (UR, OBC, SC, ST, EWS). The zone-wise and category-wise breakdown will be specified in the official notification.</p>
+<p><em>Important: The figures above are indicative, based on the 2024 cycle. The official notification will confirm exact vacancies. Always verify on the official RRB website before applying.</em></p>
+
+<h2>RPF Recruitment 2026 Eligibility Criteria</h2>
+
+<h3>Nationality</h3>
+<p>Candidates must be Indian citizens.</p>
+
+<h3>Age Limit</h3>
+<p>For <strong>RPF Constable</strong>: Minimum 18 years, Maximum 25 years (General / UR category). For <strong>RPF Sub-Inspector</strong>: Minimum 20 years, Maximum 25 years (General / UR category).</p>
+<p>Age relaxation (as per Government of India norms):</p>
+<ul>
+  <li><strong>OBC (Non-Creamy Layer):</strong> +3 years → upper limit becomes 28 years</li>
+  <li><strong>SC / ST:</strong> +5 years → upper limit becomes 30 years</li>
+  <li><strong>Ex-Servicemen:</strong> As per Govt. norms (service period + 3 years, subject to upper cap)</li>
+  <li><strong>PwBD:</strong> +10 years (General), +13 years (OBC), +15 years (SC/ST)</li>
+</ul>
+<p><em>Note: Age limits are subject to confirmation in the official notification. Verify final figures on the official RRB / RPF website before applying.</em></p>
+
+<h3>Educational Qualification</h3>
+<ul>
+  <li><strong>RPF Constable:</strong> 10th Standard Pass (Matriculation) from a recognised board. No graduation required.</li>
+  <li><strong>RPF Sub-Inspector:</strong> Bachelor's Degree in any discipline from a recognised university.</li>
+</ul>
+
+<h3>Physical Standards</h3>
+<p>Candidates must meet height, chest (for male candidates), and running standards prescribed by RPF. These are verified at the Physical Measurement Test (PMT) stage, not at the application stage. Minimum height requirements vary by category (General/OBC: 165 cm for males, 157 cm for females; SC/ST candidates and those from hill areas get a 5 cm relaxation). Always check the official notification for the exact physical standards applicable to your category and post.</p>
+
+<h2>RPF Selection Process 2026</h2>
+<p>RPF recruitment follows a four-stage selection process. Candidates must clear each stage to proceed to the next. There is no final merit list based on CBT alone — all four stages are qualifying / eliminatory in sequence.</p>
+
+<h3>Stage 1: Computer Based Test (CBT)</h3>
+<p>The CBT is the first and most important stage. It is an online multiple-choice test covering three subjects. Candidates who clear the CBT shortlist (typically 10× the vacancy count) are called for Stage 2.</p>
+
+<h3>Stage 2: Physical Efficiency Test (PET)</h3>
+<p>PET is a physical fitness test conducted at railway sports facilities. It tests running, long jump, and high jump performance. PET is qualifying — you pass or fail, with no merit ranking. Candidates who pass PET are called for PMT.</p>
+
+<h3>Stage 3: Physical Measurement Test (PMT)</h3>
+<p>PMT verifies that candidates meet the height and chest (for males) standards specified in the notification. PMT is also a pass/fail stage. Candidates who clear PMT are called for Document Verification and Medical Examination.</p>
+
+<h3>Stage 4: Document Verification &amp; Medical Examination</h3>
+<p>All original documents (age proof, educational certificate, caste certificate if applicable, physical fitness certificate) are verified. A medical examination assesses vision, hearing, and general health fitness. Final appointment is offered to candidates who clear all four stages.</p>
+
+<h2>CBT Exam Pattern: What You Will Face</h2>
+<p>The Computer Based Test for RPF Constable and SI follows the same pattern. It is a single-paper, objective multiple-choice test with negative marking:</p>
+<ul>
+  <li><strong>Total Questions:</strong> 120</li>
+  <li><strong>Total Marks:</strong> 120 (1 mark per question)</li>
+  <li><strong>Duration:</strong> 90 minutes</li>
+  <li><strong>Negative Marking:</strong> 1/3 mark deducted per wrong answer</li>
+  <li><strong>Language:</strong> Questions available in Hindi, English, and regional languages</li>
+</ul>
+<p>The 120 questions are divided across three subjects:</p>
+<ul>
+  <li><strong>General Awareness / Current Affairs — 50 questions:</strong> Current events (national and international), Indian history, geography, polity, economy, science and technology, sports, awards and honours, railway-related general knowledge, and static GK. This is the highest-weightage section and the most direct differentiator — candidates who invest consistently in daily GK preparation score significantly higher here than those who cram in the final weeks.</li>
+  <li><strong>Arithmetic — 35 questions:</strong> Number system, simplification, fractions and decimals, percentages, ratio and proportion, average, profit and loss, simple and compound interest, time and work, time and distance, mensuration (area and volume of basic shapes), and basic algebra. RPF Arithmetic is at the 10th-standard level — fast calculation and time management matter more than advanced concepts.</li>
+  <li><strong>General Intelligence &amp; Reasoning — 35 questions:</strong> Analogies, alphabetical and number series, coding and decoding, blood relations, directions and distances, ranking, odd one out, Venn diagrams, syllogism, mirror and water images, figure completion, and mathematical operations.</li>
+</ul>
+
+<h2>How CBT Scores Are Used</h2>
+<p>CBT scores determine whether you are shortlisted for PET — typically 10 times the number of vacancies in each category are called for PET. The CBT cut-off varies by category (UR, OBC, SC, ST, EWS) and zone. Once you are shortlisted for PET, your CBT score does not influence the final merit list — it is a qualifying gate, not a ranking score. This means clearing the cut-off comfortably is the goal, not maximising every mark beyond that.</p>
+<p>However, in high-competition zones (particularly Northern, Central, and Western Railways), CBT cut-offs can be surprisingly high. In the 2024 cycle, general category cut-offs in some zones reached 80+ out of 120. Treat the CBT seriously and aim for a buffer above the expected cut-off.</p>
+
+<h2>Preparation Strategy for RPF 2026</h2>
+
+<h3>General Awareness: The Highest-Return Section</h3>
+<p>With 50 out of 120 marks at stake, General Awareness is where RPF is won or lost. The syllabus is broad but predictable. Start with static GK — Indian history (freedom movement, ancient and medieval India), Indian geography (states, rivers, mountains, national parks), and Indian polity (Constitution, Parliament, fundamental rights and duties). These topics contribute 15–20 questions and change little between exam cycles.</p>
+<p>For current affairs, build a daily habit starting at least 4–6 months before the exam. Read one credible source each morning: PIB (Press Information Bureau) for government announcements, sports news for recent championships, and any national newspaper for major events. GridAcademy's NEET and Railway exam pages include current affairs sections — use them for daily practice in the MCQ format you will face on exam day.</p>
+<p>Railway-specific GK — facts about Indian Railways (founding year, headquarters, total network length, zone headquarters, railway ministers, major rail projects) — typically contributes 5–7 questions and is easy to prepare with a focused one-week revision.</p>
+
+<h3>Arithmetic: Speed Over Complexity</h3>
+<p>RPF Arithmetic is not difficult — it is time-pressured. 35 questions in 30–35 minutes (if you allocate time proportionally) means under a minute per question. The objective is to solve correctly and fast. Build this through: daily calculation drills (tables up to 25, squares up to 30, cubes up to 15, common fraction-to-percentage conversions), shortcut technique practice for percentage and profit/loss problems, and timed mock sets of 20–30 arithmetic questions under the clock. Do not spend more than 90 seconds on any single Arithmetic question during the exam — move on and return if time permits.</p>
+
+<h3>Reasoning: Build Pattern Recognition</h3>
+<p>Reasoning in RPF is highly pattern-driven. Once you have seen 15–20 questions each of coding-decoding, blood relations, and number series, most new questions feel familiar. Practice 20–30 reasoning questions daily for the first four weeks, then reduce to weekly mock sets. Focus on visual reasoning (mirror images, figure completion) — these types are commonly underestimated and can be mastered quickly with targeted practice.</p>
+
+<h3>Physical Preparation: Start Early</h3>
+<p>PET catches many candidates off guard — they score well in CBT, get shortlisted, and then fail PET because they did not train. If you are applying for RPF Constable or SI, start running from day one of your preparation. The PET running distances are demanding under time conditions: check the official notification for the exact distance and time standards for your gender and post. Running 3–5 km daily from month one will prepare you far more effectively than trying to get fit in the two weeks between CBT results and PET.</p>
+
+<h2>Mock Tests: The Fastest Way to Improve Your CBT Score</h2>
+<p>The most effective preparation tool for RPF CBT is regular, timed full-length mock testing. Taking a mock test under exam conditions (90 minutes, no breaks, no looking up answers) trains three things simultaneously: content recall under pressure, time allocation across sections, and the discipline to skip and move on rather than getting stuck on a single question.</p>
+<p>After each mock, spend at least as long reviewing as you did attempting. Classify every wrong answer: knowledge gap (didn't know the fact), reasoning error (wrong logic), or time error (rushed without reading carefully). Each type needs a different fix. GridAcademy offers free RPF mock tests built to the 2026 exam pattern — attempt a test, get your instant score and section-wise accuracy, and use the analysis to direct your next week of preparation.</p>
+
+<h2>When Will RPF 2026 Notification Come Out?</h2>
+<p>As of mid-2026, the official notification has not been released. Based on historical cycles, RPF recruitment notifications have been released between August and December in the notification year. The 2024 recruitment notification was released in April 2024 with CBT conducted between September and November 2024. For 2026, candidates should monitor the official RRB websites and the Indian Railways recruitment portal for the notification release.</p>
+<p>The waiting period is preparation time — not rest time. Every month of structured preparation before the notification drops translates directly into CBT marks on exam day.</p>
+  `,
+  faqs: [
+    {
+      question: 'How many vacancies are expected in RPF Recruitment 2026?',
+      answer:
+        'Based on the 2024 cycle, RPF Recruitment 2026 is expected to have approximately 8,000+ total Constable vacancies and 450–500 Sub-Inspector vacancies across all Indian Railways zones and categories. Exact figures (including zone-wise and category-wise breakdown) will be confirmed in the official notification.',
+    },
+    {
+      question: 'What is the educational qualification for RPF Constable 2026?',
+      answer:
+        'For RPF Constable, the minimum educational qualification is 10th Standard Pass (Matriculation) from a recognised board. No graduation is required. For RPF Sub-Inspector, a Bachelor\'s Degree from a recognised university is required.',
+    },
+    {
+      question: 'What is the RPF Constable 2026 CBT exam pattern?',
+      answer:
+        'The RPF Constable CBT has 120 questions carrying 120 marks, to be completed in 90 minutes. There are three sections: General Awareness (50 questions), Arithmetic (35 questions), and General Intelligence & Reasoning (35 questions). Negative marking is 1/3 mark per wrong answer.',
+    },
+    {
+      question: 'What is the age limit for RPF Constable 2026?',
+      answer:
+        'The age limit for RPF Constable 2026 is 18 to 25 years for the General (UR) category. OBC candidates get +3 years relaxation (up to 28), SC/ST candidates get +5 years (up to 30). Age limits are subject to confirmation in the official notification.',
+    },
+    {
+      question: 'Does CBT score determine the final merit list for RPF 2026?',
+      answer:
+        'No. CBT score determines whether you are shortlisted for PET (Physical Efficiency Test) — typically the top 10× vacancies per category are called. Once shortlisted, CBT score does not influence the final merit list. All four stages (CBT, PET, PMT, Document Verification & Medical) are qualifying gates in sequence.',
+    },
+    {
+      question: 'When will the RPF Recruitment 2026 notification be released?',
+      answer:
+        'As of mid-2026, the official notification has not been released. Based on historical patterns, RPF notifications are typically released between August and December. Monitor the official RRB websites (rrbcdg.gov.in and zone-specific RRB portals) and the Indian Railways recruitment portal for the announcement.',
+    },
+  ],
+};
+
 // ─── Exports ─────────────────────────────────────────────────────────────────
 
-const POSTS: BlogPost[] = [neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
+const POSTS: BlogPost[] = [rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
 
 export function getAllPosts(): BlogPost[] {
   return POSTS;
