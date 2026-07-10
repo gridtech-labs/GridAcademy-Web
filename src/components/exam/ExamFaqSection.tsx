@@ -14,7 +14,7 @@ export default function ExamFaqSection({ faqs }: Props) {
   if (faqs.length === 0) return null;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-10">
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-10">
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center gap-2">
           <HelpCircle className="w-5 h-5 text-orange-500 shrink-0" />

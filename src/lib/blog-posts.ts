@@ -15,6 +15,7 @@ export interface BlogPost {
   content: string; // HTML — internally authored, safe for dangerouslySetInnerHTML
   faqs: BlogFaq[];
   downloadCta?: { label: string; url: string };
+  image?: string; // OG/social image URL
 }
 
 // ─── Articles ────────────────────────────────────────────────────────────────
@@ -501,6 +502,144 @@ const neet2027Week2: BlogPost = {
   },
 };
 
+const sscCglVsChsl: BlogPost = {
+  slug: 'ssc-cgl-vs-ssc-chsl-difference-complete-comparison',
+  title: 'SSC CGL vs SSC CHSL: Key Differences in Eligibility, Posts, Salary & Exam Pattern',
+  metaTitle: 'SSC CGL vs SSC CHSL 2026: Eligibility, Posts, Salary & Exam Pattern Compared',
+  metaDescription:
+    'SSC CGL vs SSC CHSL — complete comparison of eligibility (graduation vs 12th pass), posts offered, pay levels, exam pattern difficulty, and which exam you should target in 2026.',
+  publishedAt: '2026-07-11',
+  category: 'SSC',
+  readingTimeMinutes: 10,
+  excerpt:
+    'SSC CGL and SSC CHSL are both conducted by the Staff Selection Commission but they are very different exams — different qualifications, posts, pay scales, and difficulty levels. Here is the definitive side-by-side breakdown to help you decide which one to target.',
+  content: `
+<p>If you are planning to pursue a central government job through the Staff Selection Commission, you have almost certainly come across two names: <strong>SSC CGL</strong> (Combined Graduate Level) and <strong>SSC CHSL</strong> (Combined Higher Secondary Level). Both are conducted by SSC. Both lead to central government employment. And at first glance, both look similar — they even share some subjects in their Tier 1 exam. But they are fundamentally different exams in terms of who can apply, what posts are on offer, how much you will earn, and how hard you need to prepare. This guide gives you the complete, fact-checked comparison so you can make the right decision about where to invest your preparation time.</p>
+
+<h2>SSC CGL vs SSC CHSL: Quick Overview</h2>
+<p><strong>SSC CGL (Combined Graduate Level)</strong> is for graduates. It fills Group B and Group C gazetted and non-gazetted posts across central ministries, departments, and attached offices — inspector-level jobs, assistants, auditors, and accountants. It is one of the most competitive recruitment exams in India.</p>
+<p><strong>SSC CHSL (Combined Higher Secondary Level)</strong> is for 12th pass (10+2) candidates. It fills lower administrative and clerical posts — LDC (Lower Division Clerk), JSA (Junior Secretariat Assistant), Data Entry Operator, and Postal/Sorting Assistant. It is the stepping stone for candidates who have not yet graduated or who prefer to start working immediately after Class 12.</p>
+
+<h2>1. Eligibility: The First and Most Important Difference</h2>
+
+<h3>Educational Qualification</h3>
+<p>This is the clearest dividing line between the two exams:</p>
+<ul>
+  <li><strong>SSC CGL:</strong> Bachelor's Degree in any discipline from a recognised university. You must have completed graduation before the cut-off date specified in the notification. Some posts (like AAO, Statistical Investigator) require specific subjects at graduation — these are mentioned explicitly in the notification.</li>
+  <li><strong>SSC CHSL:</strong> 12th Standard Pass (10+2) from a recognised board. Graduates can also apply for CHSL and many do — but applying for CGL at the same time is the smarter strategy if you hold a degree.</li>
+</ul>
+
+<h3>Age Limit</h3>
+<ul>
+  <li><strong>SSC CGL:</strong> The age limit varies by post. Most Group B posts (Inspector, ASO) set the upper limit at 30 years. Some posts go up to 32 years. The lower limit is typically 20 years. Age relaxation: OBC +3 years, SC/ST +5 years, PwBD +10 years (general), Ex-Servicemen as per government norms.</li>
+  <li><strong>SSC CHSL:</strong> 18 to 27 years for most posts. Age relaxation: OBC +3 years, SC/ST +5 years, PwBD +10 years (general). The age cap is tighter than CGL — candidates who are 28–32 can appear in CGL but not CHSL.</li>
+</ul>
+
+<h2>2. Posts Offered: Group B vs Clerical Level</h2>
+
+<h3>SSC CGL Posts (Graduate Level)</h3>
+<p>SSC CGL fills Group B (gazetted and non-gazetted) and Group C posts. The most sought-after CGL posts are:</p>
+<ul>
+  <li><strong>Inspector of Income Tax / Inspector (CBIC) / Inspector (CBDT)</strong> — Pay Level 7 (₹44,900–₹1,42,400). Field enforcement work under the Income Tax Department and Customs and GST departments.</li>
+  <li><strong>Assistant Section Officer (ASO)</strong> — Pay Level 7, posted in MEA, Intelligence Bureau, AFHQ, Railway Ministry, and other prestigious offices. Primarily desk/administrative.</li>
+  <li><strong>Sub-Inspector (CBI)</strong> — Pay Level 7. Investigative role under the Central Bureau of Investigation.</li>
+  <li><strong>Assistant Enforcement Officer (AEO)</strong> — Pay Level 7. Under the Enforcement Directorate (ED), handles FEMA/PMLA enforcement.</li>
+  <li><strong>Assistant Audit Officer (AAO) / Assistant Accounts Officer</strong> — Pay Level 8 (₹47,600–₹1,51,100). The highest-paying CGL posts. Under CAG (Comptroller and Auditor General of India).</li>
+  <li><strong>Auditor / Accountant</strong> — Pay Level 5 (₹29,200–₹92,300). Under various CAG offices and Controller General of Accounts.</li>
+  <li><strong>Tax Assistant</strong> — Pay Level 4 (₹25,500–₹81,100). Data handling and clerical work in CBIC and CBDT offices.</li>
+  <li><strong>Upper Division Clerk (UDC)</strong> — Pay Level 4. Clerical/administrative posts in various ministries.</li>
+</ul>
+
+<h3>SSC CHSL Posts (Higher Secondary Level)</h3>
+<p>SSC CHSL fills lower administrative posts, all at the clerical entry level:</p>
+<ul>
+  <li><strong>Lower Division Clerk (LDC) / Junior Secretariat Assistant (JSA)</strong> — Pay Level 2 (₹19,900–₹63,200). Data entry and clerical work in central ministries. In-hand salary: ₹27,000–₹32,000/month.</li>
+  <li><strong>Postal Assistant (PA) / Sorting Assistant (SA)</strong> — Pay Level 4 (₹25,500–₹81,100). Under the Department of Posts. In-hand salary: ₹37,000–₹42,000/month.</li>
+  <li><strong>Data Entry Operator (DEO)</strong> — Pay Level 4 or 5 depending on the office. Under various ministries. In-hand salary: ₹37,000–₹42,000/month at Pay Level 4.</li>
+</ul>
+<p>The key difference: CGL posts are primarily supervisory and investigative (Inspector, ASO, SI). CHSL posts are primarily clerical and operational (LDC, DEO, Postal Assistant). A CGL Inspector supervises functions; a CHSL LDC executes them.</p>
+
+<h2>3. Salary Comparison: A Significant Gap</h2>
+<p>Pay levels under the 7th Pay Commission determine both the starting salary and the promotion ceiling:</p>
+<ul>
+  <li><strong>SSC CGL highest post (AAO/AAO):</strong> Pay Level 8 — Basic pay ₹47,600; in-hand salary ₹60,000–₹90,000/month depending on city category.</li>
+  <li><strong>SSC CGL Inspector / ASO:</strong> Pay Level 7 — Basic pay ₹44,900; in-hand salary ₹55,000–₹75,000/month.</li>
+  <li><strong>SSC CGL Auditor:</strong> Pay Level 5 — Basic pay ₹29,200; in-hand salary ₹42,000–₹50,000/month.</li>
+  <li><strong>SSC CHSL PA/SA/DEO:</strong> Pay Level 4 — Basic pay ₹25,500; in-hand salary ₹37,000–₹42,000/month.</li>
+  <li><strong>SSC CHSL LDC/JSA:</strong> Pay Level 2 — Basic pay ₹19,900; in-hand salary ₹27,000–₹32,000/month.</li>
+</ul>
+<p>Over a career, CGL posts also have a higher promotion ceiling and faster upward mobility. An Inspector in CBDT can reach Group A service (IRS) through departmental examination — a career path not available from LDC level. In-hand salaries grow significantly after 5 years: LDC/JSA reaches ₹49,000–₹52,000 and DEO Level 4 reaches ₹59,000–₹62,000 after five years of service.</p>
+
+<h2>4. Exam Pattern: Tier Structure Compared</h2>
+
+<h3>SSC CGL 2026 Exam Pattern</h3>
+<p><strong>Tier 1 (Screening Test):</strong> Computer Based Test — 100 questions, 200 marks, 60 minutes. Four sections with 25 questions each (2 marks per question): General Intelligence &amp; Reasoning, General Awareness, Quantitative Aptitude, and English Comprehension. Negative marking: 0.5 marks per wrong answer. PwBD candidates with scribe: 80 minutes.</p>
+<p><strong>Tier 2 (Main Exam):</strong> Conducted in two sessions on a single day. Paper I (compulsory for all) covers: Session 1 — Mathematical Abilities (30Q, 90 marks) + Reasoning &amp; General Intelligence (30Q, 90 marks) in 60 minutes; Session 2 — English Language &amp; Comprehension (45Q, 135 marks) + General &amp; Constitutional Awareness (25Q, 75 marks) + Computer Knowledge (20Q, 60 marks) in 75 minutes. Paper II (JSO posts): Statistics (100Q, 200 marks, 2 hours). Paper III (AAO posts): General Studies — Finance &amp; Economics (100Q, 200 marks, 2 hours). Negative marking in Paper I: 1 mark per wrong answer.</p>
+
+<h3>SSC CHSL 2026 Exam Pattern</h3>
+<p><strong>Tier 1 (Screening Test):</strong> Computer Based Test — 100 questions, 200 marks, 60 minutes. Four sections with 25 questions each (2 marks per question): English Language, General Intelligence, Quantitative Aptitude (Basic Arithmetic Skill), and General Awareness. Negative marking: 0.5 marks per wrong answer. The Tier 1 structure is almost identical to CGL Tier 1 on the surface — but the difficulty level is lower.</p>
+<p><strong>Tier 2 (Main Exam + Skill Test):</strong> Paper I is the primary scoring paper: Session 1 — Mathematical Abilities (30Q, 90 marks) + Reasoning &amp; General Intelligence (30Q, 90 marks) in 60 minutes; Session 2 — English Language &amp; Comprehension (40Q, 120 marks) + General Awareness (20Q, 60 marks) + Computer Knowledge Test (15Q, 45 marks) in 60 minutes. Skill Test (qualifying, not scored): Typing Test for LDC/JSA (10,500 key depressions per hour in English or 9,000 in Hindi), DEO speed test (8,000 key depressions per hour), or PA/SA role-specific test.</p>
+
+<h2>5. Difficulty Level: How Different Is the Preparation?</h2>
+<p>This is where many candidates underestimate the gap. Tier 1 of both exams looks similar, but the actual question difficulty differs significantly:</p>
+<ul>
+  <li><strong>Quantitative Aptitude:</strong> CGL goes well beyond 10th standard — advanced algebra, coordinate geometry, trigonometric identities, and higher-order mensuration are standard Tier 2 topics. CHSL tests Basic Arithmetic at 10th standard level.</li>
+  <li><strong>English Comprehension:</strong> CGL Tier 2 English is considerably harder — longer and more abstract reading comprehension passages, nuanced vocabulary, complex error-spotting. CHSL English is largely Grammar and straightforward comprehension at Class 12 level.</li>
+  <li><strong>General Awareness:</strong> Similar breadth in Tier 1 for both. CGL Tier 2 adds Indian Constitution and law in depth.</li>
+  <li><strong>Reasoning:</strong> CGL Tier 2 includes analytical and data-sufficiency questions. CHSL reasoning stays at the pattern-recognition and classification level.</li>
+</ul>
+<p>The overall competition intensity is also higher for CGL — it attracts graduates across the country, many of whom have spent years preparing. CHSL competition is intense too, but the candidate pool is typically less experienced and the cut-offs, while high, are comparatively more achievable for a focused 4–5 month preparation window.</p>
+
+<h2>6. Which Exam Should You Choose?</h2>
+<p><strong>You have passed Class 12 but not graduated yet:</strong> SSC CHSL is your path. Start applying as soon as you meet the age and educational requirements. Simultaneously, if you plan to complete a graduation degree, begin CGL preparation in parallel — the Tier 1 syllabi overlap significantly.</p>
+<p><strong>You hold a graduation degree:</strong> Apply for SSC CGL. The higher posts, better pay, and stronger career trajectory make it the superior target. If you want to have a backup, you can also apply for CHSL — but prioritise CGL preparation since the syllabus depth it requires covers and exceeds CHSL requirements.</p>
+<p><strong>You want a government job fast and prioritise job security over salary:</strong> CHSL is quicker to clear for most candidates, and PA/SA and DEO posts are excellent entry-level government jobs with full pension, allowances, and transfer benefits.</p>
+<p><strong>You want career growth and higher earnings:</strong> CGL is the answer — Inspector and ASO-level posts have promotional pathways, field postings, and authority that CHSL clerical posts do not.</p>
+
+<h2>7. Can You Appear in Both SSC CGL and SSC CHSL?</h2>
+<p>Yes — if you hold a graduation degree and meet the age limit, there is no rule against appearing in both SSC CGL and SSC CHSL simultaneously. In fact, many candidates pursue both strategically: they use CHSL as a confirmed government job while continuing to prepare harder for CGL. This is a sensible approach, especially if you are appearing in CGL for the first time and want the security of a CHSL selection while you build experience and improve your CGL scores over one or two attempts.</p>
+<p>However, do not let preparing for CHSL dilute your CGL preparation. Since CHSL Tier 1 and CGL Tier 1 are structurally similar, the incremental effort to prepare for CHSL on top of CGL is small. The difference is only in Tier 2 depth — for CGL Tier 2, you need advanced mathematics, in-depth English, and (for specific posts) Statistics or Finance &amp; Economics. Focus on CGL depth and CHSL will follow naturally.</p>
+
+<h2>8. Vacancy Scale: How Many Seats Are Available?</h2>
+<p>SSC CGL typically announces several thousand vacancies each cycle across all posts and categories. SSC CHSL generally announces a larger number of vacancies — often 3,000–6,000+ in recent cycles — because clerical and data entry positions are needed in larger volumes across the country. However, CHSL vacancies are at entry-level clerical grades, while CGL vacancies include inspector-level and officer-level posts. More seats in CHSL does not necessarily mean it is easier to get selected — competition is equally intense at its level.</p>
+
+<h2>The Bottom Line</h2>
+<p>SSC CGL and SSC CHSL are not competitors — they serve different stages of a career journey. If you have a degree, CGL is your primary target. If you have cleared Class 12 and want a government job now, CHSL opens the door immediately. Both require structured preparation, consistent mock testing, and strong command over General Awareness, Arithmetic, and English — the three pillars that show up in both Tier 1 exams. Start with whichever you are eligible for, use GridAcademy's free mock tests to benchmark your level, and build from there.</p>
+  `,
+  faqs: [
+    {
+      question: 'What is the main difference between SSC CGL and SSC CHSL?',
+      answer:
+        'The most fundamental difference is the educational qualification. SSC CGL requires a graduation degree and offers Group B posts like Inspector, ASO, and Auditor. SSC CHSL requires only a 12th pass (10+2) and fills clerical-level posts like LDC, JSA, DEO, and Postal Assistant. CGL posts are higher in rank, salary, and career growth than CHSL posts.',
+    },
+    {
+      question: 'Is SSC CGL harder than SSC CHSL?',
+      answer:
+        'Yes. SSC CGL is significantly harder, especially at the Tier 2 level. CGL Tier 2 includes advanced mathematics, higher-level English comprehension, constitutional awareness, and optional papers in Statistics or Finance & Economics. CHSL Tier 2 tests the same subjects at a lower difficulty level with a compulsory Typing/Skill Test. Tier 1 of both exams looks similar structurally but CGL questions are set at a higher difficulty calibration.',
+    },
+    {
+      question: 'What is the salary difference between SSC CGL and SSC CHSL?',
+      answer:
+        'SSC CGL posts range from Pay Level 4 to Pay Level 8. The highest CGL post (AAO) offers an in-hand salary of ₹60,000–₹90,000/month and the lowest (Tax Assistant/UDC) starts at around ₹35,000–₹42,000/month. SSC CHSL posts range from Pay Level 2 to Pay Level 5. LDC/JSA in-hand salary is ₹27,000–₹32,000/month, while PA/SA and DEO posts offer ₹37,000–₹42,000/month.',
+    },
+    {
+      question: 'Can I apply for both SSC CGL and SSC CHSL in the same year?',
+      answer:
+        'Yes. If you hold a graduation degree and meet the age limit for both, you can appear in both exams simultaneously. Many candidates use this strategy — they target CGL as their primary goal and use CHSL as a parallel secured option. Since Tier 1 of both exams has overlapping subjects, preparing for CGL Tier 1 effectively covers CHSL Tier 1 as well with minimal extra effort.',
+    },
+    {
+      question: 'Which SSC exam should a fresh graduate appear in — CGL or CHSL?',
+      answer:
+        'A fresh graduate should prioritise SSC CGL. The posts offered (Inspector, ASO, Auditor) are significantly better in pay, status, and career growth than CHSL posts. You can optionally apply for CHSL simultaneously as a backup, but direct your core preparation effort at CGL. The CGL syllabus depth more than covers CHSL requirements.',
+    },
+    {
+      question: 'What is the age limit for SSC CGL and SSC CHSL 2026?',
+      answer:
+        'For SSC CGL 2026, the age limit is typically 20–30 years for most posts (up to 32 for some). For SSC CHSL 2026, the age limit is 18–27 years. Standard relaxations apply for OBC (+3 years), SC/ST (+5 years), and PwBD (+10 years for general category) in both exams.',
+    },
+  ],
+};
+
 const rpfRecruitment2026: BlogPost = {
   slug: 'rpf-recruitment-2026-constable-si-complete-guide',
   title: 'RPF Recruitment 2026: Complete Guide for Constable & Sub-Inspector',
@@ -509,10 +648,12 @@ const rpfRecruitment2026: BlogPost = {
     'Everything you need to know about RPF Recruitment 2026 — expected vacancies, eligibility criteria, CBT exam pattern, selection process, and preparation strategy for Constable and Sub-Inspector posts.',
   publishedAt: '2026-07-08',
   category: 'Railway',
-  readingTimeMinutes: 9,
+  readingTimeMinutes: 13,
   excerpt:
     'RPF Constable and Sub-Inspector recruitment 2026 is expected to open with 8,000+ Constable vacancies and 450–500 SI vacancies under the Railway Recruitment Board. Here is the complete guide — eligibility, exam pattern, selection stages, and how to prepare.',
+  image: '/images/blog/rpf-recruitment-2026.jpg',
   content: `
+<p><img src="/images/blog/rpf-recruitment-2026.jpg" alt="RPF Recruitment 2026: Complete Guide for Constable & Sub-Inspector" style="width:100%;height:auto;border-radius:8px;margin-bottom:1.5rem;" /></p>
 <p>The Railway Protection Force (RPF) is one of the most sought-after uniformed service opportunities in India — a central government job with job security, regular pay revision, and the prestige of serving directly under the Ministry of Railways. RPF Recruitment 2026, conducted by the <strong>Railway Recruitment Board (RRB)</strong>, is expected to bring thousands of vacancies for Constable and Sub-Inspector posts across Indian Railways zones. If you have been waiting for this notification, now is the time to start your preparation — the last recruitment cycle (2024) saw fierce competition, and 2026 is expected to be no different.</p>
 
 <p>This guide covers everything: vacancy expectations, eligibility conditions, the complete selection process, the Computer Based Test (CBT) exam pattern, and a preparation strategy you can start today.</p>
@@ -560,6 +701,58 @@ const rpfRecruitment2026: BlogPost = {
 
 <h3>Physical Standards</h3>
 <p>Candidates must meet height, chest (for male candidates), and running standards prescribed by RPF. These are verified at the Physical Measurement Test (PMT) stage, not at the application stage. Minimum height requirements vary by category (General/OBC: 165 cm for males, 157 cm for females; SC/ST candidates and those from hill areas get a 5 cm relaxation). Always check the official notification for the exact physical standards applicable to your category and post.</p>
+
+<h2>Minimum Physical Measurement Standards</h2>
+<p>Physical standards are verified at the <strong>Physical Measurement Test (PMT)</strong> stage. You are not required to submit any physical measurement proof at the application stage — but you must meet these standards on PMT day or you will be disqualified regardless of your CBT score. Plan your preparation around this.</p>
+
+<h3>Height Requirements</h3>
+<ul>
+  <li><strong>RPF Constable — Male (General / OBC / EWS):</strong> Minimum 165 cm</li>
+  <li><strong>RPF Constable — Male (SC / ST + Garhwali, Kumaoni, Dogra, Marathas, NE states):</strong> Minimum 160 cm</li>
+  <li><strong>RPF Constable — Female (General / OBC / EWS):</strong> Minimum 157 cm</li>
+  <li><strong>RPF Constable — Female (SC / ST + hill area candidates):</strong> Minimum 152 cm</li>
+  <li><strong>RPF Sub-Inspector — Male (General / OBC / EWS):</strong> Minimum 170 cm</li>
+  <li><strong>RPF Sub-Inspector — Male (SC / ST + hill area candidates):</strong> Minimum 165 cm</li>
+  <li><strong>RPF Sub-Inspector — Female (General / OBC / EWS):</strong> Minimum 157 cm</li>
+  <li><strong>RPF Sub-Inspector — Female (SC / ST + hill area candidates):</strong> Minimum 152 cm</li>
+</ul>
+
+<h3>Chest Requirements (Male Candidates Only)</h3>
+<ul>
+  <li><strong>Unexpanded (normal breathing):</strong> Minimum 80 cm</li>
+  <li><strong>Expanded (full breath):</strong> Minimum 85 cm</li>
+  <li><strong>Minimum expansion required:</strong> 5 cm</li>
+</ul>
+<p>Female candidates are exempt from chest measurement. No weight requirement is specified in the RPF pattern — candidates should be of proportionate build as assessed by the medical board.</p>
+
+<h3>Physical Efficiency Test (PET) Standards</h3>
+<p>PET is conducted after CBT shortlisting. It tests running, long jump, and high jump. All events are qualifying — there is no partial pass. You must clear all three events in the same session.</p>
+<ul>
+  <li><strong>Constable Male:</strong> 1600 m run in 5 min 45 sec · Long Jump 14 ft (3 chances) · High Jump 3 ft 9 in (3 chances)</li>
+  <li><strong>Constable Female:</strong> 800 m run in 3 min 40 sec · Long Jump 9 ft (3 chances) · High Jump 3 ft (3 chances)</li>
+  <li><strong>SI Male:</strong> 1600 m run in 6 min 30 sec · Long Jump 12 ft (3 chances) · High Jump 3 ft 6 in (3 chances)</li>
+  <li><strong>SI Female:</strong> 800 m run in 4 min · Long Jump 9 ft (3 chances) · High Jump 3 ft (3 chances)</li>
+</ul>
+<p><em>PET standards are subject to confirmation in the official notification. Always verify exact distances and timings before your PET date.</em></p>
+
+<h3>Vision Standards</h3>
+<p>Candidates must have adequate vision as assessed at the Medical Examination stage. RPF requires: distant vision — 6/9 (better eye) and 6/12 (worse eye), corrected or uncorrected. Colour blindness, squint, or any eye disease that would impair field duty is disqualifying. Contact lenses are generally not permitted during the medical examination — carry your spectacle prescription if applicable.</p>
+
+<h2>General Guidelines</h2>
+<p>Before you apply for RPF Recruitment 2026, read these guidelines carefully. Ignoring any of them can result in rejection at Document Verification even after clearing CBT, PET, and PMT.</p>
+<ul>
+  <li><strong>Tattoo policy:</strong> Tattoos on visible body parts — face, neck, hands (including fingers), and forearms — are not permitted. Tattoos on parts of the body normally covered by uniform are generally allowed, but the official notification may specify exact restrictions. If in doubt, disclose at the application stage rather than risk rejection at DV.</li>
+  <li><strong>Criminal background:</strong> Candidates who have been convicted of any criminal offence, or have cases pending in court, are not eligible. Even minor offences on record may disqualify a candidate. Check your criminal record status and resolve any pending cases before applying.</li>
+  <li><strong>Medical fitness:</strong> Candidates must be of sound health, with no mental or physical defect that would interfere with the performance of field duties. Flat feet, knock knees, varicose veins, and certain chronic conditions may be disqualifying at the medical stage.</li>
+  <li><strong>Final year candidates:</strong> Candidates appearing in the final year of their qualifying examination (10th for Constable, graduation for SI) may apply provisionally. However, they must produce the original passing certificate / marksheet at Document Verification. Failure to produce the document will result in cancellation of candidature.</li>
+  <li><strong>One application per recruitment cycle:</strong> Candidates can apply for only one post (either Constable or SI) and one preferred RRB zone per recruitment cycle. Submitting multiple applications for the same post will lead to rejection of all applications.</li>
+  <li><strong>Ex-servicemen:</strong> Ex-servicemen applying under the reserved category must produce a valid Discharge Certificate from the Indian Armed Forces at the application stage and DV stage. The service period must be clearly indicated.</li>
+  <li><strong>Domicile / residence:</strong> There is no domicile restriction for RPF Recruitment — candidates from any state can apply for any zone. However, candidates must be proficient in the local/regional language of the applied zone for effective deployment, as assessed during the selection process.</li>
+  <li><strong>Identity proof at exam centre:</strong> Candidates must carry the same ID proof at every stage that was submitted / declared during the application. Mismatches between application data and ID proof may result in disqualification.</li>
+  <li><strong>Fee payment:</strong> Application fee (if applicable as per the notification) is non-refundable. SC/ST, Ex-Servicemen, and female candidates are typically exempt from the application fee — verify in the official notification.</li>
+  <li><strong>Biometric data:</strong> Biometric verification (fingerprint and photograph) is conducted at the CBT centre. Candidates with injury to fingers must carry a medical certificate. Any attempt to impersonate another candidate at any stage is a criminal offence and results in permanent debarment.</li>
+</ul>
+<p><em>All guidelines are based on the 2024 RPF recruitment pattern. The 2026 official notification may add, modify, or relax specific conditions. Always read the complete official notification carefully before submitting your application.</em></p>
 
 <h2>RPF Selection Process 2026</h2>
 <p>RPF recruitment follows a four-stage selection process. Candidates must clear each stage to proceed to the next. There is no final merit list based on CBT alone — all four stages are qualifying / eliminatory in sequence.</p>
@@ -656,7 +849,7 @@ const rpfRecruitment2026: BlogPost = {
 
 // ─── Exports ─────────────────────────────────────────────────────────────────
 
-const POSTS: BlogPost[] = [rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
+const POSTS: BlogPost[] = [sscCglVsChsl, rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
 
 export function getAllPosts(): BlogPost[] {
   return POSTS;

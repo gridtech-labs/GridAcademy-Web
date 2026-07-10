@@ -8,8 +8,9 @@ import Link from 'next/link';
 import { ExamCard, ExamTypeFilter } from '@/types/exam';
 import {
   FileText, Star, ChevronRight, Zap,
-  Home, BookOpen, Trophy, BarChart2, Search
+  Home, BookOpen, Trophy, BarChart2, Search, Clock, Tag
 } from 'lucide-react';
+import { getAllPosts } from '@/lib/blog-posts';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface ExamLevel { id: number; name: string; examCount: number; }
@@ -507,6 +508,56 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
               </Link>
             </div>
           </div>
+
+          {/* ── Latest Blog Posts ── */}
+          {(() => {
+            const latestPosts = getAllPosts().slice(0, 5);
+            const CAT_COLORS: Record<string, string> = {
+              SSC: 'bg-blue-100 text-blue-700',
+              CUET: 'bg-violet-100 text-violet-700',
+              Railway: 'bg-green-100 text-green-700',
+              NEET: 'bg-red-100 text-red-700',
+              Banking: 'bg-amber-100 text-amber-700',
+              UPSC: 'bg-slate-100 text-slate-700',
+            };
+            return (
+              <section className="mt-8 mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-base font-bold text-gray-900">Latest from the Blog</h2>
+                  <Link href="/blog" className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1">
+                    View all <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {latestPosts.map(post => {
+                    const catCls = CAT_COLORS[post.category] ?? 'bg-orange-100 text-orange-700';
+                    const date = new Date(post.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+                    return (
+                      <Link key={post.slug} href={`/blog/${post.slug}`}
+                        className="group flex items-start gap-4 bg-white rounded-xl border border-gray-200 hover:border-orange-300 hover:shadow-sm transition-all duration-200 p-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${catCls}`}>
+                              <Tag className="w-2.5 h-2.5" />{post.category}
+                            </span>
+                            <span className="flex items-center gap-1 text-[11px] text-gray-400">
+                              <Clock className="w-2.5 h-2.5" />{post.readingTimeMinutes} min
+                            </span>
+                            <span className="text-[11px] text-gray-400 ml-auto">{date}</span>
+                          </div>
+                          <h3 className="text-sm font-bold text-gray-900 leading-snug group-hover:text-orange-600 transition-colors line-clamp-2">
+                            {post.title}
+                          </h3>
+                          <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">{post.excerpt}</p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-orange-400 transition-colors shrink-0 mt-1" />
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })()}
 
           {/* ── About + FAQ ── */}
           <section className="mt-10 space-y-8">

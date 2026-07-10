@@ -20,6 +20,7 @@ import {
 import { stripHtml } from '@/lib/utils';
 import { getStaticFaqs } from '@/lib/static-faqs';
 import { getStaticMeta, isHindi, buildExamDescription, buildExamTitle } from '@/lib/static-meta';
+import { getAllPosts } from '@/lib/blog-posts';
 
 interface PageProps { params: { slug: string }; searchParams?: { tab?: string } }
 
@@ -71,6 +72,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       .replace(/\s*\|\s*GridAcademy$/, '');
     const description = override?.description ?? (dbDescOk ? rawDesc : buildExamDescription(exam.title, hasFree));
 
+    const ogImage = override?.image
+      ? `https://www.gridacademy.in${override.image}`
+      : exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg";
+
     return {
       title,
       description,
@@ -86,14 +91,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description,
         url,
         siteName: "GridAcademy",
-        images: [{ url: exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg", width: 1200, height: 630 }],
+        images: [{ url: ogImage, width: 1200, height: 630 }],
         type: "article",
       },
       twitter: {
         card: "summary_large_image",
         title,
         description,
-        images: [exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg"],
+        images: [ogImage],
       },
     };
   } catch { return { title: "Exam Details" }; }
@@ -158,7 +163,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
         "@context": "https://schema.org", "@type": ["Course", "EducationalOccupationalProgram"],
         name: exam.title, description: stripHtml(exam.shortDescription || ""),
         url: `https://www.gridacademy.in/exam/${exam.slug}`,
-        image: exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg",
+        image: staticMeta?.image ? `https://www.gridacademy.in${staticMeta.image}` : (exam.bannerUrl || exam.thumbnailUrl || "https://www.gridacademy.in/og-image.jpg"),
         provider: { "@type": "Organization", name: "GridAcademy", url: "https://www.gridacademy.in" },
         offers: exam.priceInr === 0 ? {
           "@type": "Offer", price: "0", priceCurrency: "INR", availability: "https://schema.org/Free"
@@ -505,6 +510,68 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
 
         {/* ── FAQ ────────────────────────────────────────────────────────── */}
         {faqs.length > 0 && <ExamFaqSection faqs={faqs} />}
+
+        {/* ── Related Blog Posts ──────────────────────────────────────────── */}
+        {(() => {
+          const EXAM_TO_CATEGORY: Record<string, string> = {
+            SSC: 'SSC', Banking: 'Banking', Railway: 'Railway',
+            NEET: 'NEET', CUET: 'CUET', UPSC: 'UPSC',
+          };
+          const blogCategory = exam.examTypeName
+            ? Object.entries(EXAM_TO_CATEGORY).find(([k]) =>
+                exam.examTypeName!.toLowerCase().includes(k.toLowerCase())
+              )?.[1]
+            : null;
+
+          const related = getAllPosts()
+            .filter(p => blogCategory ? p.category === blogCategory : true)
+            .slice(0, 3);
+
+          if (related.length === 0) return null;
+
+          const CAT_COLORS: Record<string, string> = {
+            SSC: 'bg-blue-100 text-blue-700', CUET: 'bg-violet-100 text-violet-700',
+            Railway: 'bg-green-100 text-green-700', NEET: 'bg-red-100 text-red-700',
+            Banking: 'bg-amber-100 text-amber-700', UPSC: 'bg-slate-100 text-slate-700',
+          };
+
+          return (
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                  <div className="w-1 h-5 rounded-full bg-orange-500" />
+                  Related Articles
+                </h2>
+                <Link href="/blog" className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1">
+                  View all <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="grid sm:grid-cols-3 gap-4">
+                {related.map(post => {
+                  const catCls = CAT_COLORS[post.category] ?? 'bg-orange-100 text-orange-700';
+                  const date = new Date(post.publishedAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+                  return (
+                    <Link key={post.slug} href={`/blog/${post.slug}`}
+                      className="group flex flex-col bg-white rounded-xl border border-gray-200 hover:border-orange-300 hover:shadow-md transition-all duration-200 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${catCls}`}>
+                          <Tag className="w-2.5 h-2.5" />{post.category}
+                        </span>
+                        <span className="text-[11px] text-gray-400 ml-auto flex items-center gap-1">
+                          <Clock className="w-2.5 h-2.5" />{post.readingTimeMinutes} min
+                        </span>
+                      </div>
+                      <h3 className="text-sm font-bold text-gray-900 leading-snug group-hover:text-orange-600 transition-colors line-clamp-3 flex-1">
+                        {post.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-2">{date}</p>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
       </div>
     </>
