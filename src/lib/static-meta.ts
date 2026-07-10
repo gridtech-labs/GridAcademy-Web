@@ -10,6 +10,8 @@ export interface ExamMeta {
   overview?: string;
   /** Rows rendered in the Important Dates tab when the DB has no dates */
   importantDates?: Array<{ label: string; date: string }>;
+  /** OG/social image URL */
+  image?: string;
 }
 
 const slugMeta: Record<string, ExamMeta> = {
@@ -43,6 +45,7 @@ const slugMeta: Record<string, ExamMeta> = {
     description:
       'Free RPF Constable 2026 mock tests on GridAcademy. Practice with the latest RPF exam pattern, previous year papers and get instant results with analysis.',
     conductingBody: 'Railway Recruitment Board (RRB)',
+    image: '/images/blog/rpf-recruitment-2026.jpg',
     overview: `
 <h2>RPF Constable &amp; SI 2026 Recruitment</h2>
 <p>The <strong>Railway Protection Force (RPF)</strong> Constable and Sub-Inspector 2026 recruitment is conducted by the <strong>Railway Recruitment Board (RRB)</strong> under the Ministry of Railways, Government of India. RPF personnel are responsible for protecting railway property, passengers, and passenger areas across India.</p>

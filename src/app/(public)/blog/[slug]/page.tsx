@@ -13,6 +13,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = getPost(params.slug);
   if (!post) return { title: 'Article Not Found' };
+  const ogImage = post.image ? `https://www.gridacademy.in${post.image}` : 'https://www.gridacademy.in/og-image.jpg';
   return {
     title: post.metaTitle,
     description: post.metaDescription,
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'article',
       publishedTime: post.publishedAt,
       modifiedTime: post.publishedAt,
-      images: [{ url: 'https://www.gridacademy.in/og-image.jpg', width: 1200, height: 630 }],
+      images: [{ url: ogImage, width: 1200, height: 630 }],
     },
   };
 }
@@ -72,7 +73,7 @@ export default function BlogPostPage({ params }: PageProps) {
             dateModified: post.publishedAt,
             image: {
               '@type': 'ImageObject',
-              url: 'https://www.gridacademy.in/og-image.jpg',
+              url: post.image ? `https://www.gridacademy.in${post.image}` : 'https://www.gridacademy.in/og-image.jpg',
             },
             author: {
               '@type': 'Organization',
