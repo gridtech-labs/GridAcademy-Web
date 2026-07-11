@@ -1,0 +1,30 @@
+name: Telegram Notify
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'src/lib/blog-posts.ts'
+      - 'src/lib/static-meta.ts'
+
+jobs:
+  notify:
+    name: Send Telegram notifications
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (with previous commit for diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Detect new content & notify Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scripts/telegram-notify.mjs

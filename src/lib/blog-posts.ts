@@ -847,9 +847,223 @@ const rpfRecruitment2026: BlogPost = {
   ],
 };
 
+const sscCglTier1Prep: BlogPost = {
+  slug: 'ssc-cgl-tier-1-preparation-2026',
+  title: 'SSC CGL Tier 1 Preparation 2026: Section-Wise Strategy, 90-Day Study Plan & Tips to Score 160+',
+  metaTitle: 'SSC CGL Tier 1 Preparation 2026 | Study Plan, Strategy & Tips to Score 160+',
+  metaDescription:
+    'Complete SSC CGL Tier 1 2026 preparation guide — section-wise strategy for Reasoning, GA, Quant & English, 90-day study plan, best books and free mock tests.',
+  publishedAt: '2026-07-12',
+  category: 'SSC',
+  readingTimeMinutes: 12,
+  excerpt:
+    'A structured, section-wise SSC CGL Tier 1 preparation guide for 2026 — covering topic priorities, a 90-day study plan, book recommendations and a mock-test strategy to maximise your score.',
+  image: '/images/blog/ssc-cgl-tier-1-2026.png',
+  content: `
+<p>SSC CGL Tier 1 is the filter that separates serious aspirants from the rest. Out of the lakhs who apply each year, only candidates who clear the Tier 1 cut-off move on to Tier 2, which determines post allocation and final merit. This means Tier 1 is not just a "qualifying" paper — it is a real competitive test where every extra mark above the cut-off gives you a more comfortable margin for Tier 2 post allocation. This guide breaks preparation down section by section, gives you a realistic 90-day study plan, and explains exactly how to use mock tests to close the gap between where you are and where you need to be.</p>
+
+<img src="/images/blog/ssc-cgl-tier-1-2026.png" alt="SSC CGL Tier 1 Preparation 2026: Section-Wise Strategy, 90-Day Study Plan & Tips to Score 160+" style="width:100%;height:auto;border-radius:8px;margin:1.5rem 0;" />
+
+<h2>What Tier 1 Tests — At a Glance</h2>
+<p>SSC CGL Tier 1 is a Computer Based Test of 100 MCQs carrying 200 marks, to be completed in 60 minutes. All four sections carry equal weight — 25 questions, 50 marks each. Negative marking is 0.5 marks per wrong answer. There is no section-wise time limit, so you can move freely between sections during the exam — a strategic advantage most candidates underuse.</p>
+<ul>
+  <li><strong>General Intelligence &amp; Reasoning:</strong> 25 questions — verbal and non-verbal reasoning, number and letter series, analogy, coding-decoding, blood relations, direction and distance, syllogism, Venn diagrams, matrix, mirror images, and paper folding.</li>
+  <li><strong>General Awareness:</strong> 25 questions — Indian History, Geography, Polity, Economy, General Science (Physics, Chemistry, Biology), and current affairs from the preceding 12–15 months.</li>
+  <li><strong>Quantitative Aptitude:</strong> 25 questions — arithmetic (percentage, profit and loss, ratio, time-work, time-distance, SI/CI, averages, mixture) and advanced math (geometry, trigonometry, algebra, mensuration, data interpretation).</li>
+  <li><strong>English Comprehension:</strong> 25 questions — reading comprehension, vocabulary (synonyms, antonyms, one-word substitution, idioms), and grammar (error detection, sentence improvement, active/passive voice, direct/indirect speech).</li>
+</ul>
+
+<h2>What Score Do You Need to Clear Tier 1?</h2>
+<p>Cut-offs vary by category, year, and vacancy count. Based on recent SSC CGL cycles, approximate Tier 1 cut-off ranges are:</p>
+<ul>
+  <li><strong>UR / General:</strong> 140–162 out of 200</li>
+  <li><strong>EWS:</strong> 130–150</li>
+  <li><strong>OBC:</strong> 128–148</li>
+  <li><strong>SC:</strong> 108–132</li>
+  <li><strong>ST:</strong> 95–120</li>
+</ul>
+<p>These are approximate ranges — not guaranteed thresholds. SSC releases a single consolidated Tier 1 cut-off per category; there are no section-wise minimums. Target 160+ if you are in the General category. This gives you a comfortable buffer on most years and keeps you in contention for preferred posts. For high-demand posts like Assistant Section Officer (MEA), Inspector (CBI/NIA), or Assistant Audit Officer, the effective competition score is 170+.</p>
+
+<h2>General Intelligence &amp; Reasoning — How to Score 45+ out of 50</h2>
+<p>Reasoning is the most predictable section in Tier 1. SSC recycles question patterns year after year, which means deliberate practice on previous years' papers builds genuine familiarity with the actual question types you will face on exam day. This section should be your highest-accuracy section regardless of your background.</p>
+
+<h3>Topics by Frequency</h3>
+<ul>
+  <li><strong>Analogy (verbal &amp; non-verbal):</strong> 3–4 questions per paper. The single highest-yield topic — every variant repeats across cycles. Do not skip this.</li>
+  <li><strong>Series (number &amp; letter):</strong> 3–4 questions. Focus on pattern recognition — differences, squares, cubes, prime sequences, and alternate-term patterns cover 90% of what appears.</li>
+  <li><strong>Odd One Out / Classification:</strong> 2–3 questions. Includes verbal classification (word groups) and matrix-based odd-one-out. Practice both forms.</li>
+  <li><strong>Coding-Decoding:</strong> 2–3 questions. Master the four core coding patterns (letter shift, reverse alphabetical, conditional coding, symbol-based) and most questions become solvable in under 30 seconds.</li>
+  <li><strong>Non-Verbal Reasoning (mirror images, paper folding, figure completion, embedded figures):</strong> 4–5 questions. High-scoring once you identify the pattern — do not rush these. One extra second of careful observation prevents avoidable errors on non-verbal types.</li>
+  <li><strong>Blood Relations:</strong> 1–2 questions. Always draw a family tree — never attempt these mentally. The tree method eliminates errors on complex multi-step relation chains.</li>
+  <li><strong>Direction &amp; Distance:</strong> 1–2 questions. Always draw the path diagram. These are solvable in under 45 seconds with a diagram and in 3 minutes without one.</li>
+  <li><strong>Syllogism:</strong> 1–2 questions. Learn the Venn diagram approach and apply it mechanically. Do not rely on logical intuition for syllogism — the Venn method gives a definitive answer every time.</li>
+  <li><strong>Venn Diagram, Matrix, Arrangement:</strong> 1–2 questions combined. Standard once you have seen 20–30 examples of each type.</li>
+</ul>
+<p><strong>Time target for Reasoning: 12–14 minutes.</strong> The goal is to finish this section quickly and with high accuracy, banking time for Quantitative Aptitude.</p>
+
+<h3>Practice Strategy</h3>
+<p>Spend the first two weeks doing topic-wise practice — 25–30 questions per topic from previous year papers. Once you can solve each type reliably, switch to timed full-section mocks. Track accuracy per topic: anything below 75% accuracy after 30 topic-specific attempts is a knowledge gap that needs targeted revision before you move on. Reasoning accuracy above 88% on full-section mocks (22+ out of 25) is achievable for prepared candidates.</p>
+
+<h2>General Awareness — How to Score 40+ out of 50</h2>
+<p>General Awareness is the section where preparation pays off the most per minute. Every GK fact you retain has a non-zero probability of appearing in the exam. With 25 questions ideally answered in under 8 minutes, the aim is to maximise your "marks-per-hour-of-study" ratio by focusing on high-frequency topics first.</p>
+
+<h3>Static GK vs Current Affairs Split</h3>
+<p>SSC CGL Tier 1 GA typically has 15–18 static GK questions and 7–10 current affairs questions. Static GK covers History, Geography, Polity, Economy, Science, and Miscellaneous (sports, awards, art and culture). Current affairs covers events from the 12–15 months preceding the exam. Since exam dates are not always announced far in advance, safe current affairs coverage spans the preceding 18 months.</p>
+
+<h3>High-Yield Topics to Prioritise</h3>
+<ul>
+  <li><strong>Modern Indian History:</strong> Freedom movement, significant events from 1857 to 1947, key personalities and their contributions, important Acts and policies of the colonial period. Questions from this area appear in almost every SSC CGL paper.</li>
+  <li><strong>Indian Polity:</strong> Constitutional articles (Fundamental Rights Articles 12–35, DPSP Articles 38–51, Emergency provisions), key constitutional bodies (Election Commission, UPSC, CAG, Finance Commission, NHRC), and landmark amendments (42nd, 44th, 73rd, 74th, 86th, 101st).</li>
+  <li><strong>Geography:</strong> Rivers (tributaries, origin, delta/estuary), mountain ranges, passes, national parks and wildlife sanctuaries, soil types, climatic zones, minerals and their producing states. Physical geography is more predictable than human geography at Tier 1 level.</li>
+  <li><strong>Physics:</strong> Laws of motion, optics (reflection, refraction, lenses), electricity (Ohm's law, circuits), sound, units of measurement, simple machines. SSC prefers conceptual application questions over pure formula recall at Tier 1.</li>
+  <li><strong>Biology:</strong> Cell structure, plant physiology (photosynthesis, transpiration), human digestive, circulatory, and nervous systems, diseases and their pathogens (viral, bacterial, protozoan), nutrition, vitamins and deficiency diseases. 2–4 biology questions appear in most papers.</li>
+  <li><strong>Economy:</strong> GDP components, inflation types, Union Budget terminologies (fiscal deficit, revenue deficit, FRBM), RBI functions and monetary policy tools, SEBI, and major government schemes (PM schemes launched in the preceding 2 years are regularly asked).</li>
+  <li><strong>Current Affairs:</strong> Sports (championship results, Indian world records), Padma and Nobel awards, government schemes and their ministries, ISRO and defence launches, RBI and SEBI circulars, state CM/Governor appointments, international summits and agreements.</li>
+</ul>
+
+<h3>How to Cover GA Efficiently</h3>
+<p>Do one structured read-through of a static GK compilation (Lucent's General Knowledge is the most widely used), then immediately shift to active recall through MCQ practice — passive reading alone does not build exam-ready memory. For current affairs, review 15–20 current affairs MCQs daily rather than reading news articles at length. This converts passive news consumption into active retrieval practice, which is what the exam actually demands.</p>
+
+<h2>Quantitative Aptitude — How to Score 38+ out of 50</h2>
+<p>Quantitative Aptitude is where most candidates lose the most time and the most marks simultaneously. The section combines arithmetic (accessible but time-pressured) with advanced math topics that require conceptual understanding. A structured, topic-priority approach is the most efficient route.</p>
+
+<h3>Topic-Wise Priority</h3>
+<p>In recent SSC CGL Tier 1 papers, the approximate distribution is:</p>
+<ul>
+  <li><strong>Arithmetic (15–17 questions):</strong> Percentage, Profit &amp; Loss, Discount, Simple &amp; Compound Interest, Ratio &amp; Proportion, Mixture &amp; Alligation, Average, Time &amp; Work, Pipes &amp; Cisterns, Time/Speed/Distance, Trains, Boats &amp; Streams. Master these first — they carry the highest absolute count and are teachable in less time than advanced math.</li>
+  <li><strong>Geometry &amp; Mensuration (4–6 questions):</strong> Properties of triangles (angle bisector, median, altitude, Pythagoras, similarity), circles (chord, tangent, arc, sector), quadrilaterals; area, perimeter and volume of all standard 2D and 3D shapes. Learn key theorems and their result derivations.</li>
+  <li><strong>Trigonometry (2–3 questions):</strong> Basic ratios, complementary angle identities, standard identities (sin²+cos²=1 family), and height-and-distance problems (single and double-observation types). These are formula-intensive — a one-page formula sheet reviewed daily builds solid recall.</li>
+  <li><strong>Algebra (2–3 questions):</strong> Algebraic identities (a+b)², (a-b)², (a³+b³), linear equations, and basics of quadratic equations. SSC rarely tests complex algebra at Tier 1; the standard identities cover most questions.</li>
+  <li><strong>Data Interpretation (2–3 questions):</strong> Tables, bar graphs, line graphs, pie charts. Primarily tests reading speed and percentage/ratio calculations. Accuracy is high once you slow down enough to read chart values correctly.</li>
+  <li><strong>Number System (1–2 questions):</strong> LCM and HCF applications, divisibility rules, unit digit, simplification, remainder theorem basics.</li>
+</ul>
+
+<h3>The Speed Problem — and How to Fix It</h3>
+<p>The single biggest Quant problem for most candidates is not accuracy — it is speed. Most candidates can solve percentage and profit/loss questions correctly; they just cannot solve 17+ arithmetic questions in under 20 minutes. The fix is deliberate speed training, not more concept revision:</p>
+<ul>
+  <li>Memorise multiplication tables up to 25, squares up to 30, cubes up to 15, and common fraction-to-percentage conversions (1/3 = 33.33%, 1/6 = 16.67%, 1/7 = 14.28%, 1/8 = 12.5%, 1/9 = 11.11%). Eliminating calculation time adds minutes across the paper.</li>
+  <li>Learn 2–3 shortcut techniques per topic — for example, the percentage change formula for successive discounts, the alligation cross for mixture problems, or the LCM method for time-and-work. Apply them under timed conditions until they are automatic, not until they feel familiar.</li>
+  <li>Practice daily timed sets of 15–20 Quant questions with a strict 15-minute cap. Finish first, then check. Never look up the method mid-practice — you train what you repeatedly do.</li>
+</ul>
+<p><strong>Time target for Quant: 20–22 minutes.</strong> Do not aim to attempt all 25 questions. Attempt the 18–22 you can solve most confidently, and use saved minutes for cross-checking or other sections. One correct question gives you +2; one wrong question costs you −0.5. The expected value of attempting a question you are 60% confident about is (0.6 × 2) − (0.4 × 0.5) = +1.0 — strongly positive. Only skip when your confidence is below 50%.</p>
+
+<h2>English Comprehension — How to Score 40+ out of 50</h2>
+<p>English at Tier 1 is one of the most consistently high-scoring sections for well-prepared candidates. Unlike Quant, most English marks come from recognition and calibrated instinct — if your vocabulary is solid and your grammar rules are internalised, this section can be completed in under 13 minutes with accuracy above 80%.</p>
+
+<h3>Question-Type Breakdown</h3>
+<ul>
+  <li><strong>Reading Comprehension:</strong> 5–10 questions across 1–2 passages. Read the questions first, then the passage — this makes retrieval faster and more targeted. Comprehension passages at Tier 1 are moderate in difficulty; most answers are directly stated in the text rather than requiring inference.</li>
+  <li><strong>Error Spotting:</strong> 2–3 questions. The most commonly tested grammatical categories are: subject-verb agreement, preposition usage, article usage (a/an/the with proper nouns and abstract nouns), incorrect pronoun reference, and tense consistency. Focus your grammar revision on these five categories first.</li>
+  <li><strong>Sentence Improvement:</strong> 2–3 questions. Identify the error type before looking at the options. Eliminating clearly incorrect grammar choices first reduces the decision to two or three plausible options and saves 15–20 seconds per question.</li>
+  <li><strong>Fill in the Blanks:</strong> 2–3 questions. Tests contextual vocabulary and collocations. Practice by reading editorial-length texts and noting unfamiliar words in context rather than in isolation.</li>
+  <li><strong>Synonyms &amp; Antonyms:</strong> 3–4 questions. Learn 8–10 new words daily from previous year paper word lists. SSC frequently repeats vocabulary — words from the past 5 years of papers have a higher probability of reappearing than generic word lists.</li>
+  <li><strong>One-Word Substitution:</strong> 1–2 questions. A compiled list of 300 frequently tested substitutions covers the vast majority of what SSC asks in this category.</li>
+  <li><strong>Idioms &amp; Phrases:</strong> 2–3 questions. Learn in context, not as isolated definitions. Understanding when an idiom is used makes it harder to confuse with similar-sounding alternatives.</li>
+  <li><strong>Spelling:</strong> 1–2 questions. Focuses on commonly misspelled words — maintain a personal error list and review it weekly.</li>
+  <li><strong>Para Jumbles / Para Completion:</strong> 1–2 questions. Find the opening and closing sentence first (look for definite articles, introducing vs. concluding language), then build the middle.</li>
+</ul>
+
+<h3>Vocabulary Strategy</h3>
+<p>Ten to fifteen new words per day, reviewed at spaced intervals, outperforms any one-time cramming session. Use a flashcard system: encounter on day 1, review on day 3, day 7, day 14, then monthly. SSC repeats vocabulary with high frequency across cycles — solving 5–6 previous years' English papers and building a flashcard deck from every unfamiliar word is the highest-ROI vocabulary strategy available.</p>
+
+<h2>90-Day Study Plan for SSC CGL Tier 1 2026</h2>
+<p>This plan assumes 4–5 hours of focused daily study. Adjust timings based on your starting strengths — if your Quant baseline is weak, swap Quant and Reasoning time allocations in Month 1.</p>
+
+<h3>Month 1 — Foundation (Days 1–30)</h3>
+<ul>
+  <li><strong>Quantitative Aptitude (60–75 min/day):</strong> Number system → Percentage → Profit &amp; Loss → Discount → Simple &amp; Compound Interest → Ratio &amp; Proportion → Average → Mixture &amp; Alligation. Complete 30–40 practice questions per topic before moving on.</li>
+  <li><strong>Reasoning (30–35 min/day):</strong> Analogy → Series → Classification → Coding-Decoding. Topic-wise practice from previous year papers only — do not use textbook examples as your primary source.</li>
+  <li><strong>English (30 min/day):</strong> Daily editorial reading (The Hindu or Indian Express). Begin learning 10 new words daily. Start grammar rules: subject-verb agreement, tenses, prepositions, and articles.</li>
+  <li><strong>General Awareness (45–60 min/day):</strong> Cover in Month 1: Modern Indian History (complete) + Indian Polity (Fundamental Rights, DPSP, constitutional bodies, key amendments). Daily 15-minute current affairs MCQ set.</li>
+  <li><strong>End of Month 1:</strong> Take one sectional mock for Quant and one for Reasoning. Note your baseline accuracy per topic — this is your diagnostic baseline, not a performance assessment.</li>
+</ul>
+
+<h3>Month 2 — Acceleration (Days 31–60)</h3>
+<ul>
+  <li><strong>Quantitative Aptitude (60 min/day):</strong> Time &amp; Work → Pipes &amp; Cisterns → Time/Speed/Distance → Trains/Boats → Geometry → Mensuration → Trigonometry → Algebra → Data Interpretation. Run daily timed practice sets (15 questions, 15-minute cap) alongside new topic learning.</li>
+  <li><strong>Reasoning (25–30 min/day):</strong> Blood Relations → Direction &amp; Distance → Syllogism → Venn Diagrams → Non-verbal (mirror image, paper folding, figure completion). Begin timed full-section practice (25 questions in 14 minutes target).</li>
+  <li><strong>English (35 min/day):</strong> Vocabulary — 10 new words daily with spaced review. One-word substitution list (300 common items). Idioms &amp; Phrases (200 common items). Timed reading comprehension practice — 1 passage per day, questions answered without re-reading.</li>
+  <li><strong>General Awareness (45 min/day):</strong> Geography (rivers, mountain passes, national parks, soil types, minerals) → Science (Physics and Biology systematically) → Economy (GDP, RBI, SEBI, Union Budget terminology, key government schemes) → Current affairs ongoing (20 min/day).</li>
+  <li><strong>Weekly full mock:</strong> One complete Tier 1 mock test every Sunday under real conditions. 60 minutes, no breaks, no looking up answers. Structured error review immediately after using the K/R/T classification (see Mock Test Strategy section below).</li>
+</ul>
+
+<h3>Month 3 — Mastery (Days 61–90)</h3>
+<ul>
+  <li><strong>Mock tests:</strong> 2–3 full Tier 1 mocks per week. Track your score trajectory — target consistent improvement of 3–5 marks per test cycle. If scores plateau, the problem is almost always error review quality, not volume of practice.</li>
+  <li><strong>Weak section intensive:</strong> Identify your single weakest section after Month 2 mocks. Allocate an extra 30 minutes daily to it throughout Month 3. One section of consistent improvement is worth more than marginal improvement across all four.</li>
+  <li><strong>Revision:</strong> Static GK flashcard review (20 min/day). English vocabulary flashcard review (10 min/day). Quant and Trigonometry formula sheet review (10 min/day).</li>
+  <li><strong>Current affairs:</strong> Daily 20 minutes. Compile a final 6-month current affairs capsule in the last two weeks and review it completely before the exam.</li>
+  <li><strong>Speed drills:</strong> 15-question Quant timed sets (target: 13 minutes) and full Reasoning section timed attempts (target: under 13 minutes). Build exam-day speed before you need it.</li>
+</ul>
+
+<h2>Best Books for SSC CGL Tier 1 2026</h2>
+<p>Finishing fewer sources thoroughly beats starting many and completing none. This list is deliberately short.</p>
+<ul>
+  <li><strong>Quantitative Aptitude:</strong> <em>Fast Track Objective Arithmetic</em> by Rajesh Verma (Arihant) for shortcut techniques, or <em>Quantitative Aptitude for Competitive Examinations</em> by R.S. Aggarwal for comprehensive concept coverage. Use one, not both.</li>
+  <li><strong>Reasoning:</strong> <em>A Modern Approach to Verbal and Non-Verbal Reasoning</em> by R.S. Aggarwal for concept and question variety. Supplement with SSC CGL previous year reasoning papers — pattern familiarity matters more than textbook depth in this section.</li>
+  <li><strong>English:</strong> <em>Objective General English</em> by S.P. Bakshi (Arihant) for grammar rules, vocabulary, and practice. <em>English for General Competitions (Vol. 1 &amp; 2)</em> by Neetu Singh (KD Campus) for SSC-specific question patterns.</li>
+  <li><strong>General Awareness:</strong> <em>Lucent\'s General Knowledge</em> for static GK (one thorough read-through, then MCQ practice). Any reliable monthly current affairs capsule for current events.</li>
+  <li><strong>Previous Year Papers:</strong> <em>SSC CGL Previous Year Question Papers (Chapterwise Solved)</em> by Kiran Prakashan. Solving 10–15 full previous year papers is more valuable than any single subject book — real SSC questions are the best preparation material.</li>
+</ul>
+
+<h2>Mock Test Strategy: The Most Effective Part of Preparation</h2>
+<p>Candidates who take 15 or more full-length Tier 1 mocks before the exam consistently outperform those who take fewer than 5 — regardless of how much time they spent on study material. Mock tests convert knowledge into exam-ready performance. Reading gives you information; mock testing builds the neural pathways that retrieve that information accurately under 60-minute time pressure.</p>
+<p>Use this four-step review process after every mock:</p>
+<ul>
+  <li><strong>Score and section breakdown first.</strong> Note your raw score, accuracy per section, and the number of questions you left unattempted. These three numbers are your diagnostic dashboard and should be tracked across every mock.</li>
+  <li><strong>Error classification.</strong> Go through every wrong answer and classify it as: <strong>K</strong> (knowledge gap — you did not know the concept), <strong>R</strong> (reading error — you misread the question or rushed through options), or <strong>T</strong> (time error — you could have solved it correctly but ran out of time). Different fixes apply to each type.</li>
+  <li><strong>Targeted intervention.</strong> K errors require content revision of that specific topic. R errors require deliberate slow reading on those question types. T errors require more timed practice on those question types until your speed improves without losing accuracy.</li>
+  <li><strong>Re-test the fix.</strong> One week after addressing a knowledge gap or practicing a skill, take a topic-specific set to verify your accuracy has improved. If it has not, your intervention was wrong — change the approach before the next test cycle.</li>
+</ul>
+<p>GridAcademy offers free SSC CGL Tier 1 mock tests built to the 2026 exam pattern. Each attempt gives you section-wise accuracy, time-per-question data, percentile rank among recent test-takers, and detailed answer explanations for every question.</p>
+
+<h2>Attempt Order on Exam Day</h2>
+<p>Since there is no section-wise time limit in Tier 1, your attempt order is a genuine strategic decision. The most effective order for the majority of candidates:</p>
+<ul>
+  <li><strong>1. General Awareness (7–8 minutes):</strong> Start here. Each question is either known within 10–15 seconds or unknown — there is almost no middle-ground where thinking harder changes the outcome. Quick wins on your strong GK topics create positive momentum and bank time for other sections.</li>
+  <li><strong>2. General Intelligence &amp; Reasoning (12–14 minutes):</strong> High accuracy potential with systematic solving. Move immediately past any question that is not becoming clear within 30 seconds — return at the end with remaining time. Non-verbal questions deserve one extra second of careful observation; rushing costs disproportionately here.</li>
+  <li><strong>3. English Comprehension (12–13 minutes):</strong> Attempt third when your reading concentration is still good. For reading comprehension passages, read questions first. Vocabulary questions are fastest — answer confidently or skip and return.</li>
+  <li><strong>4. Quantitative Aptitude (22–25 minutes):</strong> Attempt last. Only attempt the 18–22 questions where you are confident. Do not spend more than 90 seconds on any single advanced geometry or trigonometry question — make your best guess and move on. Time management here directly determines your final score.</li>
+</ul>
+<p>Adjust this order to match your actual strengths. If your Quant accuracy is stronger than your GA accuracy, swap them. The underlying principle is: start with your fastest-and-most-accurate section to build time and momentum for what comes after.</p>
+  `,
+  faqs: [
+    {
+      question: 'What is a good score in SSC CGL Tier 1 2026?',
+      answer:
+        'For the General/UR category, 155–165 out of 200 clears the cut-off in most years. Candidates targeting high-demand posts like Inspector (CBI/NIA), Assistant Section Officer (MEA), or Assistant Audit Officer should aim for 168–175+. Cut-offs for OBC, SC, and ST categories are typically 15–30 marks lower than the UR cut-off depending on the cycle.',
+    },
+    {
+      question: 'Can I clear SSC CGL Tier 1 in 3 months?',
+      answer:
+        'Yes — 3 months of structured daily preparation (4–5 hours per day) is sufficient for most candidates to clear Tier 1. The 90-day plan in this article is designed specifically for this timeline. Topic-priority discipline is the key: not every topic needs equal time, and mock tests from month two are as important as content study. Candidates with a strong English or Quant background can clear Tier 1 in as little as 60 days of focused preparation.',
+    },
+    {
+      question: 'Which section is easiest in SSC CGL Tier 1?',
+      answer:
+        'General Awareness is the fastest to attempt — each question is answered within 10–15 seconds since it is a straightforward recall test. Reasoning tends to give the highest accuracy for prepared candidates because question patterns repeat across years and are learnable. Quantitative Aptitude takes the most time and is where most candidates lose marks to time pressure, not to conceptual errors.',
+    },
+    {
+      question: 'How many questions should I attempt in SSC CGL Tier 1?',
+      answer:
+        'Aim to attempt 85–92 out of 100 questions. With 0.5 negative marking, attempting a question where your confidence is above 60% is statistically correct — the expected marks are positive. Only skip questions where you have no idea and cannot eliminate any option. Leaving more than 12–15 questions unattempted on a prepared paper usually costs more marks than a few wrong attempts would.',
+    },
+    {
+      question: 'What are the best books for SSC CGL Tier 1 preparation?',
+      answer:
+        'For Quantitative Aptitude: Fast Track Objective Arithmetic by Rajesh Verma (Arihant). For Reasoning: A Modern Approach to Verbal and Non-Verbal Reasoning by R.S. Aggarwal. For English: Objective General English by S.P. Bakshi. For General Awareness: Lucent\'s General Knowledge. For previous year papers: SSC CGL Chapterwise Solved Papers by Kiran Prakashan. Finish one book per subject thoroughly — starting many and finishing none is the most common preparation mistake.',
+    },
+    {
+      question: 'Is there negative marking in SSC CGL Tier 1 2026?',
+      answer:
+        'Yes. SSC CGL Tier 1 carries a negative marking of 0.5 marks for each wrong answer. Unattempted questions carry no penalty. Each question is worth 2 marks, so the correct-to-wrong ratio for breaking even is 1 wrong attempt for every 4 correct ones (2 × 4 = 8 marks gained, 0.5 × 4 = 2 marks lost if all four of those wrong attempts happen). In practice, never attempt questions where you cannot eliminate at least one option.',
+    },
+  ],
+};
+
 // ─── Exports ─────────────────────────────────────────────────────────────────
 
-const POSTS: BlogPost[] = [sscCglVsChsl, rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
+const POSTS: BlogPost[] = [sscCglTier1Prep, sscCglVsChsl, rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
 
 export function getAllPosts(): BlogPost[] {
   return POSTS;
