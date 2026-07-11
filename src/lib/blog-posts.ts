@@ -858,11 +858,9 @@ const sscCglTier1Prep: BlogPost = {
   readingTimeMinutes: 12,
   excerpt:
     'A structured, section-wise SSC CGL Tier 1 preparation guide for 2026 — covering topic priorities, a 90-day study plan, book recommendations and a mock-test strategy to maximise your score.',
-  image: '/images/blog/ssc-cgl-tier-1-2026.png',
+  image: '/images/blog/ssc-cgl-tier-1-2026.jpg',
   content: `
 <p>SSC CGL Tier 1 is the filter that separates serious aspirants from the rest. Out of the lakhs who apply each year, only candidates who clear the Tier 1 cut-off move on to Tier 2, which determines post allocation and final merit. This means Tier 1 is not just a "qualifying" paper — it is a real competitive test where every extra mark above the cut-off gives you a more comfortable margin for Tier 2 post allocation. This guide breaks preparation down section by section, gives you a realistic 90-day study plan, and explains exactly how to use mock tests to close the gap between where you are and where you need to be.</p>
-
-<img src="/images/blog/ssc-cgl-tier-1-2026.png" alt="SSC CGL Tier 1 Preparation 2026: Section-Wise Strategy, 90-Day Study Plan & Tips to Score 160+" style="width:100%;height:auto;border-radius:8px;margin:1.5rem 0;" />
 
 <h2>What Tier 1 Tests — At a Glance</h2>
 <p>SSC CGL Tier 1 is a Computer Based Test of 100 MCQs carrying 200 marks, to be completed in 60 minutes. All four sections carry equal weight — 25 questions, 50 marks each. Negative marking is 0.5 marks per wrong answer. There is no section-wise time limit, so you can move freely between sections during the exam — a strategic advantage most candidates underuse.</p>
