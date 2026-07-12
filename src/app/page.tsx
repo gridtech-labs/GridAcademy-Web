@@ -71,52 +71,52 @@ function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamT
   });
 
   return (
-    <aside className="hidden md:flex flex-col bg-white border-r border-gray-200 overflow-y-auto"
+    <aside className="hidden md:flex flex-col bg-white border-r border-gray-100 overflow-y-auto shadow-sm"
       style={{ width: 260, position: 'sticky', top: 56, height: 'calc(100vh - 56px)' }}>
 
       {/* Main nav */}
-      <div className="p-3">
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1">Main Menu</p>
+      <div className="p-3 pt-4">
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-2 mb-2">Main Menu</p>
         <Link href="/"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-[#1760f4] bg-blue-50">
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#1760f4] to-[#1250d0] shadow-sm shadow-blue-200 mb-0.5">
           <Home className="w-4 h-4" /> Home
         </Link>
         <Link href="/exams"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-[#1760f4] transition-all">
           <BookOpen className="w-4 h-4" /> All Exams
         </Link>
         <Link href="/tests"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-[#1760f4] transition-all">
           <FileText className="w-4 h-4 shrink-0" />
           <span>Free Tests</span>
-          <span className="ml-auto bg-green-100 text-green-700 text-xs font-bold px-1.5 py-0.5 rounded-full">Free</span>
+          <span className="ml-auto bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">Free</span>
         </Link>
         <Link href="/leaderboard"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-[#1760f4] transition-all">
           <Trophy className="w-4 h-4" /> Leaderboard
         </Link>
         <Link href="/dashboard"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-[#1760f4] transition-all">
           <BarChart2 className="w-4 h-4" /> My Progress
         </Link>
         <Link href="/career-guide"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-[#1760f4] transition-all">
           <span className="text-base leading-none">🧭</span>
           <span>Career Guide</span>
-          <span className="ml-auto bg-violet-100 text-violet-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">New</span>
+          <span className="ml-auto bg-violet-100 text-violet-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-violet-200">New</span>
         </Link>
       </div>
 
       {/* Exam type nav */}
       <div className="px-3 pb-3">
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 mb-1 mt-2">Exam Categories</p>
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-2 mb-2 mt-3">Exam Categories</p>
         {examTypes.map(t => (
           <Link key={t.id} href={`/?category=${encodeURIComponent(t.name)}`}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-[#1760f4] transition-all">
             <span className="text-base leading-none">{examTypeIcon(t.name)}</span>
             <span>{t.name}</span>
             {typeCounts[t.name] ? (
-              <span className="ml-auto text-xs text-gray-400">{typeCounts[t.name]}</span>
+              <span className="ml-auto text-[11px] font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{typeCounts[t.name]}</span>
             ) : null}
           </Link>
         ))}
@@ -124,11 +124,12 @@ function LeftSidebar({ exams, examTypes }: { exams: ExamCard[]; examTypes: ExamT
 
       {/* Bottom CTA */}
       <div className="mt-auto p-3">
-        <div className="rounded-xl p-4 bg-[#1760f4] text-white text-sm">
-          <p className="font-bold mb-1">Are you an educator?</p>
-          <p className="text-blue-100 text-xs mb-3">Upload tests &amp; reach lakhs of students.</p>
+        <div className="rounded-2xl p-4 bg-gradient-to-br from-[#1760f4] to-[#0a3ba8] text-white relative overflow-hidden">
+          <div className="absolute right-0 top-0 w-20 h-20 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <p className="font-bold mb-1 text-sm relative z-10">Are you an educator?</p>
+          <p className="text-blue-200 text-xs mb-3 relative z-10">Upload tests &amp; reach lakhs of students.</p>
           <Link href="/provider/register"
-            className="block text-center bg-white text-[#1760f4] font-bold text-xs py-2 rounded-lg hover:bg-blue-50 transition-colors">
+            className="block text-center bg-white text-[#1760f4] font-bold text-xs py-2 rounded-xl hover:bg-blue-50 transition-colors relative z-10 shadow-sm">
             Become a Provider
           </Link>
         </div>
@@ -145,77 +146,85 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
   const featured = exams.filter(e => e.isFeatured).length;
 
   return (
-    <aside className="hidden lg:flex flex-col gap-4 py-7 pr-6"
+    <aside className="hidden lg:flex flex-col gap-4 py-6 pr-6"
       style={{ width: 300, position: 'sticky', top: 64, maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
 
       {/* Platform Stats */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <h3 className="text-sm font-bold text-gray-800 mb-3">Platform Stats</h3>
-        <div className="grid grid-cols-2 gap-3">
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-4 bg-[#1760f4] rounded-full" />
+          <h3 className="text-sm font-bold text-gray-800">Platform Stats</h3>
+        </div>
+        <div className="grid grid-cols-2 gap-2.5">
           {[
-            { icon: '📝', num: total,    label: 'Total Exams' },
-            { icon: '🆓', num: free,     label: 'Free Exams' },
-            { icon: '📋', num: tests,    label: 'Mock Tests' },
-            { icon: '⭐', num: featured, label: 'Featured' },
+            { icon: '📝', num: total,    label: 'Total Exams',  bg: 'bg-blue-50',   text: 'text-blue-600' },
+            { icon: '🆓', num: free,     label: 'Free Exams',   bg: 'bg-emerald-50', text: 'text-emerald-600' },
+            { icon: '📋', num: tests,    label: 'Mock Tests',   bg: 'bg-violet-50',  text: 'text-violet-600' },
+            { icon: '⭐', num: featured, label: 'Featured',     bg: 'bg-amber-50',   text: 'text-amber-600' },
           ].map(s => (
-            <div key={s.label} className="bg-gray-50 rounded-lg p-3 flex items-center gap-2">
+            <div key={s.label} className={`${s.bg} rounded-xl p-3 flex flex-col gap-1`}>
               <span className="text-xl leading-none">{s.icon}</span>
-              <div>
-                <p className="text-base font-extrabold text-gray-900 leading-none">{s.num}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
-              </div>
+              <p className={`text-xl font-extrabold ${s.text} leading-none mt-1`}>{s.num}</p>
+              <p className="text-[11px] text-gray-500 font-medium">{s.label}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Top Performers */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <h3 className="text-sm font-bold text-gray-800 mb-3">Top Performers</h3>
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-4 bg-amber-400 rounded-full" />
+          <h3 className="text-sm font-bold text-gray-800">Top Performers</h3>
+        </div>
         {[
-          { rank: 1, name: 'Aakash Singh', score: '96/100', cls: 'bg-yellow-100 text-yellow-800' },
-          { rank: 2, name: 'Priya Kumari', score: '94/100', cls: 'bg-gray-100 text-gray-700' },
-          { rank: 3, name: 'Ravi Shankar', score: '91/100', cls: 'bg-gray-100 text-gray-600' },
-          { rank: 4, name: 'Sunita Devi',  score: '89/100', cls: 'bg-gray-50 text-gray-500' },
-          { rank: 5, name: 'Manoj Yadav',  score: '87/100', cls: 'bg-gray-50 text-gray-500' },
+          { rank: 1, name: 'Aakash Singh', score: '96/100', bg: 'bg-gradient-to-br from-yellow-400 to-amber-500', text: 'text-white' },
+          { rank: 2, name: 'Priya Kumari', score: '94/100', bg: 'bg-gray-200', text: 'text-gray-700' },
+          { rank: 3, name: 'Ravi Shankar', score: '91/100', bg: 'bg-amber-100', text: 'text-amber-800' },
+          { rank: 4, name: 'Sunita Devi',  score: '89/100', bg: 'bg-gray-100', text: 'text-gray-600' },
+          { rank: 5, name: 'Manoj Yadav',  score: '87/100', bg: 'bg-gray-100', text: 'text-gray-600' },
         ].map(p => (
-          <div key={p.rank} className="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
-            <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shrink-0 ${p.cls}`}>
+          <div key={p.rank} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
+            <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shrink-0 ${p.bg} ${p.text}`}>
               {p.rank}
             </span>
-            <span className="text-sm font-medium text-gray-800 flex-1 truncate">{p.name}</span>
+            <span className="text-sm font-medium text-gray-700 flex-1 truncate">{p.name}</span>
             <span className="text-sm font-bold text-[#1760f4]">{p.score}</span>
           </div>
         ))}
       </div>
 
       {/* Upcoming Deadlines */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <h3 className="text-sm font-bold text-gray-800 mb-3">Upcoming Deadlines</h3>
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-4 bg-rose-400 rounded-full" />
+          <h3 className="text-sm font-bold text-gray-800">Upcoming Deadlines</h3>
+        </div>
         {[
           { day: '30', mon: 'Apr', title: 'RRB ALP Application', sub: 'Last date to apply' },
           { day: '25', mon: 'May', title: 'UPSC Prelims 2026',   sub: 'Hall ticket from May 10' },
           { day: '10', mon: 'Jun', title: 'RRB ALP CBT 1',       sub: 'Admit card 7 days prior' },
         ].map(d => (
-          <div key={d.title} className="flex gap-3 py-2.5 border-b border-gray-100 last:border-0">
-            <div className="shrink-0 rounded-lg px-2.5 py-2 text-center bg-[#1760f4] text-white" style={{ minWidth: 44 }}>
+          <div key={d.title} className="flex gap-3 py-2.5 border-b border-gray-50 last:border-0">
+            <div className="shrink-0 rounded-xl px-2.5 py-2 text-center bg-gradient-to-br from-[#1760f4] to-[#0e4dd4] text-white shadow-sm shadow-blue-200" style={{ minWidth: 44 }}>
               <span className="block text-lg font-extrabold leading-none">{d.day}</span>
-              <span className="text-xs font-semibold">{d.mon}</span>
+              <span className="text-[10px] font-bold opacity-90">{d.mon}</span>
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-800 leading-snug">{d.title}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{d.sub}</p>
+              <p className="text-xs text-gray-400 mt-0.5">{d.sub}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Provider CTA */}
-      <div className="rounded-xl p-5 bg-[#1760f4] text-white">
-        <h3 className="text-sm font-bold mb-1">Are you a coaching institute?</h3>
-        <p className="text-blue-100 text-xs mb-3">Upload question banks, create mock tests &amp; reach lakhs of students.</p>
+      <div className="rounded-2xl p-5 bg-gradient-to-br from-[#1760f4] to-[#0a3ba8] text-white relative overflow-hidden">
+        <div className="absolute right-0 bottom-0 w-28 h-28 bg-white/10 rounded-full translate-x-1/3 translate-y-1/3" />
+        <h3 className="text-sm font-bold mb-1 relative z-10">Are you a coaching institute?</h3>
+        <p className="text-blue-200 text-xs mb-3 relative z-10">Upload question banks, create mock tests &amp; reach lakhs of students.</p>
         <Link href="/provider/register"
-          className="block text-center bg-white text-[#1760f4] font-bold text-sm py-2 rounded-lg hover:bg-blue-50 transition-colors">
+          className="block text-center bg-white text-[#1760f4] font-bold text-sm py-2 rounded-xl hover:bg-blue-50 transition-colors relative z-10 shadow-sm">
           Become a Provider
         </Link>
       </div>
@@ -223,16 +232,16 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
   );
 }
 
-// ── Card colour palette (cycles across cards) ────────────────────────────────
+// ── Card colour palette ────────────────────────────────────────────────────────
 const CARD_PALETTES = [
-  { bg: 'bg-orange-50',  topBorder: 'border-t-orange-400',  badgeBg: 'bg-orange-100',  badgeText: 'text-orange-700'  },
-  { bg: 'bg-amber-50',   topBorder: 'border-t-amber-400',   badgeBg: 'bg-amber-100',   badgeText: 'text-amber-700'   },
-  { bg: 'bg-yellow-50',  topBorder: 'border-t-yellow-400',  badgeBg: 'bg-yellow-100',  badgeText: 'text-yellow-700'  },
-  { bg: 'bg-lime-50',    topBorder: 'border-t-lime-500',    badgeBg: 'bg-lime-100',    badgeText: 'text-lime-700'    },
-  { bg: 'bg-teal-50',    topBorder: 'border-t-teal-500',    badgeBg: 'bg-teal-100',    badgeText: 'text-teal-700'    },
+  { bg: 'bg-blue-50',    topBorder: 'border-t-blue-500',    badgeBg: 'bg-blue-100',    badgeText: 'text-blue-700'    },
+  { bg: 'bg-indigo-50',  topBorder: 'border-t-indigo-500',  badgeBg: 'bg-indigo-100',  badgeText: 'text-indigo-700'  },
   { bg: 'bg-sky-50',     topBorder: 'border-t-sky-500',     badgeBg: 'bg-sky-100',     badgeText: 'text-sky-700'     },
-  { bg: 'bg-indigo-50',  topBorder: 'border-t-indigo-400',  badgeBg: 'bg-indigo-100',  badgeText: 'text-indigo-700'  },
-  { bg: 'bg-rose-50',    topBorder: 'border-t-rose-400',    badgeBg: 'bg-rose-100',    badgeText: 'text-rose-700'    },
+  { bg: 'bg-violet-50',  topBorder: 'border-t-violet-500',  badgeBg: 'bg-violet-100',  badgeText: 'text-violet-700'  },
+  { bg: 'bg-cyan-50',    topBorder: 'border-t-cyan-500',    badgeBg: 'bg-cyan-100',    badgeText: 'text-cyan-700'    },
+  { bg: 'bg-teal-50',    topBorder: 'border-t-teal-500',    badgeBg: 'bg-teal-100',    badgeText: 'text-teal-700'    },
+  { bg: 'bg-slate-50',   topBorder: 'border-t-slate-400',   badgeBg: 'bg-slate-100',   badgeText: 'text-slate-700'   },
+  { bg: 'bg-blue-50',    topBorder: 'border-t-[#1760f4]',   badgeBg: 'bg-blue-100',    badgeText: 'text-blue-800'    },
 ];
 
 // ── Exam Card ─────────────────────────────────────────────────────────────────
@@ -240,48 +249,48 @@ function ExamCardItem({ exam, index }: { exam: ExamCard; index: number }) {
   const p = CARD_PALETTES[index % CARD_PALETTES.length];
   return (
     <Link href={`/exam/${exam.slug}`}
-      className={`group flex flex-col rounded-xl border border-gray-200 border-t-4 ${p.topBorder} ${p.bg}
-        hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden`}>
+      className={`group flex flex-col rounded-2xl border border-gray-100 border-t-4 ${p.topBorder} ${p.bg}
+        hover:shadow-xl hover:shadow-blue-100/60 hover:-translate-y-1 transition-all duration-200 overflow-hidden`}>
 
       <div className="p-4 flex flex-col gap-3 flex-1">
 
         {/* Row 1: level badge + featured star */}
         <div className="flex items-center justify-between gap-2 min-h-[26px]">
           {exam.examLevelName ? (
-            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border border-current/10 ${p.badgeBg} ${p.badgeText}`}>
+            <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${p.badgeBg} ${p.badgeText}`}>
               {exam.examLevelName}
             </span>
           ) : <span />}
           {exam.isFeatured && (
-            <Star className="w-4 h-4 text-yellow-500 fill-yellow-400 shrink-0" />
+            <Star className="w-4 h-4 text-amber-500 fill-amber-400 shrink-0" />
           )}
         </div>
 
-        {/* Row 2: title — allow up to 3 lines so long names fit */}
-        <h2 className="text-[26px] font-bold text-gray-900 leading-snug line-clamp-3
-          group-hover:text-orange-600 transition-colors flex-1">
+        {/* Row 2: title */}
+        <h2 className="text-base font-bold text-gray-900 leading-snug line-clamp-3
+          group-hover:text-[#1760f4] transition-colors flex-1">
           {exam.title}
         </h2>
 
         {/* Row 3: conducting body */}
-        <p className="text-xs text-gray-500 truncate">
+        <p className="text-xs text-gray-400 truncate font-medium">
           {exam.conductingBody ?? exam.examTypeName ?? exam.category ?? 'Government Exam'}
         </p>
 
         {/* Row 4: tests count + free/price badge */}
-        <div className="flex items-center justify-between pt-2 border-t border-black/[0.06]">
-          <span className="flex items-center gap-1.5 text-xs font-medium text-gray-500">
+        <div className="flex items-center justify-between pt-3 border-t border-black/[0.06]">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-gray-500">
             <FileText className="w-3.5 h-3.5 shrink-0" />
             {exam.testCount} Test{exam.testCount !== 1 ? 's' : ''}
           </span>
           {exam.priceInr === 0 ? (
-            <span className="flex items-center gap-1 text-xs font-bold text-green-700
-              bg-green-50 border border-green-200 px-2.5 py-0.5 rounded-full">
+            <span className="flex items-center gap-1 text-xs font-bold text-emerald-700
+              bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
               <Zap className="w-3 h-3" />Free
             </span>
           ) : (
-            <span className="text-xs font-bold text-gray-800 bg-white border border-gray-200
-              px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-bold text-gray-700 bg-white border border-gray-200
+              px-2.5 py-0.5 rounded-full shadow-sm">
               ₹{exam.priceInr.toLocaleString('en-IN')}
             </span>
           )}
@@ -378,20 +387,31 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
         {/* Main content */}
         <main className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-5 pb-20 md:pb-6">
 
-          {/* ── Page H1 ── */}
-          <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 mb-4">
-            Free Mock Tests for SSC, CUET, Railway, Banking &amp; UPSC Exams
-          </h1>
+          {/* ── Hero banner ── */}
+          <div className="relative rounded-2xl overflow-hidden mb-5 bg-gradient-to-br from-[#1760f4] via-[#1454e0] to-[#0a3ba8] p-6 md:p-8 shadow-lg shadow-blue-200/50">
+            {/* Decorative circles */}
+            <div className="absolute right-0 top-0 w-56 h-56 bg-white/5 rounded-full -translate-y-1/3 translate-x-1/4 pointer-events-none" />
+            <div className="absolute right-16 bottom-0 w-36 h-36 bg-white/5 rounded-full translate-y-1/2 pointer-events-none" />
+            <div className="absolute left-1/2 top-0 w-24 h-24 bg-white/5 rounded-full -translate-y-1/2 pointer-events-none" />
+            <div className="relative z-10">
+              <h1 className="text-xl md:text-2xl font-extrabold text-white leading-snug mb-2">
+                Free Mock Tests for SSC, CUET, Railway, Banking &amp; UPSC Exams
+              </h1>
+              <p className="text-blue-200 text-sm font-medium">
+                Practice with real exam pattern · Instant results · Section-wise analysis
+              </p>
+            </div>
+          </div>
 
           {/* ── Filter pills ── */}
           <div className="overflow-x-auto scrollbar-hide mb-5 -mx-4 px-4 md:-mx-6 md:px-6">
             <div className="flex items-center gap-2 min-w-max">
               <Link
                 href="/"
-                className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
+                className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-all
                   ${activeCategory === ''
-                    ? 'bg-[#1760f4] text-white border-[#1760f4]'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-[#1760f4] hover:text-[#1760f4]'
+                    ? 'bg-[#1760f4] text-white border-[#1760f4] shadow-sm shadow-blue-200'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-[#1760f4] hover:text-[#1760f4] hover:shadow-sm'
                   }`}>
                 All Exams
               </Link>
@@ -401,10 +421,10 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                 return (
                   <Link key={t.id}
                     href={`/?category=${encodeURIComponent(t.name)}`}
-                    className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors
+                    className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-all
                       ${isActive
-                        ? 'bg-[#1760f4] text-white border-[#1760f4]'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-[#1760f4] hover:text-[#1760f4]'
+                        ? 'bg-[#1760f4] text-white border-[#1760f4] shadow-sm shadow-blue-200'
+                        : 'bg-white text-gray-600 border-gray-200 hover:border-[#1760f4] hover:text-[#1760f4] hover:shadow-sm'
                       }`}>
                     {examTypeIcon(t.name)} {t.name}
                   </Link>
@@ -413,17 +433,19 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             </div>
           </div>
 
-          {/* ── Hero banner ── */}
+          {/* ── Featured exam banner ── */}
           {featured.length > 0 && (
             <Link href={`/exam/${featured[0].slug}`}
-              className="block rounded-xl overflow-hidden mb-6 group border border-gray-200 bg-white hover:border-gray-300 transition-colors">
-              <div className="relative p-6 md:p-8 border-l-4 border-l-[#1760f4]">
-                <div className="max-w-lg">
+              className="block rounded-2xl overflow-hidden mb-6 group border border-blue-100 bg-white hover:shadow-lg hover:shadow-blue-100/60 transition-all duration-200">
+              <div className="relative p-6 md:p-7">
+                {/* Blue left accent bar */}
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#1760f4] to-[#0a3ba8] rounded-l-2xl" />
+                <div className="pl-4 max-w-xl">
                   <div className="inline-flex items-center gap-1.5 mb-3 text-xs font-bold px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#1760f4]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#1760f4] animate-pulse inline-block"></span>
                     Featured
                   </div>
-                  <h2 className="text-gray-900 text-xl md:text-2xl font-extrabold leading-tight mb-2">
+                  <h2 className="text-gray-900 text-xl md:text-2xl font-extrabold leading-tight mb-2 group-hover:text-[#1760f4] transition-colors">
                     {featured[0].title}
                   </h2>
                   {featured[0].shortDescription && (
@@ -432,13 +454,13 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                     </p>
                   )}
                   <div className="flex items-center gap-3 flex-wrap">
-                    <span className="bg-[#1760f4] text-white text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-[#0e4dd4] transition-colors">
+                    <span className="bg-[#1760f4] text-white text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#0e4dd4] transition-colors shadow-sm shadow-blue-300">
                       Start Preparation
                     </span>
-                    <span className="text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                    <span className="text-gray-600 text-sm font-semibold px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
                       View Syllabus
                     </span>
-                    <span className={`ml-auto text-sm font-bold ${featured[0].priceInr === 0 ? 'text-green-600' : 'text-gray-900'}`}>
+                    <span className={`ml-auto text-sm font-bold ${featured[0].priceInr === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
                       {formatPrice(featured[0].priceInr)}
                     </span>
                   </div>
@@ -450,16 +472,16 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           {/* ── Quick stats ── */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             {[
-              { icon: '📝', num: `${exams.length}+`, label: 'Exams' },
-              { icon: '🆓', num: `${exams.filter(e => e.priceInr === 0).length}`, label: 'Free Exams' },
-              { icon: '📋', num: `${exams.reduce((s, e) => s + e.testCount, 0)}+`, label: 'Mock Tests' },
-              { icon: '🏆', num: '10K+', label: 'Students' },
+              { icon: '📝', num: `${exams.length}+`, label: 'Exams',      gradient: 'from-blue-500 to-[#1760f4]' },
+              { icon: '🆓', num: `${exams.filter(e => e.priceInr === 0).length}`, label: 'Free Exams', gradient: 'from-emerald-500 to-teal-600' },
+              { icon: '📋', num: `${exams.reduce((s, e) => s + e.testCount, 0)}+`, label: 'Mock Tests', gradient: 'from-violet-500 to-indigo-600' },
+              { icon: '🏆', num: '10K+',             label: 'Students',   gradient: 'from-amber-500 to-orange-500' },
             ].map(s => (
-              <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-3 flex items-center gap-3">
-                <span className="text-2xl leading-none shrink-0">{s.icon}</span>
+              <div key={s.label} className={`bg-gradient-to-br ${s.gradient} rounded-2xl p-4 flex items-center gap-3 shadow-md`}>
+                <span className="text-2xl leading-none shrink-0 drop-shadow-sm">{s.icon}</span>
                 <div>
-                  <p className="text-xl font-extrabold text-gray-900 leading-none">{s.num}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+                  <p className="text-xl font-extrabold text-white leading-none">{s.num}</p>
+                  <p className="text-xs text-white/80 font-medium mt-0.5">{s.label}</p>
                 </div>
               </div>
             ))}
@@ -469,11 +491,14 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           {latest.length > 0 && (
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-bold text-gray-900">
-                  {activeCategory ? `${activeCategory} Exams` : 'Explore Exams'}
-                </h2>
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-5 bg-[#1760f4] rounded-full" />
+                  <h2 className="text-base font-bold text-gray-900">
+                    {activeCategory ? `${activeCategory} Exams` : 'Explore Exams'}
+                  </h2>
+                </div>
                 <Link href="/exams"
-                  className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1">
+                  className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded-full transition-colors hover:bg-blue-100">
                   View all <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -484,9 +509,10 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           )}
 
           {/* ── Career Guide Banner ── */}
-          <div className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 p-5 md:p-6 mt-8 mb-6 flex flex-col sm:flex-row sm:items-center gap-4">
-            <div className="text-4xl shrink-0 leading-none">🧭</div>
-            <div className="flex-1 min-w-0">
+          <div className="rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 p-5 md:p-6 mt-8 mb-6 flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-violet-200/50 relative overflow-hidden">
+            <div className="absolute right-0 top-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+            <div className="text-4xl shrink-0 leading-none relative z-10">🧭</div>
+            <div className="flex-1 min-w-0 relative z-10">
               <p className="text-[11px] font-bold uppercase tracking-wider text-violet-200 mb-0.5">
                 Free Career Guide
               </p>
@@ -497,13 +523,13 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                 Discover paths across 8 personality types — Makers, Thinkers, Builders &amp; more. Most cost ₹0 to start.
               </p>
             </div>
-            <div className="flex flex-row sm:flex-col gap-2 shrink-0">
+            <div className="flex flex-row sm:flex-col gap-2 shrink-0 relative z-10">
               <Link href="/career-guide/quiz"
-                className="inline-flex items-center justify-center gap-1.5 bg-white text-violet-700 font-bold text-sm px-4 py-2.5 rounded-lg hover:bg-violet-50 transition-colors whitespace-nowrap shadow-sm">
+                className="inline-flex items-center justify-center gap-1.5 bg-white text-violet-700 font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-violet-50 transition-colors whitespace-nowrap shadow-sm">
                 🎯 Take the Quiz
               </Link>
               <Link href="/career-guide"
-                className="inline-flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap border border-white/20">
+                className="inline-flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap border border-white/20">
                 Browse 100 Careers
               </Link>
             </div>
@@ -513,44 +539,47 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           {(() => {
             const latestPosts = getAllPosts().slice(0, 5);
             const CAT_COLORS: Record<string, string> = {
-              SSC: 'bg-blue-100 text-blue-700',
-              CUET: 'bg-violet-100 text-violet-700',
-              Railway: 'bg-green-100 text-green-700',
-              NEET: 'bg-red-100 text-red-700',
-              Banking: 'bg-amber-100 text-amber-700',
-              UPSC: 'bg-slate-100 text-slate-700',
+              SSC: 'bg-blue-100 text-blue-700 border-blue-200',
+              CUET: 'bg-violet-100 text-violet-700 border-violet-200',
+              Railway: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+              NEET: 'bg-rose-100 text-rose-700 border-rose-200',
+              Banking: 'bg-amber-100 text-amber-700 border-amber-200',
+              UPSC: 'bg-slate-100 text-slate-700 border-slate-200',
             };
             return (
               <section className="mt-8 mb-8">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-base font-bold text-gray-900">Latest from the Blog</h2>
-                  <Link href="/blog" className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-5 bg-[#1760f4] rounded-full" />
+                    <h2 className="text-base font-bold text-gray-900">Latest from the Blog</h2>
+                  </div>
+                  <Link href="/blog" className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded-full transition-colors hover:bg-blue-100">
                     View all <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
                 <div className="flex flex-col gap-3">
                   {latestPosts.map(post => {
-                    const catCls = CAT_COLORS[post.category] ?? 'bg-orange-100 text-orange-700';
+                    const catCls = CAT_COLORS[post.category] ?? 'bg-blue-100 text-blue-700 border-blue-200';
                     const date = new Date(post.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
                     return (
                       <Link key={post.slug} href={`/blog/${post.slug}`}
-                        className="group flex items-start gap-4 bg-white rounded-xl border border-gray-200 hover:border-orange-300 hover:shadow-sm transition-all duration-200 p-4">
+                        className="group flex items-start gap-4 bg-white rounded-2xl border border-gray-100 hover:border-blue-200 hover:shadow-md hover:shadow-blue-50 transition-all duration-200 p-4">
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${catCls}`}>
+                          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                            <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${catCls}`}>
                               <Tag className="w-2.5 h-2.5" />{post.category}
                             </span>
-                            <span className="flex items-center gap-1 text-[11px] text-gray-400">
-                              <Clock className="w-2.5 h-2.5" />{post.readingTimeMinutes} min
+                            <span className="flex items-center gap-1 text-[11px] text-gray-400 font-medium">
+                              <Clock className="w-2.5 h-2.5" />{post.readingTimeMinutes} min read
                             </span>
-                            <span className="text-[11px] text-gray-400 ml-auto">{date}</span>
+                            <span className="text-[11px] text-gray-400 ml-auto font-medium">{date}</span>
                           </div>
-                          <h3 className="text-sm font-bold text-gray-900 leading-snug group-hover:text-orange-600 transition-colors line-clamp-2">
+                          <h3 className="text-sm font-bold text-gray-900 leading-snug group-hover:text-[#1760f4] transition-colors line-clamp-2">
                             {post.title}
                           </h3>
                           <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">{post.excerpt}</p>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-orange-400 transition-colors shrink-0 mt-1" />
+                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#1760f4] transition-colors shrink-0 mt-1" />
                       </Link>
                     );
                   })}
@@ -560,11 +589,14 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           })()}
 
           {/* ── About + FAQ ── */}
-          <section className="mt-10 space-y-8">
+          <section className="mt-10 space-y-6">
 
             {/* About GridAcademy */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-8 space-y-6">
-              <h2 className="text-lg font-extrabold text-gray-900">About GridAcademy</h2>
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-sm space-y-6">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-5 bg-[#1760f4] rounded-full" />
+                <h2 className="text-lg font-extrabold text-gray-900">About GridAcademy</h2>
+              </div>
 
               <div className="space-y-4 text-sm text-gray-600 leading-relaxed">
                 <p>
@@ -607,9 +639,12 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             </div>
 
             {/* FAQ */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
-              <h2 className="text-lg font-extrabold text-gray-900 mb-5">Frequently Asked Questions</h2>
-              <dl className="divide-y divide-gray-100">
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-sm">
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-1 h-5 bg-[#1760f4] rounded-full" />
+                <h2 className="text-lg font-extrabold text-gray-900">Frequently Asked Questions</h2>
+              </div>
+              <dl className="divide-y divide-gray-50">
                 {[
                   {
                     q: 'Are GridAcademy mock tests free?',
@@ -633,11 +668,11 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                   },
                 ].map(({ q, a }) => (
                   <details key={q} className="group py-4 cursor-pointer list-none">
-                    <summary className="flex items-center justify-between gap-3 font-semibold text-sm text-gray-800 marker:hidden list-none">
+                    <summary className="flex items-center justify-between gap-3 font-semibold text-sm text-gray-800 marker:hidden list-none hover:text-[#1760f4] transition-colors">
                       {q}
-                      <span className="shrink-0 text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+                      <span className="shrink-0 w-5 h-5 rounded-full bg-blue-50 text-[#1760f4] flex items-center justify-center text-xs group-open:rotate-180 transition-transform">▾</span>
                     </summary>
-                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">{a}</p>
+                    <p className="mt-3 text-sm text-gray-500 leading-relaxed">{a}</p>
                   </details>
                 ))}
               </dl>
@@ -647,7 +682,9 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           {/* ── Empty state ── */}
           {latest.length === 0 && (
             <div className="text-center py-20">
-              <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <div className="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="w-10 h-10 text-[#1760f4]" />
+              </div>
               {activeCategory ? (
                 <>
                   <h2 className="text-xl font-semibold text-gray-700">No {activeCategory} Exams Yet</h2>
@@ -655,7 +692,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                     We&apos;re adding {activeCategory} exams soon. Check back shortly or browse all exams.
                   </p>
                   <Link href="/"
-                    className="mt-6 inline-flex items-center gap-2 text-white bg-[#1760f4] px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#0e4dd4] transition-colors">
+                    className="mt-6 inline-flex items-center gap-2 text-white bg-[#1760f4] px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#0e4dd4] transition-colors shadow-sm shadow-blue-300">
                     View All Exams <ChevronRight className="w-4 h-4" />
                   </Link>
                 </>
@@ -666,7 +703,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                     We&apos;re adding new exams and mock tests. Register to get notified when they go live.
                   </p>
                   <Link href="/register"
-                    className="mt-6 inline-flex items-center gap-2 text-white bg-[#1760f4] px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#0e4dd4] transition-colors">
+                    className="mt-6 inline-flex items-center gap-2 text-white bg-[#1760f4] px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#0e4dd4] transition-colors shadow-sm shadow-blue-300">
                     Get Notified <ChevronRight className="w-4 h-4" />
                   </Link>
                 </>
@@ -680,8 +717,8 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
       </div>
 
       {/* ── Mobile bottom navigation ── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 grid grid-cols-4"
-        style={{ height: 60, boxShadow: '0 -2px 10px rgba(0,0,0,.06)' }}>
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 grid grid-cols-4"
+        style={{ height: 60, boxShadow: '0 -4px 20px rgba(0,0,0,.06)' }}>
         {[
           { icon: <Home className="w-5 h-5" />,     label: 'Home',    href: '/',          active: true },
           { icon: <Search className="w-5 h-5" />,   label: 'Search',  href: '/exams',     active: false },
@@ -690,7 +727,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
         ].map(item => (
           <Link key={item.label} href={item.href}
             className={`flex flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors
-              ${item.active ? 'text-[#1760f4]' : 'text-gray-500 hover:text-[#1760f4]'}`}>
+              ${item.active ? 'text-[#1760f4]' : 'text-gray-400 hover:text-[#1760f4]'}`}>
             {item.icon}
             {item.label}
           </Link>
