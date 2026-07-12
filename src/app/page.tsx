@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
 import { ExamCard, ExamTypeFilter } from '@/types/exam';
 import {
-  FileText, Star, ChevronRight, Zap,
+  FileText, Star, ChevronRight, Zap, User,
   Home, BookOpen, Trophy, BarChart2, Search, Clock, Tag
 } from 'lucide-react';
 import { getAllPosts } from '@/lib/blog-posts';
@@ -147,7 +147,7 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
 
   return (
     <aside className="hidden lg:flex flex-col gap-4 py-6 pr-6"
-      style={{ width: 300, position: 'sticky', top: 64, maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
+      style={{ width: 300, position: 'sticky', top: 64, alignSelf: 'flex-start' }}>
 
       {/* Platform Stats */}
       <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
@@ -171,62 +171,46 @@ function RightPanel({ exams }: { exams: ExamCard[] }) {
         </div>
       </div>
 
-      {/* Top Performers */}
+      {/* Why GridAcademy */}
       <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-1 h-4 bg-amber-400 rounded-full" />
-          <h3 className="text-sm font-bold text-gray-800">Top Performers</h3>
+          <div className="w-1 h-4 bg-[#1760f4] rounded-full" />
+          <h3 className="text-sm font-bold text-gray-800">Why GridAcademy?</h3>
         </div>
-        {[
-          { rank: 1, name: 'Aakash Singh', score: '96/100', bg: 'bg-gradient-to-br from-yellow-400 to-amber-500', text: 'text-white' },
-          { rank: 2, name: 'Priya Kumari', score: '94/100', bg: 'bg-gray-200', text: 'text-gray-700' },
-          { rank: 3, name: 'Ravi Shankar', score: '91/100', bg: 'bg-amber-100', text: 'text-amber-800' },
-          { rank: 4, name: 'Sunita Devi',  score: '89/100', bg: 'bg-gray-100', text: 'text-gray-600' },
-          { rank: 5, name: 'Manoj Yadav',  score: '87/100', bg: 'bg-gray-100', text: 'text-gray-600' },
-        ].map(p => (
-          <div key={p.rank} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
-            <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shrink-0 ${p.bg} ${p.text}`}>
-              {p.rank}
-            </span>
-            <span className="text-sm font-medium text-gray-700 flex-1 truncate">{p.name}</span>
-            <span className="text-sm font-bold text-[#1760f4]">{p.score}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Upcoming Deadlines */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-1 h-4 bg-rose-400 rounded-full" />
-          <h3 className="text-sm font-bold text-gray-800">Upcoming Deadlines</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { icon: '⚡', title: 'Instant Results' },
+            { icon: '🎯', title: 'Latest Pattern' },
+            { icon: '🆓', title: 'Mostly Free' },
+            { icon: '📊', title: 'Deep Analytics' },
+          ].map(f => (
+            <div key={f.title} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2">
+              <span className="text-base leading-none shrink-0">{f.icon}</span>
+              <p className="text-xs font-semibold text-gray-700 leading-tight">{f.title}</p>
+            </div>
+          ))}
         </div>
-        {[
-          { day: '30', mon: 'Apr', title: 'RRB ALP Application', sub: 'Last date to apply' },
-          { day: '25', mon: 'May', title: 'UPSC Prelims 2026',   sub: 'Hall ticket from May 10' },
-          { day: '10', mon: 'Jun', title: 'RRB ALP CBT 1',       sub: 'Admit card 7 days prior' },
-        ].map(d => (
-          <div key={d.title} className="flex gap-3 py-2.5 border-b border-gray-50 last:border-0">
-            <div className="shrink-0 rounded-xl px-2.5 py-2 text-center bg-gradient-to-br from-[#1760f4] to-[#0e4dd4] text-white shadow-sm shadow-blue-200" style={{ minWidth: 44 }}>
-              <span className="block text-lg font-extrabold leading-none">{d.day}</span>
-              <span className="text-[10px] font-bold opacity-90">{d.mon}</span>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-800 leading-snug">{d.title}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{d.sub}</p>
-            </div>
-          </div>
-        ))}
       </div>
 
       {/* Provider CTA */}
-      <div className="rounded-2xl p-5 bg-gradient-to-br from-[#1760f4] to-[#0a3ba8] text-white relative overflow-hidden">
-        <div className="absolute right-0 bottom-0 w-28 h-28 bg-white/10 rounded-full translate-x-1/3 translate-y-1/3" />
-        <h3 className="text-sm font-bold mb-1 relative z-10">Are you a coaching institute?</h3>
-        <p className="text-blue-200 text-xs mb-3 relative z-10">Upload question banks, create mock tests &amp; reach lakhs of students.</p>
-        <Link href="/provider/register"
-          className="block text-center bg-white text-[#1760f4] font-bold text-sm py-2 rounded-xl hover:bg-blue-50 transition-colors relative z-10 shadow-sm">
-          Become a Provider
-        </Link>
+      <div className="rounded-2xl border border-blue-100 bg-white shadow-sm overflow-hidden">
+        <div className="h-1 bg-gradient-to-r from-[#1760f4] to-[#0a3ba8]" />
+        <div className="p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">🏫</span>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#1760f4]">For Institutes</p>
+              <h3 className="text-sm font-extrabold text-gray-900 leading-tight">Are you a coaching institute?</h3>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 leading-relaxed mb-3">
+            Upload tests &amp; reach <span className="font-semibold text-gray-700">lakhs of students</span>. Free to join, no setup fee.
+          </p>
+          <Link href="/provider/register"
+            className="flex items-center justify-center gap-1.5 w-full bg-[#1760f4] text-white font-bold text-sm py-2.5 rounded-xl hover:bg-[#0e4dd4] transition-colors shadow-sm">
+            Become a Provider <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
     </aside>
   );
@@ -397,9 +381,22 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
               <h1 className="text-xl md:text-2xl font-extrabold text-white leading-snug mb-2">
                 Free Mock Tests for SSC, CUET, Railway, Banking &amp; UPSC Exams
               </h1>
-              <p className="text-blue-200 text-sm font-medium">
+              <p className="text-blue-200 text-sm font-medium mb-4">
                 Practice with real exam pattern · Instant results · Section-wise analysis
               </p>
+              <form action="/exams" method="GET" className="relative max-w-lg">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                <input
+                  type="text"
+                  name="q"
+                  placeholder="Search exams — SSC CGL, IBPS PO, RRB NTPC..."
+                  className="w-full pl-10 pr-20 py-3 rounded-xl text-gray-900 text-sm bg-white/95 shadow-md placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-white/50 transition-all"
+                />
+                <button type="submit"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-[#1760f4] text-white text-xs font-bold px-4 py-1.5 rounded-lg hover:bg-[#0e4dd4] transition-colors shadow-sm">
+                  Search
+                </button>
+              </form>
             </div>
           </div>
 
@@ -431,6 +428,24 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                 );
               })}
             </div>
+          </div>
+
+          {/* ── Quick stats ── */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            {[
+              { icon: '📝', num: `${exams.length}+`, label: 'Exams',      gradient: 'from-blue-500 to-[#1760f4]' },
+              { icon: '🆓', num: `${exams.filter(e => e.priceInr === 0).length}`, label: 'Free Exams', gradient: 'from-emerald-500 to-teal-600' },
+              { icon: '📋', num: `${exams.reduce((s, e) => s + e.testCount, 0)}+`, label: 'Mock Tests', gradient: 'from-violet-500 to-indigo-600' },
+              { icon: '🏆', num: '10K+',             label: 'Students',   gradient: 'from-amber-500 to-orange-500' },
+            ].map(s => (
+              <div key={s.label} className={`bg-gradient-to-br ${s.gradient} rounded-2xl p-4 flex items-center gap-3 shadow-md`}>
+                <span className="text-2xl leading-none shrink-0 drop-shadow-sm">{s.icon}</span>
+                <div>
+                  <p className="text-xl font-extrabold text-white leading-none">{s.num}</p>
+                  <p className="text-xs text-white/80 font-medium mt-0.5">{s.label}</p>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* ── Featured exam banner ── */}
@@ -469,24 +484,6 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             </Link>
           )}
 
-          {/* ── Quick stats ── */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            {[
-              { icon: '📝', num: `${exams.length}+`, label: 'Exams',      gradient: 'from-blue-500 to-[#1760f4]' },
-              { icon: '🆓', num: `${exams.filter(e => e.priceInr === 0).length}`, label: 'Free Exams', gradient: 'from-emerald-500 to-teal-600' },
-              { icon: '📋', num: `${exams.reduce((s, e) => s + e.testCount, 0)}+`, label: 'Mock Tests', gradient: 'from-violet-500 to-indigo-600' },
-              { icon: '🏆', num: '10K+',             label: 'Students',   gradient: 'from-amber-500 to-orange-500' },
-            ].map(s => (
-              <div key={s.label} className={`bg-gradient-to-br ${s.gradient} rounded-2xl p-4 flex items-center gap-3 shadow-md`}>
-                <span className="text-2xl leading-none shrink-0 drop-shadow-sm">{s.icon}</span>
-                <div>
-                  <p className="text-xl font-extrabold text-white leading-none">{s.num}</p>
-                  <p className="text-xs text-white/80 font-medium mt-0.5">{s.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
           {/* ── Exam cards grid ── */}
           {latest.length > 0 && (
             <section>
@@ -509,23 +506,23 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           )}
 
           {/* ── Career Guide Banner ── */}
-          <div className="rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 p-5 md:p-6 mt-8 mb-6 flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-violet-200/50 relative overflow-hidden">
+          <div className="rounded-2xl bg-gradient-to-r from-[#1760f4] to-[#0a3ba8] p-5 md:p-6 mt-8 mb-6 flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-blue-200/50 relative overflow-hidden">
             <div className="absolute right-0 top-0 w-40 h-40 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
             <div className="text-4xl shrink-0 leading-none relative z-10">🧭</div>
             <div className="flex-1 min-w-0 relative z-10">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-violet-200 mb-0.5">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-blue-200 mb-0.5">
                 Free Career Guide
               </p>
               <h3 className="text-base md:text-lg font-extrabold text-white leading-snug">
                 Not sure which career to choose? Explore 100 options.
               </h3>
-              <p className="text-sm text-violet-100 mt-1">
+              <p className="text-sm text-blue-100 mt-1">
                 Discover paths across 8 personality types — Makers, Thinkers, Builders &amp; more. Most cost ₹0 to start.
               </p>
             </div>
             <div className="flex flex-row sm:flex-col gap-2 shrink-0 relative z-10">
               <Link href="/career-guide/quiz"
-                className="inline-flex items-center justify-center gap-1.5 bg-white text-violet-700 font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-violet-50 transition-colors whitespace-nowrap shadow-sm">
+                className="inline-flex items-center justify-center gap-1.5 bg-white text-[#1760f4] font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-blue-50 transition-colors whitespace-nowrap shadow-sm">
                 🎯 Take the Quiz
               </Link>
               <Link href="/career-guide"
@@ -558,9 +555,37 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
                   </Link>
                 </div>
                 <div className="flex flex-col gap-3">
-                  {latestPosts.map(post => {
+                  {latestPosts.map((post, idx) => {
                     const catCls = CAT_COLORS[post.category] ?? 'bg-blue-100 text-blue-700 border-blue-200';
                     const date = new Date(post.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+
+                    if (idx === 0) {
+                      return (
+                        <Link key={post.slug} href={`/blog/${post.slug}`}
+                          className="group bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 hover:border-blue-200 hover:shadow-md hover:shadow-blue-100 transition-all duration-200 p-5 md:p-6">
+                          <div className="flex items-center gap-2 mb-3 flex-wrap">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#1760f4] bg-blue-100 px-2.5 py-1 rounded-full">Featured Article</span>
+                            <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${catCls}`}>
+                              <Tag className="w-2.5 h-2.5" />{post.category}
+                            </span>
+                            <span className="text-[11px] text-gray-400 ml-auto font-medium">{date}</span>
+                          </div>
+                          <h3 className="text-base md:text-lg font-extrabold text-gray-900 leading-snug group-hover:text-[#1760f4] transition-colors mb-2">
+                            {post.title}
+                          </h3>
+                          <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-3">{post.excerpt}</p>
+                          <div className="flex items-center gap-3">
+                            <span className="flex items-center gap-1 text-[11px] text-gray-400 font-medium">
+                              <Clock className="w-2.5 h-2.5" />{post.readingTimeMinutes} min read
+                            </span>
+                            <span className="ml-auto flex items-center gap-1 text-xs font-bold text-[#1760f4] group-hover:gap-2 transition-all">
+                              Read Article <ChevronRight className="w-3.5 h-3.5" />
+                            </span>
+                          </div>
+                        </Link>
+                      );
+                    }
+
                     return (
                       <Link key={post.slug} href={`/blog/${post.slug}`}
                         className="group flex items-start gap-4 bg-white rounded-2xl border border-gray-100 hover:border-blue-200 hover:shadow-md hover:shadow-blue-50 transition-all duration-200 p-4">
@@ -723,7 +748,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
           { icon: <Home className="w-5 h-5" />,     label: 'Home',    href: '/',          active: true },
           { icon: <Search className="w-5 h-5" />,   label: 'Search',  href: '/exams',     active: false },
           { icon: <FileText className="w-5 h-5" />, label: 'Tests',   href: '/tests',     active: false },
-          { icon: <BookOpen className="w-5 h-5" />, label: 'Profile', href: '/dashboard', active: false },
+          { icon: <User className="w-5 h-5" />, label: 'Profile', href: '/dashboard', active: false },
         ].map(item => (
           <Link key={item.label} href={item.href}
             className={`flex flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors
