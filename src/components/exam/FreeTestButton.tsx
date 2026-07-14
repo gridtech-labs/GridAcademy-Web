@@ -48,7 +48,7 @@ export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token,
     const { assignmentId, attemptId: existingAttemptId } = freeData;
 
     if (existingAttemptId) {
-      router.push(`/instructions/${existingAttemptId}`);
+      window.location.href = `/instructions/${existingAttemptId}`;
       return;
     }
 
@@ -63,7 +63,7 @@ export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token,
     const startJson = await startRes.json();
     const attemptId = startJson.data?.attemptId ?? startJson.data?.AttemptId ?? startJson.attemptId;
     if (!attemptId) throw new Error('No attempt ID returned');
-    router.push(`/instructions/${attemptId}`);
+    window.location.href = `/instructions/${attemptId}`;
   };
 
   // ── Already logged in ─────────────────────────────────────────────────────

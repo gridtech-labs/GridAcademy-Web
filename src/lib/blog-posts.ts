@@ -1059,9 +1059,272 @@ const sscCglTier1Prep: BlogPost = {
   ],
 };
 
+const neet2026ExpectedCutoff: BlogPost = {
+  slug: 'neet-2026-expected-cutoff',
+  title: 'NEET 2026 Expected Cutoff: Category-Wise Marks, Safe Score & College-Wise Analysis',
+  metaTitle: 'NEET 2026 Expected Cutoff Marks — General, OBC, SC, ST & Top College Ranks',
+  metaDescription:
+    'NEET 2026 expected cutoff marks for General, OBC, SC, ST, and EWS categories. Includes qualifying cutoff vs admission cutoff, AIIMS and top govt college rank analysis, and what to do while waiting for results.',
+  publishedAt: '2026-07-15',
+  category: 'NEET',
+  readingTimeMinutes: 10,
+  excerpt:
+    'NEET 2026 results are expected by July 20. Here is a data-driven analysis of expected qualifying cutoffs, category-wise safe scores for government MBBS seats, and closing ranks for AIIMS Delhi, MAMC, and top state medical colleges.',
+  content: `
+<p>NEET UG 2026 was conducted in May 2026, followed by a re-examination on <strong>June 21, 2026</strong> for a section of candidates. With results expected by <strong>July 20, 2026</strong>, the most critical question on every aspirant's mind right now is: <em>What score is good enough?</em></p>
+
+<p>This article answers that question precisely — separating the qualifying cutoff (minimum to enter counselling) from the competitive cutoff (what you actually need for a government MBBS seat), with category-wise numbers and college-wise rank analysis based on the last three years of official data.</p>
+
+<h2>Two Types of NEET Cutoffs — Understand the Difference First</h2>
+<p>Most candidates confuse "qualifying cutoff" with "admission cutoff." They are entirely different, and mixing them up leads to false confidence or unnecessary panic.</p>
+
+<ul>
+  <li><strong>Qualifying Cutoff:</strong> The minimum marks you need to be eligible for counselling. This is set by NTA based on percentile. Clearing this gets you into the counselling pool — it does not guarantee a seat.</li>
+  <li><strong>Admission Cutoff (Closing Rank):</strong> The actual rank at which the last seat in a particular college, category, and round was filled in the previous year's counselling. This is far higher than the qualifying cutoff and varies by college, state, and category.</li>
+</ul>
+
+<p>Understanding which cutoff applies to your goal is the single most important piece of context when reading any cutoff table.</p>
+
+<h2>NEET 2026 Expected Qualifying Cutoff — Category Wise</h2>
+<p>NTA sets the qualifying cutoff as a percentile threshold, not a fixed mark. The 50th percentile applies to the General/EWS category; the 40th percentile applies to OBC, SC, and ST categories. The exact marks corresponding to these percentiles change every year based on the difficulty level of that year's paper and the score distribution among all candidates.</p>
+
+<p>Based on the difficulty level of the 2026 paper and the trend from previous years, the following qualifying marks are expected:</p>
+
+<table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;">
+  <thead>
+    <tr style="background:#1760f4;color:#fff;">
+      <th style="padding:10px 14px;text-align:left;border-radius:6px 0 0 0;">Category</th>
+      <th style="padding:10px 14px;text-align:center;">Percentile Required</th>
+      <th style="padding:10px 14px;text-align:center;">2024 Actual</th>
+      <th style="padding:10px 14px;text-align:center;">2025 Actual</th>
+      <th style="padding:10px 14px;text-align:center;border-radius:0 6px 0 0;">2026 Expected</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">General / UR / EWS</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">50th</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">162</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">144</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;color:#1760f4;">137–150</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">OBC</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">40th</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">127</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">113</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;color:#1760f4;">107–120</td>
+    </tr>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">SC</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">40th</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">127</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">113</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;color:#1760f4;">107–120</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">ST</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">40th</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">113</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">113</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;color:#1760f4;">107–115</td>
+    </tr>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;font-weight:600;">PH (General)</td>
+      <td style="padding:9px 14px;text-align:center;">45th</td>
+      <td style="padding:9px 14px;text-align:center;">144</td>
+      <td style="padding:9px 14px;text-align:center;">122</td>
+      <td style="padding:9px 14px;text-align:center;font-weight:700;color:#1760f4;">120–135</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><em>Note: "Expected" figures are expert estimates based on paper difficulty and score distribution trends. Official qualifying marks will be announced by NTA with the NEET UG 2026 result.</em></p>
+
+<h2>What Score Do You Actually Need for a Government MBBS Seat?</h2>
+<p>Qualifying the NEET cutoff is step one. Getting a government MBBS seat is an entirely different target — and the marks required are dramatically higher. Here is what the last two years of MCC AIQ counselling data shows for general government MBBS seat allocation:</p>
+
+<table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;">
+  <thead>
+    <tr style="background:#1760f4;color:#fff;">
+      <th style="padding:10px 14px;text-align:left;border-radius:6px 0 0 0;">Category</th>
+      <th style="padding:10px 14px;text-align:center;">Safe Score (Govt MBBS)</th>
+      <th style="padding:10px 14px;text-align:center;">Expected AIQ Rank Range</th>
+      <th style="padding:10px 14px;text-align:center;border-radius:0 6px 0 0;">Chances</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">General / UR</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">600+ marks</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">Under 20,000</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;color:#16a34a;font-weight:600;">Good</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">EWS</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">560–590 marks</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">Under 50,000</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;color:#16a34a;font-weight:600;">Good</td>
+    </tr>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">OBC</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">550–580 marks</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">Under 60,000</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;color:#16a34a;font-weight:600;">Good</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">SC</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">460–510 marks</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">Under 85,000</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;color:#16a34a;font-weight:600;">Good</td>
+    </tr>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;font-weight:600;">ST</td>
+      <td style="padding:9px 14px;text-align:center;font-weight:700;">420–480 marks</td>
+      <td style="padding:9px 14px;text-align:center;">Under 1,00,000</td>
+      <td style="padding:9px 14px;text-align:center;color:#16a34a;font-weight:600;">Good</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For private or deemed medical colleges (MBBS), the cutoff is lower — but fees range from ₹15 lakh to ₹1.5 crore per year. State quota seats (85% of government college seats) have state-specific cutoffs and require separate state counselling.</p>
+
+<h2>Top Government Medical College Expected Cutoffs for 2026</h2>
+<p>These rank estimates are based on MCC AIQ counselling trends from 2023–2025. NEET 2026 closing ranks will be confirmed only after all rounds of MCC and state counselling conclude — typically by November 2026.</p>
+
+<table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin:1rem 0;">
+  <thead>
+    <tr style="background:#1760f4;color:#fff;">
+      <th style="padding:10px 14px;text-align:left;border-radius:6px 0 0 0;">College</th>
+      <th style="padding:10px 14px;text-align:center;">General AIR (Expected)</th>
+      <th style="padding:10px 14px;text-align:center;border-radius:0 6px 0 0;">Approximate Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">AIIMS New Delhi</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">AIR 1 – 50</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">705–720</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">Maulana Azad Medical College, Delhi</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">AIR 50 – 200</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">650–680</td>
+    </tr>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">AIIMS Jodhpur</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">AIR ~374</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">650–670</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">AIIMS Bhopal</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">AIR ~510</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">645–665</td>
+    </tr>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">AIIMS Rishikesh / Nagpur / Patna</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">AIR 600–1,500</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">630–660</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">UCH / Lady Hardinge (Delhi)</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">AIR 200–1,000</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">620–660</td>
+    </tr>
+    <tr style="background:#f8faff;">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;font-weight:600;">PGIMER Chandigarh</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;">AIR 200–800</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8edf8;text-align:center;font-weight:700;">640–675</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 14px;font-weight:600;">Top State Govt Colleges (avg)</td>
+      <td style="padding:9px 14px;text-align:center;">AIR 2,000–50,000</td>
+      <td style="padding:9px 14px;text-align:center;font-weight:700;">500–630</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Important:</strong> AIIMS colleges conduct their own INI-CET counselling separately from MCC. Seats at AIIMS institutions are not allocated through the standard MCC AIQ process. The ranks and marks above are based on NEET UG 2026 scores but the actual allocation happens via INI-CET 2026 counselling.</p>
+
+<h2>Total Seats Available in NEET 2026</h2>
+<p>NEET UG 2026 covers admission to the following courses and seats across India:</p>
+<ul>
+  <li><strong>MBBS:</strong> 1,29,603 seats across 824 medical colleges (450 government + 374 private/deemed)</li>
+  <li><strong>BDS (Dentistry):</strong> ~28,016 seats</li>
+  <li><strong>AYUSH (BAMS, BHMS, BUMS, BSMS):</strong> 52,720+ seats across Ayurveda, Homeopathy, and Unani colleges</li>
+  <li><strong>BSc Nursing (select colleges):</strong> Admission via NEET score in some states</li>
+</ul>
+<p>Karnataka (12,545), Uttar Pradesh (12,050), and Maharashtra (11,846) together account for nearly 40% of all MBBS seats. State quota seats (85%) are filled through respective state counselling; All India Quota (AIQ) accounts for the remaining 15% and is centrally managed by MCC.</p>
+
+<h2>Factors That Will Determine the Final NEET 2026 Cutoff</h2>
+<p>Cutoffs are not fixed in advance — they shift based on several variables that play out each exam cycle:</p>
+
+<ul>
+  <li><strong>Paper difficulty:</strong> A harder paper lowers the score distribution, which lowers the cutoff marks (though the percentile threshold stays the same). The 2025 cutoff drop to 144 from 162 in 2024 was largely driven by a more difficult Physics section.</li>
+  <li><strong>Total candidates:</strong> NEET 2026 saw over 24 lakh registrations. More candidates at the same difficulty level pushes raw rank cutoffs higher, even if qualifying marks stay similar.</li>
+  <li><strong>Seat matrix changes:</strong> New medical colleges approved mid-cycle by NMC (National Medical Commission) can add seats and slightly ease competition for lower-ranked candidates.</li>
+  <li><strong>Re-exam impact:</strong> The June 21 re-exam for affected candidates may result in score adjustments or a combined merit list — NTA will publish the methodology before results. Candidates who appeared in the re-exam should check NTA's official communication carefully.</li>
+  <li><strong>Supreme Court orders:</strong> Post the 2024 paper leak controversy, NEET is under judicial scrutiny. Any court intervention in the 2026 cycle could affect counselling timelines or cutoff methodology.</li>
+</ul>
+
+<h2>What to Do Right Now While Waiting for Results</h2>
+<p>If your NEET 2026 result is pending, here is the most productive use of your time between now and the result date:</p>
+
+<ol>
+  <li><strong>Calculate your estimated marks honestly.</strong> Use the official provisional answer key released by NTA (available at neet.nta.nic.in). Count +4 per correct and −1 per wrong across all 180 questions you attempted. This gives you a realistic score to plan against.</li>
+  <li><strong>Map your score to the tables above.</strong> If you are General category scoring 600+, you are in the government MBBS zone. 550–600 puts you in private college territory or state quota government seats. Below 500 with General, AYUSH courses or a re-attempt are the realistic paths.</li>
+  <li><strong>Register for counselling as soon as it opens.</strong> MCC counselling typically opens 30–40 days after results. Registration closes fast. Do not wait for "official confirmation" — register on day one.</li>
+  <li><strong>Research state counselling separately.</strong> If you are from Karnataka, Maharashtra, Tamil Nadu, or Uttar Pradesh, state counselling for 85% of government seats runs independently and in parallel with MCC. Missing state counselling registration is a common and costly mistake.</li>
+  <li><strong>If this was not your year:</strong> Start NEET 2027 preparation within 2 weeks of the result. There is no attempt limit, and many successful doctors cleared NEET in their second or third attempt with structured re-preparation.</li>
+</ol>
+
+<h2>NEET 2026 Result: What to Expect on Result Day</h2>
+<p>NTA typically releases NEET UG results at neet.nta.nic.in. On result day, the following documents are published simultaneously:</p>
+<ul>
+  <li>Individual scorecard (marks, percentile, AIQ rank, category rank)</li>
+  <li>Category-wise qualifying cutoff marks</li>
+  <li>State-wise topper list and merit list</li>
+  <li>OMR answer sheet (candidates can download and verify)</li>
+</ul>
+<p>The result server typically crashes within minutes of announcement due to traffic. Bookmark the result link in advance and attempt login in the first 5 minutes — or wait 2–3 hours for traffic to normalise. Your scorecard is downloadable throughout the counselling season, so missing the first window is not catastrophic.</p>
+  `,
+  faqs: [
+    {
+      question: 'What is the minimum marks to qualify NEET 2026?',
+      answer:
+        'The qualifying cutoff for NEET 2026 is based on percentile. General/EWS category candidates need to score at or above the 50th percentile — expected to be approximately 137–150 marks. OBC, SC, and ST candidates need to reach the 40th percentile — expected around 107–120 marks. These are the minimum to be eligible for counselling, not to actually secure a seat.',
+    },
+    {
+      question: 'What NEET 2026 score is needed for a government MBBS seat?',
+      answer:
+        'For a government MBBS seat through MCC AIQ or state counselling, General category candidates typically need 600+ marks. OBC candidates need 550–580 marks. SC candidates need 460–510 marks, and ST candidates need 420–480 marks. These are competitive benchmarks based on 2024–2025 counselling closing ranks and are subject to change based on 2026 seat availability.',
+    },
+    {
+      question: 'When will NEET 2026 result be declared?',
+      answer:
+        'The NEET UG 2026 result, including the re-exam conducted on June 21, 2026, is expected to be declared by July 20, 2026 on the official NTA website (neet.nta.nic.in). The result includes your marks, percentile, All India Rank, and the official category-wise qualifying cutoff.',
+    },
+    {
+      question: 'What is the NEET 2026 cutoff for AIIMS Delhi?',
+      answer:
+        'AIIMS New Delhi is the most competitive medical college in India. Based on INI-CET 2025 trends, the closing rank for General category candidates is expected to be within AIR 1–50, corresponding to approximately 705–720 marks out of 720. AIIMS admissions are through INI-CET counselling, not MCC AIQ, but the NEET score determines eligibility and rank.',
+    },
+    {
+      question: 'What happens if I score between 137 and 500 in NEET 2026?',
+      answer:
+        'If you score above the qualifying cutoff (expected ~137 for General) but below 500, you are eligible for counselling but unlikely to secure a government MBBS seat. Realistic options include: AYUSH (BAMS, BHMS, BUMS) colleges which have lower cutoffs, private MBBS colleges (fees vary widely), BDS (dental) government colleges which have lower cutoffs than MBBS, or reconsidering a re-attempt for NEET 2027 with targeted preparation.',
+    },
+    {
+      question: 'How is the NEET 2026 qualifying cutoff different from the college admission cutoff?',
+      answer:
+        'The qualifying cutoff is set by NTA and determines who is eligible to register for counselling — it is typically around 137–150 marks for General (50th percentile). The college admission cutoff (closing rank) is the rank at which the last seat in a specific college was filled during counselling — for top government colleges, this corresponds to 600–720 marks. The two numbers are very different and should never be confused.',
+    },
+  ],
+};
+
 // ─── Exports ─────────────────────────────────────────────────────────────────
 
-const POSTS: BlogPost[] = [sscCglTier1Prep, sscCglVsChsl, rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
+const POSTS: BlogPost[] = [neet2026ExpectedCutoff, sscCglTier1Prep, sscCglVsChsl, rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
 
 export function getAllPosts(): BlogPost[] {
   return POSTS;
