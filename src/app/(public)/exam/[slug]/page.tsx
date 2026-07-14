@@ -156,7 +156,9 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
   const officialUrl = exam.officialWebsite ?? fallbackOfficial?.url ?? null;
   const officialName = displayConductingBody ?? fallbackOfficial?.name ?? 'Official Website';
 
-  const freeTestCount = sortedTests.filter(t => t.isFree).length;
+  const freeTests     = sortedTests.filter(t => t.isFree);
+  const freeTestCount = freeTests.length;
+  const firstFreeTest = freeTests[0] ?? null;
 
   return (
     <>
@@ -291,12 +293,16 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                     {exam.priceInr === 0 ? 'No credit card required' : 'One-time access'}
                   </p>
                 </div>
-                {freeTestCount > 0 && (
-                  <Link
-                    href={session ? '/dashboard' : `/register?callbackUrl=/exam/${exam.slug}`}
-                    className="block w-full text-center text-sm font-bold bg-white text-[#1760f4] py-2.5 rounded-xl hover:bg-blue-50 transition-colors mb-3 shadow-sm">
-                    Start Free Test
-                  </Link>
+                {firstFreeTest && (
+                  <div className="mb-3">
+                    <FreeTestButton
+                      testId={firstFreeTest.testId}
+                      isLoggedIn={!!session}
+                      callbackUrl={`/exam/${exam.slug}`}
+                      token={token}
+                      variant="ctaCard"
+                    />
+                  </div>
                 )}
                 <div className="grid grid-cols-2 gap-2 text-center">
                   <div className="bg-white/10 rounded-xl py-2">

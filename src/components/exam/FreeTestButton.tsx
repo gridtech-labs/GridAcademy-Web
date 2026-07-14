@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { signIn, getSession } from 'next-auth/react';
 import { Loader2, Play, X } from 'lucide-react';
@@ -11,7 +12,7 @@ interface Props {
   isLoggedIn: boolean;
   callbackUrl: string;
   token?: string;
-  variant?: 'default' | 'hero';
+  variant?: 'default' | 'hero' | 'ctaCard';
 }
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
@@ -30,9 +31,10 @@ export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token,
   const [mobErr,    setMobErr]    = useState('');
 
   const isHero = variant === 'hero';
+  const isCtaCard = variant === 'ctaCard';
   const btnBase = isHero
     ? 'flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-base font-bold transition-colors shadow-lg'
-    : 'flex items-center justify-center gap-2 w-full text-sm font-semibold py-2.5 rounded-xl transition-colors';
+    : 'flex items-center justify-center gap-2 w-full text-sm font-bold py-2.5 rounded-xl transition-colors shadow-sm';
 
   const startExam = async (bearerToken: string) => {
     const freeRes = await fetch(`${API_BASE}/api/assessment/free-access/${testId}`, {
@@ -122,22 +124,22 @@ export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token,
         <button
           onClick={isLoggedIn ? handleStart : () => setShowModal(true)}
           disabled={loading}
-          className={`${btnBase} bg-green-500 hover:bg-green-400 disabled:bg-green-400/70 text-white`}
+          className={`${btnBase} ${isCtaCard ? 'bg-white text-[#1760f4] hover:bg-blue-50 disabled:bg-white/70' : 'bg-green-500 hover:bg-green-400 disabled:bg-green-400/70 text-white'}`}
         >
           {loading
             ? <Loader2 className={`animate-spin ${isHero ? 'w-5 h-5' : 'w-3.5 h-3.5'}`} />
             : <Play    className={isHero ? 'w-5 h-5' : 'w-3.5 h-3.5'} />}
-          {loading ? 'Starting…' : 'Take Free Test'}
+          {loading ? 'Starting…' : isCtaCard ? 'Start Free Test' : 'Take Free Test'}
         </button>
         {error && !showModal && (
           <p className="text-xs text-red-500 mt-1.5 text-center">{error}</p>
         )}
       </div>
 
-      {/* ── Quick-access modal ──────────────────────────────────────────── */}
-      {showModal && (
+      {/* ── Quick-access modal (portal → body to escape backdrop-filter stacking context) */}
+      {showModal && typeof document !== 'undefined' && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
           style={{ background: 'rgba(0,0,0,0.45)' }}
           onClick={e => { if (e.target === e.currentTarget) setShowModal(false); }}
         >
@@ -209,7 +211,8 @@ export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token,
               No registration required. Your progress is saved automatically.
             </p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
