@@ -330,6 +330,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
       <style>{`
         :root { --topbar-h: 56px; }
       `}</style>
+      {/* FAQPage schema — powers FAQ rich results in Google Search */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -359,7 +360,64 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             name: "Which exams are currently available on GridAcademy?",
             acceptedAnswer: { "@type": "Answer", text: "GridAcademy currently covers SSC (CGL, CHSL, MTS, GD Constable), Banking (IBPS PO, IBPS Clerk, SBI PO, SBI Clerk), Railway (RRB NTPC, Group D, ALP, RPF), UPSC Prelims, CUET UG, NEET, and various defence and state-level exams." },
           },
+          {
+            "@type": "Question",
+            name: "How does GridAcademy compare to other mock test platforms?",
+            acceptedAnswer: { "@type": "Answer", text: "GridAcademy partners with 100+ coaching institutes to bring you expert-created tests — not auto-generated questions. Every test is built to the latest official exam pattern, includes detailed explanations, and provides section-wise accuracy with percentile ranking against other aspirants." },
+          },
+          {
+            "@type": "Question",
+            name: "Can I take mock tests on my mobile phone?",
+            acceptedAnswer: { "@type": "Answer", text: "Yes. GridAcademy is fully mobile-optimised and works on any modern browser — no app download required. The exam interface adapts to your screen size and supports the same timed test experience as the desktop version." },
+          },
         ],
+      })}} />
+
+      {/* WebApplication schema — signals to Google that this is a free web app for exam prep */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "@id": "https://www.gridacademy.in/#webapp",
+        name: "GridAcademy",
+        url: "https://www.gridacademy.in",
+        description: "India's mock test platform for SSC, Banking, Railway, UPSC, CUET and NEET — free tests with instant results, section-wise analytics, and percentile ranking.",
+        applicationCategory: "EducationApplication",
+        operatingSystem: "Any",
+        browserRequirements: "Requires JavaScript. Works on all modern browsers.",
+        inLanguage: ["en-IN", "hi-IN"],
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "INR",
+          description: "Free mock tests with instant results and section-wise analysis. Premium test series available from ₹7.",
+          availability: "https://schema.org/InStock",
+        },
+        featureList: [
+          "1,200+ free and premium mock tests",
+          "SSC, Banking, Railway, UPSC, CUET, NEET coverage",
+          "Real exam pattern with accurate marking scheme",
+          "Instant results with section-wise accuracy",
+          "Time-per-question analysis",
+          "Percentile ranking against all test-takers",
+          "Detailed answer explanations",
+          "Mobile-optimised exam interface",
+        ],
+        screenshot: "https://www.gridacademy.in/og-image.jpg",
+        publisher: {
+          "@type": "Organization",
+          name: "GridAcademy",
+          url: "https://www.gridacademy.in",
+          logo: "https://www.gridacademy.in/logo.png",
+        },
+        audience: {
+          "@type": "EducationalAudience",
+          educationalRole: "student",
+          audienceType: "Competitive exam aspirants in India",
+          geographicArea: {
+            "@type": "Country",
+            name: "India",
+          },
+        },
       })}} />
 
       <Header />
@@ -399,6 +457,184 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
               </form>
             </div>
           </div>
+
+          {/* ── Daily Current Affairs ── */}
+          {(() => {
+            // Day-of-year seed so topics rotate daily without a DB
+            const now = new Date();
+            const startOfYear = new Date(now.getFullYear(), 0, 0);
+            const dayOfYear = Math.floor((now.getTime() - startOfYear.getTime()) / 86_400_000);
+            const todayStr = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+            // Format today as YYYY-MM-DD for the current-affairs route
+            const todayIso = now.toISOString().slice(0, 10);
+
+            // Static exam categories — always show, independent of API examTypeName
+            const CATEGORIES = [
+              {
+                key: 'SSC',
+                label: 'SSC',
+                emoji: '👮',
+                gradient: 'from-blue-500 via-[#1760f4] to-indigo-600',
+                textColor: 'text-blue-700',
+                href: `/current-affairs/daily/${todayIso}?s=supreme-court-gig-workers-protection-2026`,
+                topics: [
+                  'Constitution Amendment', 'Indian Economy Basics', 'Static GK — Capitals',
+                  'Polity: Parliament', 'History: Freedom Struggle', 'Geography: Rivers & Dams',
+                  'Science: Chemistry GK', 'Awards & Honours', 'Important Committees',
+                  'Budget 2026 Highlights', 'Indian Judiciary', 'Environment: National Parks',
+                  'Sports: Recent Champions', 'Science: Physics Laws', 'Polity: Fundamental Rights',
+                ],
+              },
+              {
+                key: 'Banking',
+                label: 'Banking',
+                emoji: '🏦',
+                gradient: 'from-amber-400 via-orange-500 to-rose-500',
+                textColor: 'text-amber-700',
+                href: `/current-affairs/daily/${todayIso}?s=rbi-wholesale-digital-rupee-cbdc-2026`,
+                topics: [
+                  'RBI Monetary Policy', 'Banking Awareness: NBFC', 'Economy: Inflation & CPI',
+                  'Govt Schemes: PMJDY', 'Financial Market Basics', 'Budget 2026: Key Numbers',
+                  'Banking: NPA & Basel Norms', 'Economy: GDP & Growth', 'International: IMF & WB',
+                  'Schemes: PM Mudra Yojana', 'Banking: Digital Payments', 'Economy: Trade Balance',
+                  'Current Affairs: Mergers', 'Fintech & UPI Updates', 'Economy: Forex Reserves',
+                ],
+              },
+              {
+                key: 'Railway',
+                label: 'Railway',
+                emoji: '🚂',
+                gradient: 'from-emerald-400 via-teal-500 to-cyan-600',
+                textColor: 'text-emerald-700',
+                href: `/current-affairs/daily/${todayIso}?s=india-high-speed-rail-corridor-2026`,
+                topics: [
+                  'Indian Railways: Zones', 'Railway Budget 2026', 'Vande Bharat Express',
+                  'Railway: New Projects', 'Physics: Motion & Force', 'Science: Heat & Energy',
+                  'Geography: India Map', 'Current Affairs: Infra', 'Math: Speed & Distance',
+                  'Railway: Safety Norms', 'Kavach — Anti-Collision', 'Dedicated Freight Corridor',
+                  'Railway: Electrification', 'Chemistry: Metals & Alloys', 'Biology: Human Body GK',
+                ],
+              },
+              {
+                key: 'UPSC',
+                label: 'UPSC',
+                emoji: '🏛️',
+                gradient: 'from-slate-500 via-gray-600 to-slate-700',
+                textColor: 'text-slate-700',
+                href: `/current-affairs/daily/${todayIso}?s=brics-eu-carbon-tax-2026`,
+                topics: [
+                  'Polity: Directive Principles', 'History: Ancient India', 'Economy: Five-Year Plans',
+                  'Environment: Climate Change', 'Governance: RTI Act', 'International Relations',
+                  'Science & Tech: Space', 'Social Issues: Education', 'Geography: Physical India',
+                  'Current Affairs: G20 2026', 'Ethics: Case Study Topics', 'Disaster Management',
+                  'Internal Security', 'Art & Culture: Dance Forms', 'Agriculture: Schemes',
+                ],
+              },
+              {
+                key: 'NEET',
+                label: 'NEET',
+                emoji: '🩺',
+                gradient: 'from-rose-400 via-pink-500 to-fuchsia-600',
+                textColor: 'text-rose-700',
+                href: `/current-affairs/daily/${todayIso}?s=neet-pg-reform-2026`,
+                topics: [
+                  'Biology: Cell Division', 'Physics: Optics Basics', 'Chemistry: Periodic Table',
+                  'Biology: Human Genetics', 'Physics: Electrostatics', 'Chemistry: Chemical Bonds',
+                  'Biology: Digestive System', 'Physics: Thermodynamics', 'Chemistry: Organic Basics',
+                  'Biology: Plant Kingdom', 'Physics: Modern Physics', 'Chemistry: Equilibrium',
+                  'Biology: Evolution', 'Physics: Waves & Sound', 'Chemistry: Solutions',
+                ],
+              },
+              {
+                key: 'CUET',
+                label: 'CUET',
+                emoji: '📚',
+                gradient: 'from-violet-400 via-purple-500 to-indigo-500',
+                textColor: 'text-violet-700',
+                href: `/current-affairs/daily/${todayIso}?s=isro-shukrayaan-venus-mission-2026`,
+                topics: [
+                  'English: Reading Comprehension', 'Current Affairs: Aug 2026', 'Maths: Algebra Basics',
+                  'GK: International Events', 'English: Grammar Rules', 'General Test: Reasoning',
+                  'Economy: India 2026', 'Science: Environment', 'English: Vocabulary',
+                  'GK: National Awards', 'History: Medieval India', 'Maths: Statistics',
+                  'GK: Sports & Games', 'Polity: Indian Federalism', 'English: Para Jumbles',
+                ],
+              },
+              {
+                key: 'Defence',
+                label: 'Defence',
+                emoji: '⚔️',
+                gradient: 'from-green-500 via-emerald-600 to-teal-700',
+                textColor: 'text-green-700',
+                href: `/current-affairs/daily/${todayIso}?s=india-s-400-second-regiment-2026`,
+                topics: [
+                  'Indian Armed Forces', 'Defence: Weapons Systems', 'History: Wars of India',
+                  'Math: Mensuration', 'Physics: Mechanics', 'Geography: Borders & LOC',
+                  'Current Affairs: Defence', 'Science: Fundamentals', 'Polity: President & PM',
+                  'GK: Military Awards', 'Chemistry: Explosives GK', 'Biology: First Aid Basics',
+                  'Current Affairs: DRDO', 'Math: Percentage & Profit', 'Reasoning: Spatial Ability',
+                ],
+              },
+            ];
+
+            return (
+              <div className="mb-5 -mx-4 px-4 md:-mx-6 md:px-6">
+                {/* Row label */}
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Daily Current Affairs</span>
+                  <span className="text-[10px] font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{todayStr}</span>
+                </div>
+
+                {/* Scrollable bubbles */}
+                <div className="flex items-start gap-5 overflow-x-auto pb-2 scrollbar-hide">
+                  {CATEGORIES.map((cat, idx) => {
+                    const topic = cat.topics[(dayOfYear + idx) % cat.topics.length];
+                    const shortTopic = topic.length > 18 ? topic.slice(0, 17) + '…' : topic;
+                    return (
+                      <Link
+                        key={cat.key}
+                        href={cat.href}
+                        className="flex flex-col items-center gap-1.5 flex-none group"
+                        title={`${cat.label}: ${topic}`}
+                      >
+                        {/* Gradient ring → white gap → emoji bubble */}
+                        <span className={`block rounded-full p-[2.5px] bg-gradient-to-br ${cat.gradient} transition-transform duration-150 group-hover:-translate-y-1`}>
+                          <span className="block rounded-full bg-white p-[2.5px]">
+                            <span className={`relative flex items-center justify-center w-[60px] h-[60px] md:w-[68px] md:h-[68px] rounded-full bg-gradient-to-br ${cat.gradient} text-white font-black text-2xl shadow-inner select-none`}>
+                              {cat.emoji}
+                            </span>
+                          </span>
+                        </span>
+                        {/* Category name + topic */}
+                        <span className="text-center" style={{ width: 72 }}>
+                          <span className={`block text-[10px] font-bold ${cat.textColor} truncate`}>{cat.label}</span>
+                          <span className="block text-[9px] text-gray-400 font-medium mt-0.5 leading-tight"
+                            style={{ maxWidth: 72, wordBreak: 'break-word' }}>
+                            {shortTopic}
+                          </span>
+                        </span>
+                      </Link>
+                    );
+                  })}
+
+                  {/* "All Topics" end bubble → blog */}
+                  <Link href="/blog" className="flex flex-col items-center gap-1.5 flex-none group" title="Read all preparation articles">
+                    <span className="block rounded-full p-[2.5px] bg-gradient-to-br from-gray-300 to-gray-400 transition-transform duration-150 group-hover:-translate-y-1">
+                      <span className="block rounded-full bg-white p-[2.5px]">
+                        <span className="relative flex items-center justify-center w-[60px] h-[60px] md:w-[68px] md:h-[68px] rounded-full bg-gradient-to-br from-gray-100 to-gray-200 text-2xl shadow-inner select-none">
+                          📰
+                        </span>
+                      </span>
+                    </span>
+                    <span className="text-center" style={{ width: 72 }}>
+                      <span className="block text-[10px] font-bold text-gray-500 truncate">All Topics</span>
+                      <span className="block text-[9px] text-gray-400 font-medium mt-0.5">Read Blog</span>
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* ── Filter pills ── */}
           <div className="overflow-x-auto scrollbar-hide mb-5 -mx-4 px-4 md:-mx-6 md:px-6">
@@ -448,41 +684,140 @@ export default async function HomePage({ searchParams }: { searchParams?: { cate
             ))}
           </div>
 
-          {/* ── Featured exam banner ── */}
-          {featured.length > 0 && (
-            <Link href={`/exam/${featured[0].slug}`}
-              className="block rounded-2xl overflow-hidden mb-6 group border border-blue-100 bg-white hover:shadow-lg hover:shadow-blue-100/60 transition-all duration-200">
-              <div className="relative p-6 md:p-7">
-                {/* Blue left accent bar */}
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#1760f4] to-[#0a3ba8] rounded-l-2xl" />
-                <div className="pl-4 max-w-xl">
-                  <div className="inline-flex items-center gap-1.5 mb-3 text-xs font-bold px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#1760f4]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1760f4] animate-pulse inline-block"></span>
-                    Featured
+          {/* ── Featured Tests section ── */}
+          {(() => {
+            const featuredExams = (featured.length > 0 ? featured : exams).slice(0, 6);
+            if (featuredExams.length === 0) return null;
+
+            // Per-category gradient + accent colour map
+            const typeStyle: Record<string, { gradient: string; badge: string; icon: string }> = {
+              'SSC':       { gradient: 'from-blue-600 to-[#1760f4]',    badge: 'bg-blue-100 text-blue-700',    icon: '👮' },
+              'Banking':   { gradient: 'from-amber-500 to-orange-500',  badge: 'bg-amber-100 text-amber-700',  icon: '🏦' },
+              'Railway':   { gradient: 'from-emerald-500 to-teal-600',  badge: 'bg-emerald-100 text-emerald-700', icon: '🚂' },
+              'UPSC':      { gradient: 'from-slate-600 to-slate-800',   badge: 'bg-slate-100 text-slate-700',  icon: '🏛️' },
+              'CUET':      { gradient: 'from-violet-500 to-purple-600', badge: 'bg-violet-100 text-violet-700', icon: '📚' },
+              'NEET':      { gradient: 'from-rose-500 to-pink-600',     badge: 'bg-rose-100 text-rose-700',    icon: '🩺' },
+              'Defence':   { gradient: 'from-green-600 to-emerald-700', badge: 'bg-green-100 text-green-700',  icon: '⚔️' },
+              'Police':    { gradient: 'from-indigo-500 to-indigo-700', badge: 'bg-indigo-100 text-indigo-700', icon: '🚔' },
+              'Teaching':  { gradient: 'from-teal-500 to-cyan-600',     badge: 'bg-teal-100 text-teal-700',    icon: '🎓' },
+              'State PSC': { gradient: 'from-orange-500 to-red-500',    badge: 'bg-orange-100 text-orange-700', icon: '🏢' },
+            };
+            const defaultStyle = { gradient: 'from-[#1760f4] to-[#0a3ba8]', badge: 'bg-blue-100 text-blue-700', icon: '📝' };
+
+            return (
+              <section className="mb-8" aria-label="Featured Tests">
+                {/* Section header */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-5 bg-[#1760f4] rounded-full" />
+                    <h2 className="text-base font-bold text-gray-900">Featured Tests</h2>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200 ml-1">
+                      <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" /> Top Picks
+                    </span>
                   </div>
-                  <h2 className="text-gray-900 text-xl md:text-2xl font-extrabold leading-tight mb-2 group-hover:text-[#1760f4] transition-colors">
-                    {featured[0].title}
-                  </h2>
-                  {featured[0].shortDescription && (
-                    <p className="text-gray-500 text-sm mb-4 line-clamp-2">
-                      {stripHtml(featured[0].shortDescription)}
-                    </p>
-                  )}
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className="bg-[#1760f4] text-white text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#0e4dd4] transition-colors shadow-sm shadow-blue-300">
-                      Start Preparation
-                    </span>
-                    <span className="text-gray-600 text-sm font-semibold px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
-                      View Syllabus
-                    </span>
-                    <span className={`ml-auto text-sm font-bold ${featured[0].priceInr === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
-                      {formatPrice(featured[0].priceInr)}
-                    </span>
+                  <Link href="/exams"
+                    className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded-full transition-colors hover:bg-blue-100">
+                    View all <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+
+                {/* Scrollable card row */}
+                <div className="overflow-x-auto -mx-4 px-4 md:-mx-6 md:px-6 pb-2 scrollbar-hide">
+                  <div className="flex gap-4 min-w-max">
+                    {featuredExams.map((exam) => {
+                      const st = typeStyle[exam.examTypeName ?? ''] ?? defaultStyle;
+                      const isFree = exam.priceInr === 0;
+                      return (
+                        <Link
+                          key={exam.id}
+                          href={`/exam/${exam.slug}`}
+                          className="group relative flex flex-col w-64 md:w-72 rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-blue-100/60 transition-all duration-300 hover:-translate-y-1 shrink-0"
+                          aria-label={exam.title}
+                        >
+                          {/* Gradient header */}
+                          <div className={`relative bg-gradient-to-br ${st.gradient} p-5 pb-8`}>
+                            {/* Decorative blobs */}
+                            <div className="absolute right-2 top-2 w-20 h-20 bg-white/10 rounded-full pointer-events-none" />
+                            <div className="absolute right-10 bottom-0 w-12 h-12 bg-white/10 rounded-full translate-y-1/2 pointer-events-none" />
+
+                            {/* Top row: exam type badge + icon */}
+                            <div className="relative flex items-start justify-between gap-2 mb-3">
+                              {exam.examTypeName && (
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-white/80 bg-white/15 px-2.5 py-1 rounded-full">
+                                  {exam.examTypeName}
+                                </span>
+                              )}
+                              <span className="text-2xl leading-none shrink-0 drop-shadow-sm ml-auto">
+                                {st.icon}
+                              </span>
+                            </div>
+
+                            {/* Title */}
+                            <h3 className="relative text-white font-extrabold text-sm leading-snug line-clamp-2 group-hover:opacity-90 transition-opacity">
+                              {exam.title}
+                            </h3>
+                          </div>
+
+                          {/* Card body */}
+                          <div className="flex flex-col flex-1 p-4 -mt-4 bg-white rounded-t-2xl relative z-10">
+                            {/* Conducting body */}
+                            <p className="text-[11px] text-gray-400 font-medium truncate mb-3">
+                              {exam.conductingBody ?? exam.category ?? 'Government Exam'}
+                            </p>
+
+                            {/* Stats row */}
+                            <div className="flex items-center gap-2 mb-4">
+                              <span className="flex items-center gap-1 text-[11px] font-semibold text-gray-500 bg-gray-50 border border-gray-100 px-2.5 py-1 rounded-full">
+                                <FileText className="w-3 h-3" />
+                                {exam.testCount} Test{exam.testCount !== 1 ? 's' : ''}
+                              </span>
+                              {exam.isFeatured && (
+                                <span className="flex items-center gap-1 text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block" />
+                                  Featured
+                                </span>
+                              )}
+                              <span className={`ml-auto text-[11px] font-extrabold px-2.5 py-1 rounded-full border ${
+                                isFree
+                                  ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                                  : 'text-gray-800 bg-white border-gray-200'
+                              }`}>
+                                {isFree ? '🆓 Free' : `₹${exam.priceInr.toLocaleString('en-IN')}`}
+                              </span>
+                            </div>
+
+                            {/* CTA */}
+                            <div className={`mt-auto w-full text-center text-xs font-bold py-2.5 rounded-xl transition-all duration-200 ${
+                              isFree
+                                ? 'bg-emerald-500 group-hover:bg-emerald-600 text-white shadow-sm shadow-emerald-200'
+                                : `bg-gradient-to-r ${st.gradient} text-white shadow-sm group-hover:opacity-90`
+                            }`}>
+                              {isFree ? '⚡ Start Free' : 'View Tests →'}
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+
+                    {/* "See all" card */}
+                    <Link
+                      href="/exams"
+                      className="group flex flex-col items-center justify-center w-44 md:w-52 shrink-0 rounded-2xl border-2 border-dashed border-gray-200 hover:border-[#1760f4] bg-white hover:bg-blue-50 transition-all duration-200 p-6 gap-3"
+                      aria-label="Browse all exams"
+                    >
+                      <div className="w-12 h-12 rounded-2xl bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center transition-colors">
+                        <ChevronRight className="w-6 h-6 text-[#1760f4]" />
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-bold text-gray-700 group-hover:text-[#1760f4] transition-colors">Browse All</p>
+                        <p className="text-xs text-gray-400 mt-0.5">{exams.length}+ exams</p>
+                      </div>
+                    </Link>
                   </div>
                 </div>
-              </div>
-            </Link>
-          )}
+              </section>
+            );
+          })()}
 
           {/* ── Exam cards grid ── */}
           {latest.length > 0 && (
