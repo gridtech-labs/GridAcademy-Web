@@ -1322,9 +1322,422 @@ const neet2026ExpectedCutoff: BlogPost = {
   ],
 };
 
+// ─── New Articles ─────────────────────────────────────────────────────────────
+
+const ibpsPOMockTest: BlogPost = {
+  slug: 'ibps-po-mock-test-2026',
+  title: 'IBPS PO Mock Test 2026: Free Practice Tests, Strategy & What to Expect',
+  metaTitle: 'IBPS PO Mock Test 2026 | Free Practice Online',
+  metaDescription:
+    'Access free IBPS PO 2026 mock tests. Learn the Prelims & Mains exam pattern, section-wise strategy, and how to analyse mock results to crack the exam.',
+  publishedAt: '2026-08-10',
+  category: 'Banking',
+  readingTimeMinutes: 9,
+  excerpt:
+    'IBPS PO Prelims 2026 are just around the corner. Free mock tests are the single most effective tool to build speed and accuracy. Here is everything you need to know — pattern, strategy, and where to start.',
+  content: `
+<p>The IBPS Probationary Officer (PO) exam is one of the most sought-after banking recruitment tests in India, opening doors to officer-level positions across 11 public sector banks. With lakhs of candidates competing for a few thousand vacancies, clearing both Prelims and Mains demands more than just knowing the syllabus — it demands exam-day execution. Free mock tests are the most effective tool to build that execution.</p>
+
+<h2>IBPS PO 2026 Exam Structure at a Glance</h2>
+<p>IBPS PO 2026 follows a two-stage selection process: Prelims and Mains, followed by an interview. Only Mains marks (not Prelims) count toward final merit, but you must clear Prelims to advance.</p>
+
+<h3>Prelims — Pattern</h3>
+<p>IBPS PO Prelims is a 60-minute Computer Based Test with 100 questions and 100 marks, divided into three sections with individual sectional time limits:</p>
+<ul>
+  <li><strong>English Language:</strong> 30 questions, 30 marks — 20 minutes</li>
+  <li><strong>Quantitative Aptitude:</strong> 35 questions, 35 marks — 20 minutes</li>
+  <li><strong>Reasoning Ability:</strong> 35 questions, 35 marks — 20 minutes</li>
+</ul>
+<p><strong>Negative marking:</strong> 0.25 marks deducted per wrong answer. The sectional time limits are enforced — you cannot move to another section early, and overtime in one section does not carry over. This is the defining challenge of Prelims that most aspirants underestimate until they take their first mock.</p>
+
+<h3>Mains — Pattern</h3>
+<p>IBPS PO Mains is a 3-hour objective test (200 questions, 200 marks) across four sections, plus a 30-minute Descriptive Paper (Letter and Essay writing, 25 marks):</p>
+<ul>
+  <li><strong>Reasoning & Computer Aptitude:</strong> 45 questions, 60 marks — 60 minutes</li>
+  <li><strong>English Language:</strong> 35 questions, 40 marks — 40 minutes</li>
+  <li><strong>Data Analysis & Interpretation:</strong> 35 questions, 60 marks — 45 minutes</li>
+  <li><strong>General, Economy & Banking Awareness:</strong> 40 questions, 40 marks — 35 minutes</li>
+</ul>
+<p>Negative marking in Mains: 0.25 marks per wrong answer. The Descriptive Paper is evaluated only if you clear the Mains objective cutoff.</p>
+
+<h2>Why Mock Tests Are Non-Negotiable for IBPS PO</h2>
+<p>IBPS PO Prelims has a structural challenge no textbook can prepare you for: each of the three sections has a strict 20-minute timer, and the interface auto-moves you to the next section when time is up. Candidates who have never practiced under sectional time pressure almost always run out of time in Reasoning or misallocate time in Quantitative Aptitude. Mock tests simulate this exact environment.</p>
+<p>Beyond time management, mock tests reveal something called the <strong>accuracy-attempt trade-off</strong>. With 0.25 negative marking, attempting 90 questions at 70% accuracy gives the same score as attempting 70 questions at 90% accuracy — but with far more risk. Only through mock test analysis can you discover your personal optimal attempt count for each section.</p>
+
+<h2>Section-wise Strategy for IBPS PO Prelims</h2>
+
+<h3>English Language (30Q / 20 minutes)</h3>
+<p>The English section rewards candidates who read regularly. In 20 minutes, you need to handle Reading Comprehension (typically 7–10 questions from one passage), error detection, sentence rearrangement, fill in the blanks, and cloze tests. Strategy: attempt RC last — the passage takes 3–4 minutes to read. Start with Grammar-based questions (error detection, fill in the blanks) where accuracy is high if you know your rules, then return to RC. Target 22–25 out of 30 attempts.</p>
+
+<h3>Quantitative Aptitude (35Q / 20 minutes)</h3>
+<p>The biggest time sink in Prelims. Data Interpretation sets (typically 1–2 DI sets with 5 questions each) are calculation-heavy and can consume 8+ minutes. Number Series, Simplification, and Quadratic Equations are fast and high-accuracy. Strategy: do Simplification and Number Series first (approximately 10 questions, 7 minutes), then DI, then remaining Arithmetic. Target 22–28 out of 35 attempts.</p>
+
+<h3>Reasoning Ability (35Q / 20 minutes)</h3>
+<p>Reasoning is manageable once you recognize question types quickly. Puzzles (Linear/Circular Seating Arrangements, Floor puzzles) are typically 3–5 questions each and require setup time. Syllogism, Inequality, Coding-Decoding, and Direction questions are fast. Strategy: solve all non-puzzle questions first, then tackle 1–2 puzzle sets based on remaining time. Target 25–30 out of 35 attempts.</p>
+
+<h2>How to Analyse Your IBPS PO Mock Test Results</h2>
+<p>Attempting a mock without structured analysis is wasted time. Here is the four-step analysis process used by toppers:</p>
+<ul>
+  <li><strong>Step 1 — Score audit:</strong> Check not just your total score but section-wise marks. A good Prelims attempt (based on recent cutoffs) is approximately: English 12–15+, Quant 18–22+, Reasoning 20–25+, Total 50–55+.</li>
+  <li><strong>Step 2 — Error classification:</strong> For each wrong answer, label it: C (Conceptual — you didn't know the rule), R (Reading — you misread the question), T (Time — you rushed and made a careless error). Each type needs a different fix.</li>
+  <li><strong>Step 3 — Skipped question review:</strong> Questions you skipped are often easier than they appeared under pressure. Identify how many skipped questions you could have solved without the time constraint — these are your easiest improvement opportunities.</li>
+  <li><strong>Step 4 — Time-per-question log:</strong> Know your actual time spent per question type. If you're spending 3 minutes on a single Arithmetic problem, you need calculation drills, not more full-length mocks.</li>
+</ul>
+
+<h2>How GridAcademy's IBPS PO Mock Tests Are Designed</h2>
+<p>GridAcademy's IBPS PO Prelims mock tests replicate the actual exam interface — including sectional time locks that switch automatically after 20 minutes, the 0.25 negative marking deducted in real time, and question difficulty calibrated to match recent IBPS PO paper trends. After each attempt, you receive section-wise accuracy, your percentile rank among all GridAcademy aspirants, time-per-question data, and a full answer key with explanations. Most IBPS PO tests on GridAcademy are available free — start practicing at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
+
+<h2>Final 10-Day Sprint Strategy Before IBPS PO Prelims</h2>
+<p>If your exam is 10 days away, shift entirely to the test-and-analyse cycle. Take one full mock daily. Spend equal or more time on analysis. Avoid starting new topics — your goal is to maximise accuracy on what you already know. Review your personal error notebook daily and redo the specific question types where you consistently lose marks. In the final two days, stop taking full mocks and do only light sectional drills to preserve confidence without exhausting yourself.</p>
+  `,
+  faqs: [
+    {
+      question: 'What is the syllabus for IBPS PO Prelims 2026?',
+      answer:
+        'IBPS PO Prelims 2026 covers three subjects: English Language (Reading Comprehension, Error Detection, Cloze Test, Sentence Rearrangement, Fill in the Blanks), Quantitative Aptitude (Simplification, Number Series, Data Interpretation, Quadratic Equations, Arithmetic — Percentage, Profit & Loss, Time & Work, Distance), and Reasoning Ability (Puzzles, Seating Arrangements, Syllogism, Coding-Decoding, Inequality, Direction Sense). Total: 100 questions, 100 marks, 60 minutes with sectional time limits of 20 minutes each.',
+    },
+    {
+      question: 'What is the IBPS PO Prelims cutoff 2026?',
+      answer:
+        'IBPS PO Prelims 2026 cutoffs are expected to be around 50–58 marks for the General category (based on recent year trends). The cutoff varies by state, category, and the number of vacancies. SC/ST/OBC/PwBD candidates have lower cutoffs. Since Prelims is only qualifying, the actual merit list is based entirely on Mains marks.',
+    },
+    {
+      question: 'How many mock tests should I take for IBPS PO 2026?',
+      answer:
+        'Aim for at least 15–20 full-length Prelims mock tests before the exam, with detailed analysis after each one. For Mains, 10–15 full mocks are a good target. Quality of analysis matters more than volume — a thoroughly reviewed mock test is worth more than five unreviewed ones.',
+    },
+    {
+      question: 'Is negative marking applicable in IBPS PO Prelims?',
+      answer:
+        'Yes. IBPS PO Prelims has 0.25 marks negative marking per wrong answer in both Prelims and Mains. Unattempted questions carry no penalty. This means attempting a question you are less than 25% confident about is statistically negative expected value — skip it.',
+    },
+    {
+      question: 'When is the IBPS PO Prelims 2026 exam date?',
+      answer:
+        'IBPS PO Prelims 2026 is scheduled for 22–23 August 2026, with additional dates if required. Admit cards are released approximately 2 weeks before the exam on ibps.in. Mains is typically conducted 6–8 weeks after Prelims.',
+    },
+  ],
+};
+
+const rrbNtpcMockTest: BlogPost = {
+  slug: 'rrb-ntpc-mock-test-2026',
+  title: 'RRB NTPC Mock Test 2026: Free Practice, Exam Pattern & Preparation Strategy',
+  metaTitle: 'RRB NTPC Mock Test 2026 | Free Practice Online | Exam Pattern & Tips',
+  metaDescription:
+    'Free RRB NTPC 2026 mock tests for CBT 1 and CBT 2. Complete exam pattern, syllabus, section-wise strategy and how to improve your score with mock analysis.',
+  publishedAt: '2026-08-12',
+  category: 'Railway',
+  readingTimeMinutes: 8,
+  excerpt:
+    'RRB NTPC is one of India\'s largest railway recruitment exams with over a million applicants. Free mock tests tailored to the CBT 1 and CBT 2 pattern are your most powerful preparation tool. Here\'s the complete guide.',
+  content: `
+<p>The Railway Recruitment Board Non-Technical Popular Categories (RRB NTPC) exam is among the most competitive recruitment drives in India, attracting over a crore applicants for graduate and undergraduate level posts across Indian Railways. The sheer number of applicants makes accurate preparation critical — a small edge in accuracy and time management separates selection from rejection. Free mock tests built to the actual CBT 1 and CBT 2 pattern are your most leveraged investment of preparation time.</p>
+
+<h2>RRB NTPC 2026: Selection Process Overview</h2>
+<p>RRB NTPC 2026 follows a multi-stage selection process:</p>
+<ul>
+  <li><strong>CBT 1 (Stage 1):</strong> Computer Based Test — qualifying + shortlisting. Candidates are shortlisted for CBT 2 based on CBT 1 score (typically 20× the vacancies).</li>
+  <li><strong>CBT 2 (Stage 2):</strong> Computer Based Test — merit-determining. Final ranks are based on CBT 2 score only.</li>
+  <li><strong>Skill/Typing Test:</strong> For specific posts (Data Entry Operator, Junior Account Assistant cum Typist, etc.) — qualifying only.</li>
+  <li><strong>Document Verification & Medical:</strong> Final stage for shortlisted candidates.</li>
+</ul>
+
+<h2>RRB NTPC CBT 1 Exam Pattern 2026</h2>
+<p>CBT 1 is a 90-minute online test with 100 questions and 100 marks across three subjects:</p>
+<ul>
+  <li><strong>Mathematics:</strong> 30 questions, 30 marks</li>
+  <li><strong>General Intelligence & Reasoning:</strong> 30 questions, 30 marks</li>
+  <li><strong>General Awareness:</strong> 40 questions, 40 marks</li>
+</ul>
+<p><strong>Negative marking:</strong> 1/3 mark deducted per wrong answer. There are no sectional time limits — you can allocate your 90 minutes freely across subjects. This is a strategic advantage that most candidates fail to exploit.</p>
+
+<h2>RRB NTPC CBT 2 Exam Pattern 2026</h2>
+<p>CBT 2 is the exam that determines your final rank. It is a 90-minute test with 120 questions and 120 marks:</p>
+<ul>
+  <li><strong>Mathematics:</strong> 35 questions, 35 marks</li>
+  <li><strong>General Intelligence & Reasoning:</strong> 35 questions, 35 marks</li>
+  <li><strong>General Awareness:</strong> 50 questions, 50 marks</li>
+</ul>
+<p><strong>Negative marking:</strong> 1/3 mark deducted per wrong answer. CBT 2 questions are of higher difficulty than CBT 1, with more complex Data Interpretation and Reasoning questions. The General Awareness section at CBT 2 goes deeper into Railway-specific static GK.</p>
+
+<h2>RRB NTPC 2026 Complete Syllabus</h2>
+
+<h3>Mathematics</h3>
+<p>Number System, Decimals and Fractions, LCM and HCF, Ratio and Proportion, Percentage, Mensuration, Time and Work, Speed-Time-Distance, Simple and Compound Interest, Profit and Loss, Discount, Elementary Algebra, Geometry and Trigonometry, Elementary Statistics, and Data Interpretation (Bar graphs, Pie charts, Line graphs, Tables).</p>
+
+<h3>General Intelligence & Reasoning</h3>
+<p>Analogies, Alphabetical and Number Series, Coding and Decoding, Mathematical Operations, Similarities and Differences, Analytical Reasoning, Syllogism, Jumbling, Venn Diagrams, Data Sufficiency, Statement-Conclusion, Statement-Course of Action, Decision Making, Maps, Interpretation of Graphs.</p>
+
+<h3>General Awareness</h3>
+<p>Current Affairs (National and International) from the preceding 12 months, Games and Sports, Art and Culture of India, Indian Literature, Monuments and Places of India, General Science (Physics, Chemistry, Biology up to Class 10 CBSE), History of India and Freedom Struggle, Physical Geography of India and World, Indian Polity and Governance, Indian Economy, Basics of Computers and Computer Applications, Common Abbreviations, Transport Systems in India, <strong>Indian Railway-specific GK</strong> (zones, history, important projects, Railway Budget highlights), Environmental Issues, and Disaster Management.</p>
+
+<h2>Section-Wise Strategy for RRB NTPC</h2>
+
+<h3>General Awareness: Your Biggest Opportunity</h3>
+<p>General Awareness carries the highest weightage — 40 marks in CBT 1 and 50 marks in CBT 2. These questions require zero calculation time; a well-prepared candidate can attempt 35–40 correct answers in 15–20 minutes. This section directly rewards daily revision. Strategy: solve General Awareness first in both CBTs to build confidence and secure a strong base score before the more time-consuming Math and Reasoning sections.</p>
+
+<h3>Mathematics: Speed Over Perfection</h3>
+<p>At CBT 1 level, Mathematics covers Class 10 concepts. Build speed through daily arithmetic drills — percentage, ratio, profit-loss, time-work. Data Interpretation questions (typically 1–2 DI sets) require careful reading of charts but are straightforward once you identify the relevant data. At CBT 2, expect more complex DI and algebra. Target: 22–25 correct in CBT 1, 25–28 correct in CBT 2.</p>
+
+<h3>Reasoning: Pattern Recognition is the Key</h3>
+<p>Reasoning questions in NTPC are less puzzle-heavy than Banking exams. Series (Number, Alphabetical, Mixed) and Analogies are fast and high-accuracy for well-practised candidates. Venn Diagrams, Syllogisms, and Statement-Conclusion are formula-based. Practice 20–30 Reasoning questions daily to build recognition speed.</p>
+
+<h2>How to Use Mock Tests Effectively for RRB NTPC</h2>
+<p>The free-allocation format (no sectional time limits) means your mock test analysis must include a time-distribution audit. After each mock, check: how many minutes did you spend on each subject? If you spent 45 minutes on Mathematics and only 15 minutes on General Awareness, you likely left accuracy marks on the table in the easiest section.</p>
+<p>The 1/3 negative marking is less punishing than Banking's 0.25 deduction, but still significant. A wrong answer costs you 0.33 marks; an unattempted question costs you nothing. Track your precision: if your accuracy falls below 75% in any section across multiple mocks, reduce your attempt count in that section until accuracy improves.</p>
+<p>GridAcademy offers free RRB NTPC CBT 1 and CBT 2 mock tests built to the 2026 exam pattern. Each mock includes section-wise accuracy, time analysis, a full solution key with explanations, and your percentile rank among all students who attempted the same paper. Practice now at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
+
+<h2>RRB NTPC Preparation Timeline: 3-Month Plan</h2>
+<p><strong>Month 1 — Concepts & Syllabus Coverage:</strong> Complete all Mathematics topics (focus on Arithmetic, DI basics), cover Reasoning question types topic by topic, start daily current affairs reading (15–20 minutes). Solve 30–40 previous year questions daily by topic.</p>
+<p><strong>Month 2 — Mixed Practice & Sectional Mocks:</strong> Take sectional tests (20–30 questions per section timed). Complete NTPC-specific Static GK: Railway zones, history, famous places, science GK from NCERT Class 9–10. Start 1–2 full-length CBT 1 mocks per week.</p>
+<p><strong>Month 3 — Full Mock Cycle:</strong> 3–4 full mocks per week, deep analysis, revision of weak topics from mock error logs. In the final week, reduce new mocks to 1–2 and focus on revision of static GK, current affairs, and formula sheets.</p>
+  `,
+  faqs: [
+    {
+      question: 'What is the negative marking in RRB NTPC 2026?',
+      answer:
+        '1/3 mark is deducted for every wrong answer in both CBT 1 and CBT 2 of RRB NTPC 2026. Unattempted questions carry no penalty. With 1/3 negative marking, you need at least 3 correct answers to compensate for 1 wrong answer, so skip questions you are genuinely unsure about.',
+    },
+    {
+      question: 'What is the total marks and duration of RRB NTPC CBT 1 2026?',
+      answer:
+        'RRB NTPC CBT 1 2026 has 100 questions carrying 100 marks to be completed in 90 minutes. It covers Mathematics (30Q), General Intelligence & Reasoning (30Q), and General Awareness (40Q). There are no sectional time limits — you can freely allocate the 90 minutes across sections.',
+    },
+    {
+      question: 'Is RRB NTPC CBT 1 merit-based or qualifying?',
+      answer:
+        'RRB NTPC CBT 1 is used for shortlisting — it is both qualifying and merit-based in the sense that only the top-scoring candidates (typically 20 times the vacancies for each post and category) are called for CBT 2. However, your CBT 1 score does not count in the final merit list — only CBT 2 marks determine your rank.',
+    },
+    {
+      question: 'How many times can I attempt RRB NTPC 2026?',
+      answer:
+        'There is no limit on the number of NTPC recruitment cycles you can apply for, as long as you meet the age and educational eligibility criteria. However, within a single cycle, each candidate can apply for only one post preference group and is assigned a single CBT 1 attempt.',
+    },
+    {
+      question: 'What posts are filled through RRB NTPC 2026?',
+      answer:
+        'RRB NTPC 2026 fills posts across two levels: Graduate-level posts include Junior Clerk cum Typist, Accounts Clerk cum Typist, Junior Time Keeper, Trains Clerk, Commercial cum Ticket Clerk, Station Master, Goods Guard, Senior Commercial cum Ticket Clerk, Senior Clerk cum Typist, Junior Account Assistant cum Typist, Senior Time Keeper, Commercial Apprentice, and Station Master. Undergraduate-level posts include Junior Clerk cum Typist, Accounts Clerk cum Typist, Junior Time Keeper, Trains Clerk, and Commercial cum Ticket Clerk.',
+    },
+  ],
+};
+
+const sbiPoPrelimsGuide: BlogPost = {
+  slug: 'sbi-po-prelims-2026-mock-test-strategy',
+  title: 'SBI PO Prelims 2026: Free Mock Tests, Exam Pattern & Section-Wise Strategy',
+  metaTitle: 'SBI PO Prelims 2026 Mock Test | Free Practice, Pattern & Strategy',
+  metaDescription:
+    'Crack SBI PO Prelims 2026 with free mock tests, the updated exam pattern, cutoff expectations, and a section-wise strategy to maximise your score in 60 minutes.',
+  publishedAt: '2026-08-15',
+  category: 'Banking',
+  readingTimeMinutes: 8,
+  excerpt:
+    'SBI PO Prelims is the gateway to one of the most prestigious jobs in Indian banking. Free mock tests — used with the right analysis process — are the highest-ROI preparation activity. Here is the complete guide for 2026.',
+  content: `
+<p>The State Bank of India Probationary Officer exam is one of the most coveted government job examinations in India. SBI PO offers officer-level roles at India's largest public sector bank, with career growth, salary, and prestige that attract hundreds of thousands of applicants annually. The Prelims stage is a 60-minute speed test — and those who succeed are almost always the ones who have taken the most mock tests, not necessarily those who have studied the most content.</p>
+
+<h2>SBI PO 2026 Exam Structure</h2>
+<p>SBI PO 2026 follows a three-stage process: Prelims (qualifying), Mains (merit-determining), and a Group Exercise + Personal Interview (GD/PI). The final appointment is based on Mains + GD/PI combined score.</p>
+
+<h2>SBI PO Prelims 2026: Exam Pattern</h2>
+<p>SBI PO Prelims is a 60-minute Computer Based Test with 100 questions and 100 marks. Like IBPS PO, it has strict sectional time limits:</p>
+<ul>
+  <li><strong>English Language:</strong> 30 questions, 30 marks — 20 minutes</li>
+  <li><strong>Quantitative Aptitude:</strong> 35 questions, 35 marks — 20 minutes</li>
+  <li><strong>Reasoning Ability:</strong> 35 questions, 35 marks — 20 minutes</li>
+</ul>
+<p><strong>Negative marking:</strong> 0.25 marks per wrong answer. The interface locks each section after exactly 20 minutes and automatically moves to the next — practising under this constraint in mock tests is not optional.</p>
+
+<h2>How SBI PO Prelims Differs from IBPS PO</h2>
+<p>Both exams share the same 3-section, 60-minute format, but SBI PO Prelims is generally considered slightly harder for the following reasons:</p>
+<ul>
+  <li><strong>English section difficulty:</strong> SBI PO tends to use more inference-based Reading Comprehension passages and trickier vocabulary in fill-in-the-blanks questions compared to IBPS PO.</li>
+  <li><strong>Quantitative Aptitude:</strong> Data Interpretation sets in SBI PO often involve multi-step calculations (Caselet DI, Mixed DI) more frequently than IBPS PO Prelims.</li>
+  <li><strong>Reasoning Puzzles:</strong> SBI PO Prelims frequently features two complex puzzle sets (Floor Puzzles, Blood Relations combined with Seating Arrangement) that are time-consuming to set up.</li>
+  <li><strong>Higher cutoff pressure:</strong> SBI PO attracts more aspirants per vacancy than IBPS PO, making the effective competition more intense.</li>
+</ul>
+
+<h2>SBI PO Prelims 2026: Expected Cutoffs</h2>
+<p>SBI PO Prelims cutoffs for General category candidates have typically ranged between 52–62 marks in recent years. Based on vacancy count and applicant volume trends for 2026:</p>
+<ul>
+  <li><strong>General/EWS:</strong> Expected 55–64 marks</li>
+  <li><strong>OBC:</strong> Expected 50–58 marks</li>
+  <li><strong>SC:</strong> Expected 44–52 marks</li>
+  <li><strong>ST:</strong> Expected 40–48 marks</li>
+</ul>
+<p>These are estimates based on recent trends and will vary with the actual paper difficulty and number of vacancies notified. Note: there are both overall cutoffs and sectional minimum marks — clearing the overall cutoff while falling short in one section will not qualify you.</p>
+
+<h2>Section-Wise Strategy for SBI PO Prelims</h2>
+
+<h3>English Language (20 minutes)</h3>
+<p>Prioritize high-accuracy questions first. Error Detection (Spotting Errors) and Para Jumbles can be solved quickly with grammar knowledge. Reading Comprehension should be attempted after scanning for vocabulary-based questions first (synonyms/antonyms in RC are fast). If RC passages are abstract or financial in nature (SBI prefers economics-themed passages), skim for the gist — do not try to understand every nuance under time pressure. Target: 20–24 correct out of 30.</p>
+
+<h3>Quantitative Aptitude (20 minutes)</h3>
+<p>Speed and accuracy require pre-exam drilling on calculation shortcuts — squaring numbers up to 30, percentage-fraction conversions, table multiplication. In 20 minutes, tackle Simplification/Approximation and Number Series first (fast, high accuracy), then 1 DI set, then remaining Arithmetic. If a DI set appears data-heavy, move on and return only if time allows. Target: 22–27 correct out of 35.</p>
+
+<h3>Reasoning Ability (20 minutes)</h3>
+<p>Identify puzzle vs. non-puzzle questions immediately. Start with Syllogism, Inequality, Coding-Decoding, and Direction Sense (2–5 minutes for 8–12 questions). Then attempt 1 straightforward puzzle set. If time remains, attempt the second puzzle set. Target: 23–28 correct out of 35.</p>
+
+<h2>The Mock Test + Analysis Cycle That Works</h2>
+<p>Research consistently shows that candidates who review their mocks in detail outperform those who simply take more mocks. After each SBI PO mock test:</p>
+<ul>
+  <li><strong>Identify your skip-worthy questions:</strong> Questions where you spent more than 90 seconds without making progress should have been skipped. Mark these in the review — you need to build a mental profile of which question types to skip immediately.</li>
+  <li><strong>Track sectional time split:</strong> If you consistently finish Reasoning with 5 minutes left but run out of time in Quant, redistribute your time allocation strategy.</li>
+  <li><strong>Compare your attempt vs. accuracy:</strong> High-scoring candidates in SBI PO Prelims typically attempt 75–85 questions with 80–90% accuracy, not 95 questions with 65% accuracy.</li>
+  <li><strong>Review all skipped questions:</strong> After the timed session, solve every question you skipped under no time pressure. This reveals whether you skipped due to time pressure (correct) or due to conceptual gaps (needs study).</li>
+</ul>
+<p>GridAcademy's SBI PO Prelims mock tests replicate the exact sectional timer interface, negative marking deduction, and question difficulty calibration. Each attempt generates section-wise accuracy data, percentile rank, and a detailed explanation for every question. Practice free at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
+
+<h2>SBI PO Mains: What to Expect After Prelims</h2>
+<p>Once you clear Prelims, Mains is a more demanding test with 200 marks in 3 hours, plus a 30-minute Descriptive Paper (Letter writing + Essay). The Mains syllabus is broader — it includes Data Analysis & Interpretation (advanced DI, caselet, probability), Reasoning & Computer Aptitude (puzzles, input-output, computer basics), General/Economy/Banking Awareness (current affairs + banking/economics concepts), and an advanced English section. Begin Mains preparation in parallel with Prelims — at minimum, read banking and economy news daily during your Prelims preparation phase so the awareness section is not a cold start after Prelims results.</p>
+  `,
+  faqs: [
+    {
+      question: 'What is the total marks and time for SBI PO Prelims 2026?',
+      answer:
+        'SBI PO Prelims 2026 consists of 100 questions for 100 marks, completed in 60 minutes total. The exam has three sections: English Language (30Q, 30 marks, 20 minutes), Quantitative Aptitude (35Q, 35 marks, 20 minutes), and Reasoning Ability (35Q, 35 marks, 20 minutes). Each section has an individual time limit enforced by the CBT interface.',
+    },
+    {
+      question: 'Is SBI PO Prelims score added to the final merit list?',
+      answer:
+        'No. SBI PO Prelims is only a qualifying stage. Candidates who clear Prelims (both overall and sectional cutoffs) are eligible to appear for Mains. The final merit list and appointment are based on Mains marks + Group Exercise and Personal Interview (GD/PI) combined score. Prelims marks are not counted.',
+    },
+    {
+      question: 'How is SBI PO Prelims different from IBPS PO Prelims?',
+      answer:
+        'Both exams have the same 3-section, 60-minute format with 0.25 negative marking and sectional time limits. SBI PO Prelims is generally considered slightly harder — with more complex Reading Comprehension passages, more calculation-heavy Data Interpretation, and more complex puzzle sets in Reasoning. Cutoffs for SBI PO are typically higher than IBPS PO for equivalent difficulty years.',
+    },
+    {
+      question: 'What is the SBI PO 2026 exam date?',
+      answer:
+        'SBI PO Prelims 2026 dates are typically notified in the official SBI PO recruitment notification published on sbi.co.in. Based on recent years, SBI PO Prelims is usually conducted between October and December. Check the official SBI website for confirmed dates specific to the 2026 cycle.',
+    },
+    {
+      question: 'How many mock tests should I take before SBI PO Prelims?',
+      answer:
+        'A minimum of 15–20 full-length Prelims mock tests with thorough analysis is recommended. Quality of analysis matters more than quantity of tests. The goal is not to take as many mocks as possible but to identify your consistent error patterns and fix them between attempts. Candidates who analyse each mock and fix specific weaknesses show the most score improvement.',
+    },
+  ],
+};
+
+const sscChslMockTest: BlogPost = {
+  slug: 'ssc-chsl-2026-mock-test-complete-guide',
+  title: 'SSC CHSL 2026 Mock Test: Free Practice, Exam Pattern & Complete Preparation Guide',
+  metaTitle: 'SSC CHSL 2026 Mock Test | Free Practice Online, Pattern & Strategy',
+  metaDescription:
+    'Free SSC CHSL 2026 mock tests for Tier 1 and Tier 2. Complete exam pattern, syllabus, section-wise strategy, cutoffs, and tips to score high in the SSC Combined Higher Secondary Level exam.',
+  publishedAt: '2026-08-18',
+  category: 'SSC',
+  readingTimeMinutes: 9,
+  excerpt:
+    'SSC CHSL is one of India\'s largest central government recruitment exams, filling LDC, JSA, PA, SA, and DEO posts. Tier 1 2026 is approaching fast. Free mock tests are the shortest path from syllabus knowledge to exam-ready performance.',
+  content: `
+<p>The Staff Selection Commission Combined Higher Secondary Level (SSC CHSL) exam is the gateway to central government positions including Lower Division Clerk (LDC), Junior Secretariat Assistant (JSA), Postal Assistant (PA), Sorting Assistant (SA), and Data Entry Operator (DEO) roles across Central Government Ministries, Departments, and Offices. With a 10+2 (Class 12) eligibility requirement and competitive salaries with government benefits, SSC CHSL attracts lakhs of candidates annually. Free mock tests that replicate the actual exam environment are essential to converting preparation into selection.</p>
+
+<h2>SSC CHSL 2026: Two-Tier Exam Structure</h2>
+<p>SSC CHSL 2026 follows the revised two-tier structure introduced in the 2023–24 cycle. The older three-tier system (with a separate descriptive paper as Tier 2 and skill/typing test as Tier 3) has been restructured:</p>
+<ul>
+  <li><strong>Tier 1:</strong> Computer Based Test — objective, 60 minutes, used for shortlisting candidates for Tier 2</li>
+  <li><strong>Tier 2:</strong> Computer Based Test — objective + descriptive + skill test (held on a single day in separate sessions)</li>
+</ul>
+
+<h2>SSC CHSL Tier 1 2026: Exam Pattern</h2>
+<p>Tier 1 is a 60-minute CBT with 100 questions and 200 marks across four sections, each with 25 questions:</p>
+<ul>
+  <li><strong>General Intelligence (Reasoning):</strong> 25 questions, 50 marks</li>
+  <li><strong>General Awareness:</strong> 25 questions, 50 marks</li>
+  <li><strong>Quantitative Aptitude:</strong> 25 questions, 50 marks</li>
+  <li><strong>English Language:</strong> 25 questions, 50 marks</li>
+</ul>
+<p><strong>Marking scheme:</strong> +2 marks for correct answers, −0.5 marks for wrong answers. No sectional time limits in Tier 1 — you can allocate the 60 minutes freely across sections. This is an important strategic advantage.</p>
+
+<h2>SSC CHSL Tier 2 2026: Exam Pattern</h2>
+<p>Tier 2 is conducted across two timed sessions in a single day:</p>
+<p><strong>Session 1</strong> (2 hours 15 minutes) covers Module 1 — Mathematical Abilities (30 questions, 90 marks) and Module 2 — Reasoning and General Intelligence (30 questions, 90 marks). Negative marking: 1 mark per wrong answer.</p>
+<p><strong>Session 2</strong> (also 2 hours 15 minutes) covers Module 1 — English Language and Comprehension (40 questions, 120 marks), Module 2 — General Awareness (20 questions, 60 marks), Module 3 — Computer Knowledge (15 questions, 45 marks), and a Skill Test / Typing Test for qualifying. Negative marking: 1 mark per wrong answer.</p>
+<p>The final merit list and post allocation are based entirely on Tier 2 performance.</p>
+
+<h2>SSC CHSL 2026 Syllabus: Complete Breakdown</h2>
+
+<h3>General Intelligence & Reasoning</h3>
+<p>Semantic Analogy, Symbolic/Number Analogy, Figural Analogy, Semantic Classification, Symbolic/Number Classification, Figural Classification, Semantic Series, Number Series, Figural Series, Problem Solving, Word Building, Coding and Decoding, Numerical Operations, Symbolic Operations, Trends, Space Orientation, Space Visualisation, Venn Diagrams, Drawing Inferences, Punched Hole/Pattern-folding and unfolding, Figural Pattern-folding and completion, Indexing, Address Matching, Date and City Matching, Critical Thinking, Emotional Intelligence, Social Intelligence.</p>
+
+<h3>General Awareness</h3>
+<p>History of India, Indian Culture and Freedom Struggle, Geography (India and World), Indian Polity and Governance (Constitution, Fundamental Rights, Directive Principles, Parliament, State Legislatures, Supreme Court), Indian Economy, General Science (Physics, Chemistry, Biology), Current Affairs — National and International events (preceding 12 months), Sports, Books and Authors, Important Days.</p>
+
+<h3>Quantitative Aptitude</h3>
+<p>Number System, Computation of Whole Numbers, Decimals and Fractions, Fundamental Arithmetical Operations, Percentages, Ratio and Proportion, Averages, Interest (Simple and Compound), Profit and Loss, Discount, Mixture and Alligation, Time and Distance, Time and Work, Basic Algebraic Identities, Linear Equations, Basic Geometric shapes (Triangle, Circle, Quadrilateral), Elementary Statistics (Mean, Median, Mode), Trigonometry (Standard Identities, Heights and Distances), Data Interpretation (Histogram, Bar Diagrams, Pie Charts, Frequency Polygons).</p>
+
+<h3>English Language</h3>
+<p>Reading Comprehension, Close Test, Fill in the Blanks, Idioms and Phrases, One-Word Substitution, Spellings Correction, Common Errors (Subject-Verb Agreement, Tenses, Articles, Prepositions), Sentence Improvement, Active and Passive Voice, Direct and Indirect Narration, Antonyms and Synonyms, Homonyms.</p>
+
+<h2>Section-Wise Strategy for SSC CHSL Tier 1</h2>
+
+<h3>Start with General Awareness (estimated 8–10 minutes)</h3>
+<p>General Awareness requires no calculation — each question takes 20–40 seconds if you know the answer, and 10 seconds to mark and skip if you don't. Solve this section first to build confidence and accumulate fast marks. With 4 months of daily current affairs reading and static GK revision, scoring 40–46/50 in this section is achievable and significantly boosts your overall score.</p>
+
+<h3>General Intelligence / Reasoning (estimated 12–14 minutes)</h3>
+<p>CHSL Tier 1 Reasoning is lighter than SSC CGL — fewer complex multi-step puzzles, more series and analogy questions. Figural (non-verbal) questions (Paper Folding, Mirror Image, Embedded Figures) are predictable with practice. Target 40–46/50. Solve after General Awareness while your mind is fresh.</p>
+
+<h3>English Language (estimated 12–15 minutes)</h3>
+<p>English at CHSL Tier 1 level tests grammar and vocabulary rather than advanced comprehension. Error Detection, Fill in the Blanks, Idioms, and One-Word Substitution are the bulk of the section. Reading Comprehension (1 passage with 5 questions) is usually straightforward. Target 38–46/50.</p>
+
+<h3>Quantitative Aptitude (estimated 18–22 minutes)</h3>
+<p>Quantitative Aptitude is the most time-consuming section but carries the same 50-mark weightage as others. Prioritize: Simplification and Approximation (fastest), then Profit/Loss/Percentage/Ratio (short arithmetic), then Geometry and Trigonometry (formula-based), and finally Data Interpretation if time permits. Target 34–42/50.</p>
+
+<h2>SSC CHSL 2026 Expected Cutoffs</h2>
+<p>SSC CHSL Tier 1 cutoffs for 2026 (estimated based on 2024–25 trends):</p>
+<ul>
+  <li><strong>General:</strong> 155–175 marks (out of 200)</li>
+  <li><strong>OBC:</strong> 145–162 marks</li>
+  <li><strong>EWS:</strong> 148–165 marks</li>
+  <li><strong>SC:</strong> 130–148 marks</li>
+  <li><strong>ST:</strong> 115–135 marks</li>
+</ul>
+<p>These are estimates. Actual cutoffs depend on difficulty level of the 2026 paper and the number of candidates shortlisted for Tier 2.</p>
+
+<h2>How GridAcademy's SSC CHSL Mock Tests Help</h2>
+<p>GridAcademy's SSC CHSL Tier 1 mock tests are built to the 2026 exam pattern — 100 questions, 200 marks, 60 minutes, with 2-mark correct and 0.5-mark deduction for wrong answers. After each attempt, you receive section-wise accuracy data, time-per-question analytics, a full answer key with detailed explanations, and your percentile rank. Mock tests are available free at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a> — no registration required to start your first test.</p>
+
+<h2>Common Mistakes to Avoid in SSC CHSL 2026</h2>
+<ul>
+  <li><strong>Neglecting General Awareness:</strong> Many candidates spend 80% of preparation time on Quant and Reasoning and then score poorly in GA — where daily 15-minute revision compounds into significant mark gains.</li>
+  <li><strong>Not practising Typing/DEO Skill Test:</strong> If you're applying for Data Entry Operator or Postal Assistant/Sorting Assistant posts, the Tier 2 skill test is qualifying — neglecting typing speed can disqualify you despite a strong objective score.</li>
+  <li><strong>Skipping mock analysis:</strong> Taking 30 mocks without analysis delivers far less improvement than taking 10 mocks with complete error review.</li>
+  <li><strong>Over-attempting with low accuracy:</strong> With 0.5 negative marking, attempting 95 questions at 70% accuracy is equivalent to attempting 75 questions at 90% accuracy — but with more risk. Find your optimal attempt range through mock test data.</li>
+</ul>
+  `,
+  faqs: [
+    {
+      question: 'What is the SSC CHSL 2026 exam pattern for Tier 1?',
+      answer:
+        'SSC CHSL Tier 1 2026 is a 60-minute Computer Based Test with 100 questions and 200 marks. It has four sections: General Intelligence & Reasoning (25 questions, 50 marks), General Awareness (25 questions, 50 marks), Quantitative Aptitude (25 questions, 50 marks), and English Language (25 questions, 50 marks). Marking scheme: +2 for correct, −0.5 for wrong answers. No sectional time limits.',
+    },
+    {
+      question: 'What posts are filled through SSC CHSL 2026?',
+      answer:
+        'SSC CHSL 2026 fills Lower Division Clerk (LDC), Junior Secretariat Assistant (JSA), Postal Assistant (PA), Sorting Assistant (SA), and Data Entry Operator (DEO) posts in Central Government Ministries, Departments, and Offices across India. Eligibility requires passing Class 12 (10+2) from a recognized board.',
+    },
+    {
+      question: 'What is the negative marking in SSC CHSL 2026 Tier 1?',
+      answer:
+        'In SSC CHSL Tier 1 2026, 0.5 marks are deducted for each wrong answer. Each correct answer carries 2 marks. Unattempted questions carry no penalty. In Tier 2, the negative marking is 1 mark per wrong answer (with Tier 2 questions carrying 3 marks each).',
+    },
+    {
+      question: 'What is the difference between SSC CGL and SSC CHSL?',
+      answer:
+        'The main differences are: Eligibility — CGL requires a graduate degree; CHSL requires Class 12 pass. Post level — CGL fills Group B and Group C gazetted/non-gazetted posts (Tax Assistants, Inspectors, Auditors, etc.); CHSL fills Group C non-gazetted posts (LDC, JSA, PA, SA, DEO). Difficulty — CGL is significantly harder, especially at Tier 2. Salary — CGL posts generally carry higher pay grades. Many candidates appear in both exams simultaneously.',
+    },
+    {
+      question: 'How many mock tests should I take for SSC CHSL Tier 1 2026?',
+      answer:
+        'A minimum of 20–25 full-length Tier 1 mock tests with complete analysis is recommended. Take at least 1 mock per week starting 3–4 months before the exam, increasing to 3–4 per week in the final month. Focus on section-wise accuracy and time allocation in your analysis, not just overall score.',
+    },
+  ],
+};
+
 // ─── Exports ─────────────────────────────────────────────────────────────────
 
-const POSTS: BlogPost[] = [neet2026ExpectedCutoff, sscCglTier1Prep, sscCglVsChsl, rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026];
+const POSTS: BlogPost[] = [neet2026ExpectedCutoff, sscCglTier1Prep, sscCglVsChsl, rpfRecruitment2026, neet2027Week2, sscCglExamPattern, cuetMockTests, rrbAlpSyllabus, neetUg2026, ibpsPOMockTest, rrbNtpcMockTest, sbiPoPrelimsGuide, sscChslMockTest];
 
 export function getAllPosts(): BlogPost[] {
   return POSTS;
