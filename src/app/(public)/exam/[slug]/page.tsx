@@ -290,7 +290,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                     {exam.priceInr === 0 ? 'Free' : `₹${exam.priceInr.toLocaleString('en-IN')}`}
                   </p>
                   <p className="text-blue-200 text-xs mt-1">
-                    {exam.priceInr === 0 ? 'No credit card required' : 'One-time access'}
+                    {exam.priceInr === 0 ? 'No credit card required' : 'Lifetime access'}
                   </p>
                 </div>
                 {firstFreeTest && (

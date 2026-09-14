@@ -153,7 +153,10 @@ export default async function DashboardPage() {
                       </span>
                       <span className="flex items-center gap-1">
                         <CalendarClock className="w-3 h-3" />
-                        {formatDate(t.availableFrom)} – {formatDate(t.availableTo)}
+                        {/* Exam tests are lifetime access — the API sends a year-9999 end date */}
+                        {to.getUTCFullYear() >= 9999
+                          ? 'Lifetime access'
+                          : <>{formatDate(t.availableFrom)} – {formatDate(t.availableTo)}</>}
                       </span>
                     </div>
                   </div>
