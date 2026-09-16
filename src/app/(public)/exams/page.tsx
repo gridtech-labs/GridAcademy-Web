@@ -4,12 +4,12 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Mock Tests & Practice Sets for SSC, Banking, Railway, NEET 2026 | GridAcademy',
-  description: 'Practice 10,000+ free & paid mock tests for SSC CGL, IBPS PO, RRB NTPC, NEET, UPSC, CUET 2026. Instant results, section-wise scores and a solution for every question. Start free today.',
+  description: 'Practice free & paid mock tests for SSC CGL, IBPS PO, RRB NTPC, NEET, UPSC, CUET 2026. Instant results, section-wise scores and a solution for every question. Start free today.',
   keywords: 'mock test, free mock test, SSC CGL mock test, IBPS PO mock test, NEET mock test 2026, RRB NTPC mock test, UPSC mock test, CUET mock test 2026, online test series, practice test',
   alternates: { canonical: 'https://www.gridacademy.in/exams' },
   openGraph: {
     title: 'Free Mock Tests for All Government & Entrance Exams | GridAcademy',
-    description: 'India\'s fastest-growing exam prep platform. 10,000+ mock tests, instant results and a solution for every question. Free to start.',
+    description: 'Mock tests on the real computer-based exam interface, with instant results and a solution for every question. Free to start.',
     url: 'https://www.gridacademy.in/exams',
     type: 'website',
     images: [{ url: 'https://www.gridacademy.in/og-image.jpg', width: 1200, height: 630 }],
@@ -143,7 +143,7 @@ function LeftSidebar({ examTypes, active, counts }: {
         <div className="rounded-2xl p-4 bg-gradient-to-br from-[#1760f4] to-[#0a3ba8] text-white relative overflow-hidden">
           <div className="absolute right-0 top-0 w-20 h-20 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
           <p className="font-bold mb-1 text-sm relative z-10">Are you an educator?</p>
-          <p className="text-blue-200 text-xs mb-3 relative z-10">Upload tests &amp; reach lakhs of students.</p>
+          <p className="text-blue-200 text-xs mb-3 relative z-10">Upload your tests &amp; reach students preparing across India.</p>
           <Link href="/provider/register"
             className="block text-center bg-white text-[#1760f4] font-bold text-xs py-2 rounded-xl hover:bg-blue-50 transition-colors relative z-10 shadow-sm">
             Become a Provider
@@ -222,7 +222,7 @@ function ExamCardItem({ exam }: { exam: ExamCard }) {
 const FAQS = [
   {
     q: 'Are the mock tests on GridAcademy free?',
-    a: 'Yes. GridAcademy offers hundreds of completely free mock tests for SSC CGL, IBPS PO, RRB NTPC, NEET 2026, CUET, and more. No credit card or registration is required to start a free test.',
+    a: 'Yes. Most exams on GridAcademy include free mock tests. You can start one with just your email and 10-digit mobile number — no password or payment needed.',
   },
   {
     q: 'How are GridAcademy mock tests different from other platforms?',
@@ -274,7 +274,9 @@ export default async function ExamsPage({
     if (e.examTypeName) counts[e.examTypeName] = (counts[e.examTypeName] ?? 0) + 1;
   });
 
-  const totalFree = allExams.filter(e => e.priceInr === 0).length;
+  // Live totals from /api/exam-pages — no hard-coded marketing numbers
+  const totalTests = allExams.reduce((n, e) => n + (e.testCount ?? 0), 0);
+  const totalFreeExams = allExams.filter(e => e.priceInr === 0 && e.testCount > 0).length;
   const categoryLabel = activeCategory || 'All Exams';
   const isFiltered = !!activeCategory || !!searchQuery;
 
@@ -282,7 +284,7 @@ export default async function ExamsPage({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Mock Tests & Practice Sets | GridAcademy',
-    description: 'Browse 10,000+ free & paid mock tests for SSC, Banking, Railway, NEET, UPSC, CUET and more on GridAcademy.',
+    description: `Browse ${totalTests} free & paid mock tests across ${allExams.length} exams for SSC, Banking, Railway, NEET, UPSC, CUET and more on GridAcademy.`,
     url: 'https://www.gridacademy.in/exams',
     provider: { '@type': 'Organization', name: 'GridAcademy', url: 'https://www.gridacademy.in' },
   };
@@ -336,9 +338,9 @@ export default async function ExamsPage({
                     {/* Stats row */}
                     <div className="flex flex-wrap gap-4 md:gap-6">
                       {[
-                        { icon: FileText,   val: `${allExams.length}+`, label: 'Exam Series' },
-                        { icon: Zap,        val: `${totalFree}+`,       label: 'Free Tests'  },
-                        { icon: Users,      val: '10K+',                label: 'Students'    },
+                        { icon: FileText,   val: String(allExams.length), label: 'Exams'       },
+                        { icon: Users,      val: String(totalTests),      label: 'Mock Tests'  },
+                        { icon: Zap,        val: String(totalFreeExams),  label: 'Free Exams'  },
                         { icon: TrendingUp, val: 'Instant',             label: 'Results'     },
                       ].map(s => (
                         <div key={s.label} className="flex items-center gap-2">
@@ -499,7 +501,7 @@ export default async function ExamsPage({
                         { icon: Zap,        title: 'Instant Results',        desc: 'See your score and section-wise results the moment you submit.' },
                         { icon: Shield,     title: 'Latest 2026 Pattern',    desc: 'Every test updated after each new official notification.' },
                         { icon: TrendingUp, title: 'Worked Solutions',       desc: 'Review the correct answer and solution for every question.' },
-                        { icon: Users,      title: '10K+ Students',          desc: 'Join India\'s fastest-growing exam prep community.' },
+                        { icon: Users,      title: 'Free to Start',          desc: 'Take a free test with just your email and mobile number.' },
                       ].map(f => (
                         <div key={f.title} className="bg-blue-50/60 rounded-xl p-4">
                           <div className="w-9 h-9 bg-[#1760f4]/10 rounded-xl flex items-center justify-center mb-3">
