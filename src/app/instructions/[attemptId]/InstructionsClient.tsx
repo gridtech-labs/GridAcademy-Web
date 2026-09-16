@@ -2,53 +2,39 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  BookOpen, Clock, HelpCircle, Layers, BarChart2,
-  ShieldAlert, AlertTriangle, CheckSquare, Play, Loader2,
-  ChevronLeft,
-} from 'lucide-react';
+import { AlertTriangle, ArrowRight, ChevronLeft, Loader2 } from 'lucide-react';
 import { AttemptInfo } from '@/types/exam';
+import { StatusLegend } from '@/components/exam/PaletteStatus';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
 
 interface Props {
   info: AttemptInfo;
   token: string;
+  candidateName?: string;
 }
 
-export default function InstructionsClient({ info, token }: Props) {
+export default function InstructionsClient({ info, token, candidateName }: Props) {
   const router = useRouter();
   const [agreed,  setAgreed]  = useState(false);
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState<string | null>(null);
 
-  const totalMaxMarks = info.sections.reduce(
-    (sum, s) => sum + s.questionCount * s.marksPerQuestion,
-    0,
-  );
+  const totalMaxMarks = info.sections.reduce((sum, s) => sum + s.questionCount * s.marksPerQuestion, 0);
 
   const handleStart = async () => {
     if (!agreed) return;
     setLoading(true);
     setError(null);
-
     try {
-      const res = await fetch(
-        `${API_BASE}/api/assessment/attempts/${info.attemptId}/acknowledge`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
+      const res = await fetch(`${API_BASE}/api/assessment/attempts/${info.attemptId}/acknowledge`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
         throw new Error(json?.message ?? 'Failed to start test. Please try again.');
       }
-
       router.push(`/attempt/${info.attemptId}`);
     } catch (err: any) {
       setError(err?.message ?? 'Something went wrong. Please try again.');
@@ -56,215 +42,115 @@ export default function InstructionsClient({ info, token }: Props) {
     }
   };
 
+  const leave = () => {
+    if (window.confirm(
+      'Your test attempt is already created and the timer will run.\n\n' +
+      'If you leave now you can resume from the dashboard.\n\nLeave anyway?'
+    )) router.push('/dashboard');
+  };
+
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-paper text-ink">
+      <div className="h-14 md:h-[60px] bg-ink text-white flex items-center gap-3 px-4 md:px-8">
+        <button onClick={leave} className="w-10 h-10 -ml-2 flex items-center justify-center rounded-lg hover:bg-ink-soft" aria-label="Back to dashboard">
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <span className="w-7 h-7 rounded-[7px] bg-primary flex items-center justify-center font-bold shrink-0">G</span>
+        <span className="font-semibold text-[15px] md:text-base truncate">{info.testTitle}</span>
+        {candidateName && <span className="ml-auto hidden sm:block text-sm text-ink-muted">{candidateName}</span>}
+      </div>
 
-      {/* Back to dashboard — warn user that the attempt stays open */}
-      <button
-        onClick={() => {
-          if (window.confirm(
-            'Your test attempt is already created and the timer will run.\n\n' +
-            'If you leave now you can resume from the dashboard.\n\n' +
-            'Leave anyway?'
-          )) {
-            router.push('/dashboard');
-          }
-        }}
-        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors"
-      >
-        <ChevronLeft className="w-4 h-4" />
-        Back to Dashboard
-      </button>
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-6 md:py-9 grid lg:grid-cols-[1fr_400px] lg:grid-rows-[auto_1fr] gap-5 lg:gap-x-8 lg:gap-y-5 items-start">
+        <div className="bg-white border border-line rounded-xl p-5 md:px-9 md:py-8 flex flex-col gap-6 order-2 lg:order-none lg:col-start-1 lg:row-start-1 lg:row-span-2">
+          <h1 className="text-[22px] md:text-[28px] font-bold leading-tight">Read the instructions carefully</h1>
+          <ol className="list-decimal pl-5 flex flex-col gap-3 text-[15px] md:text-base leading-relaxed text-[#344054]">
+            <li>The countdown at the top right shows the time left. The test submits itself when it reaches zero.</li>
+            <li>Click a question number in the palette to go to it directly. Your answer is saved as soon as you choose it.</li>
+            <li><b>Save &amp; Next</b> moves to the next question. <b>Mark for Review &amp; Next</b> flags the question so you can return to it; <b>Clear Response</b> removes your answer.</li>
+            <li>For numerical questions, type the answer with the on-screen keypad. Integers and decimals are accepted.</li>
+            <li>Questions marked for review that have an answer <b>will</b> be evaluated.</li>
+            <li>Switching to another tab or app is recorded. The test is submitted automatically on the third switch.</li>
+          </ol>
 
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-
-        {/* ── Header ─────────────────────────────────────────────────────── */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-6 text-white">
-          <p className="text-indigo-200 text-xs font-semibold uppercase tracking-widest mb-1">
-            Test Instructions
-          </p>
-          <h1 className="text-2xl font-extrabold leading-tight mb-4">{info.testTitle}</h1>
-
-          <div className="flex flex-wrap gap-4 text-sm">
-            <div className="flex items-center gap-1.5 bg-white/10 rounded-xl px-3 py-1.5">
-              <Clock className="w-4 h-4 text-indigo-200" />
-              <span><strong>{info.durationMinutes}</strong> minutes</span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-white/10 rounded-xl px-3 py-1.5">
-              <HelpCircle className="w-4 h-4 text-indigo-200" />
-              <span><strong>{info.totalQuestions}</strong> questions</span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-white/10 rounded-xl px-3 py-1.5">
-              <Layers className="w-4 h-4 text-indigo-200" />
-              <span><strong>{info.sections.length}</strong> section{info.sections.length !== 1 ? 's' : ''}</span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-white/10 rounded-xl px-3 py-1.5">
-              <BarChart2 className="w-4 h-4 text-indigo-200" />
-              <span>Passing: <strong>{info.passingPercent}%</strong></span>
-            </div>
-            {info.negativeMarkingEnabled ? (
-              <div className="flex items-center gap-1.5 bg-red-500/30 border border-red-400/40 rounded-xl px-3 py-1.5 text-red-100">
-                <AlertTriangle className="w-4 h-4" />
-                <span>Negative marking</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1.5 bg-green-500/20 border border-green-400/30 rounded-xl px-3 py-1.5 text-green-100">
-                <CheckSquare className="w-4 h-4" />
-                <span>No negative marking</span>
-              </div>
-            )}
+          <div className="flex flex-col gap-3 p-4 md:p-5 bg-[#f9fafb] rounded-[10px]">
+            <p className="font-semibold text-[15px]">The question palette uses these symbols</p>
+            <StatusLegend />
           </div>
+
+          {info.instructions && (
+            <div className="text-[15px] leading-relaxed text-[#344054]">
+              <p className="font-semibold text-ink mb-1.5">From the test author</p>
+              <div className="exam-rich-content" dangerouslySetInnerHTML={{ __html: info.instructions }} />
+            </div>
+          )}
         </div>
 
-        <div className="px-6 py-6 space-y-6">
-
-          {/* ── Section Summary ──────────────────────────────────────────── */}
-          <div>
-            <h2 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-indigo-500" />
-              Section Summary
-            </h2>
-            <div className="overflow-x-auto rounded-xl border border-gray-200">
+          <div className="bg-white border border-line rounded-xl p-5 md:p-6 flex flex-col gap-3.5 order-1 lg:order-none lg:col-start-2 lg:row-start-1">
+            <p className="text-[17px] font-semibold">Test summary</p>
+            <dl className="grid grid-cols-2 gap-2.5">
+              {[
+                ['Duration', `${info.durationMinutes} min`],
+                ['Questions', String(info.totalQuestions)],
+                ['Maximum marks', String(totalMaxMarks)],
+                ['Pass mark', `${info.passingPercent}%`],
+              ].map(([k, v]) => (
+                <div key={k} className="bg-[#f9fafb] rounded-lg p-3">
+                  <dt className="text-[12.5px] text-[#667085]">{k}</dt>
+                  <dd className="font-mono font-semibold text-[19px] mt-1">{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="overflow-x-auto -mx-1">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    <th className="px-4 py-3 text-left">#</th>
-                    <th className="px-4 py-3 text-left">Section</th>
-                    <th className="px-4 py-3 text-left">Subject</th>
-                    <th className="px-4 py-3 text-center">Questions</th>
-                    <th className="px-4 py-3 text-center">Marks/Q</th>
-                    {info.negativeMarkingEnabled && (
-                      <th className="px-4 py-3 text-center">Neg/Q</th>
-                    )}
-                    <th className="px-4 py-3 text-center">Max Marks</th>
+                  <tr className="bg-[#f9fafb] text-[12.5px] text-[#475467] text-left">
+                    <th className="font-semibold px-2.5 py-2">Section</th>
+                    <th className="font-semibold px-2.5 py-2">Q</th>
+                    <th className="font-semibold px-2.5 py-2">+</th>
+                    {info.negativeMarkingEnabled && <th className="font-semibold px-2.5 py-2">−</th>}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {info.sections.map((sec, idx) => (
-                    <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-4 py-3 text-gray-400 font-mono text-xs">{idx + 1}</td>
-                      <td className="px-4 py-3 font-semibold text-gray-800">{sec.name}</td>
-                      <td className="px-4 py-3 text-gray-500">{sec.subjectName || '—'}</td>
-                      <td className="px-4 py-3 text-center text-gray-700">{sec.questionCount}</td>
-                      <td className="px-4 py-3 text-center text-green-600 font-semibold">
-                        +{sec.marksPerQuestion}
+                <tbody>
+                  {info.sections.map((sec, i) => (
+                    <tr key={i} className="border-b border-[#eef0f3] last:border-0">
+                      <td className="px-2.5 py-2.5">
+                        {sec.name}
+                        {sec.subjectName && sec.subjectName !== sec.name && <span className="block text-[12.5px] text-[#667085]">{sec.subjectName}</span>}
                       </td>
-                      {info.negativeMarkingEnabled && (
-                        <td className="px-4 py-3 text-center text-red-500 font-semibold">
-                          -{sec.negativeMarksPerQuestion}
-                        </td>
-                      )}
-                      <td className="px-4 py-3 text-center font-bold text-gray-900">
-                        {sec.questionCount * sec.marksPerQuestion}
-                      </td>
+                      <td className="px-2.5 py-2.5 font-mono">{sec.questionCount}</td>
+                      <td className="px-2.5 py-2.5 font-mono text-[#0b6b31]">{sec.marksPerQuestion}</td>
+                      {info.negativeMarkingEnabled && <td className="px-2.5 py-2.5 font-mono text-[#b42318]">{sec.negativeMarksPerQuestion}</td>}
                     </tr>
                   ))}
                 </tbody>
-                <tfoot>
-                  <tr className="bg-gray-50 font-semibold text-sm">
-                    <td colSpan={3} className="px-4 py-3 text-gray-700">Total</td>
-                    <td className="px-4 py-3 text-center text-gray-900">{info.totalQuestions}</td>
-                    <td className="px-4 py-3" />
-                    {info.negativeMarkingEnabled && <td className="px-4 py-3" />}
-                    <td className="px-4 py-3 text-center text-gray-900">{totalMaxMarks}</td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
+            {!info.negativeMarkingEnabled && <p className="text-[13px] text-[#475467]">No negative marking in this test.</p>}
           </div>
 
-          {/* ── Instructions ─────────────────────────────────────────────── */}
-          <div>
-            <h2 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-indigo-500" />
-              Instructions
-            </h2>
-            {info.instructions ? (
-              <div
-                className="prose prose-sm max-w-none text-gray-600 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: info.instructions }}
+          <div className="bg-white border border-line rounded-xl p-5 flex flex-col gap-4 order-3 lg:order-none lg:col-start-2 lg:row-start-2 lg:sticky lg:top-6">
+            <label className="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={e => setAgreed(e.target.checked)}
+                className="mt-0.5 w-[22px] h-[22px] rounded-[5px] accent-[#1760f4] shrink-0 cursor-pointer"
               />
-            ) : (
-              <ol className="space-y-2 text-sm text-gray-600 list-decimal list-inside">
-                <li>Read each question carefully before selecting your answer.</li>
-                <li>Each correct answer carries <strong className="text-gray-800">positive marks</strong> as specified per section.</li>
-                {info.negativeMarkingEnabled && (
-                  <li className="text-red-600 font-medium">
-                    Negative marking applies — incorrect answers will deduct marks as specified.
-                  </li>
-                )}
-                <li>Use the question palette on the right to navigate between questions.</li>
-                <li>You can <strong className="text-gray-800">mark questions for review</strong> and revisit them later.</li>
-                <li>The timer starts as soon as you click <strong className="text-gray-800">Start Test</strong> and cannot be paused.</li>
-                <li>The exam will <strong className="text-gray-800">auto-submit</strong> when the time limit is reached.</li>
-                <li>Once submitted, your answers <strong className="text-gray-800">cannot be changed</strong>.</li>
-              </ol>
+              <span className="text-[14.5px] leading-snug">I have read the instructions and I am ready to begin.</span>
+            </label>
+            {error && (
+              <p className="flex items-center gap-2 text-[13.5px] text-[#b42318] bg-[#fef3f2] border border-[#fecdca] rounded-lg px-3 py-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />{error}
+              </p>
             )}
-          </div>
-
-          {/* ── Exam Rules ───────────────────────────────────────────────── */}
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <div className="flex items-start gap-3">
-              <ShieldAlert className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-              <div>
-                <p className="font-semibold text-amber-900 mb-2">Exam Rules</p>
-                <ul className="space-y-1 text-sm text-amber-800">
-                  <li>• Switching tabs or minimising the browser will be logged as a violation.</li>
-                  <li>• Right-click context menu is disabled during the exam.</li>
-                  <li>• Copy, paste, and developer-tools keyboard shortcuts are blocked.</li>
-                  <li>• The exam will auto-submit if the time limit is reached.</li>
-                  <li>• Once submitted, answers cannot be changed.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* ── Declaration Checkbox ─────────────────────────────────────── */}
-          <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-colors
-            border-gray-200 hover:border-indigo-300 has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50">
-            <input
-              type="checkbox"
-              checked={agreed}
-              onChange={e => setAgreed(e.target.checked)}
-              className="mt-0.5 w-5 h-5 rounded accent-indigo-600 shrink-0 cursor-pointer"
-            />
-            <span className="text-sm text-gray-700 leading-relaxed">
-              I have read and understood all the instructions and exam rules.
-              I agree to abide by them and acknowledge that any violation may result in
-              disqualification.
-            </span>
-          </label>
-
-          {/* ── Error ────────────────────────────────────────────────────── */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 shrink-0" />
-              {error}
-            </div>
-          )}
-
-          {/* ── Start Button ─────────────────────────────────────────────── */}
-          <div className="flex items-center justify-between pt-2">
-            <div className="text-xs text-gray-400">
-              <Clock className="inline w-3.5 h-3.5 mr-1" />
-              Timer starts when you click Start Test
-            </div>
             <button
               onClick={handleStart}
               disabled={!agreed || loading}
-              className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm
-                bg-indigo-600 text-white hover:bg-indigo-700
-                disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
-                transition-colors shadow-sm"
+              className="h-[50px] rounded-lg bg-primary text-white text-base font-semibold inline-flex items-center justify-center gap-2 hover:bg-primary-dark disabled:bg-[#e4e7ec] disabled:text-[#98a2b3] disabled:cursor-not-allowed"
             >
-              {loading
-                ? <><Loader2 className="w-4 h-4 animate-spin" />Starting…</>
-                : <><Play className="w-4 h-4" />Start Test</>
-              }
+              {loading ? <><Loader2 className="w-[18px] h-[18px] animate-spin" /> Starting…</> : <>Start test <ArrowRight className="w-[17px] h-[17px]" /></>}
             </button>
           </div>
-
-        </div>
       </div>
     </div>
   );
