@@ -102,7 +102,10 @@ export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token,
         redirect: false,
       });
       if (!result?.ok) {
-        setError('Could not sign in. Please check your details.');
+        // Quick-access now refuses an existing account unless the mobile matches the
+        // one registered on it (and always refuses staff accounts), so say what to do.
+        setError('Could not sign in. If you already have an account with this email, ' +
+                 'enter the mobile number registered with it — or sign in with your password.');
         setLoading(false);
         return;
       }
