@@ -142,7 +142,7 @@ const cuetMockTests: BlogPost = {
 </ul>
 
 <h2>How GridAcademy's CUET Mock Tests Are Built</h2>
-<p>GridAcademy's CUET mock tests are designed to the latest 2026 NTA pattern. The available tests include CUET English (Section IA), CUET General Test (Section III), and select domain subject papers. Each test uses the correct +5/−1 marking scheme, includes previous year-style questions, and is timed accurately to the section duration. After every attempt you get an instant result with section-wise accuracy, time-per-question analysis, a full answer key with detailed explanations, and a percentile rank among all students who attempted the same paper. Most CUET tests on GridAcademy are free. Select premium series are available from ₹7 and include additional papers and expanded analytics.</p>
+<p>GridAcademy's CUET mock tests are designed to the latest 2026 NTA pattern. The available tests include CUET English (Section IA), CUET General Test (Section III), and select domain subject papers. Each test uses the correct +5/−1 marking scheme, includes previous year-style questions, and is timed accurately to the section duration. After every attempt you get an instant result with section-wise accuracy, time-per-question analysis, a full answer key with detailed explanations, and a percentile rank among all students who attempted the same paper. Each CUET exam on GridAcademy includes free tests you can start with just your email and mobile number. The remaining tests unlock together with one payment for that exam, with lifetime access.</p>
 
 <h2>How to Use CUET Mock Tests Effectively</h2>
 <p>Taking a mock test without a review structure is wasted preparation time. Here is the method that converts practice scores into actual improvement:</p>
@@ -162,7 +162,7 @@ const cuetMockTests: BlogPost = {
     {
       question: 'Is the CUET UG 2026 mock test on GridAcademy free?',
       answer:
-        'Yes. GridAcademy offers free CUET UG mock tests including CUET English previous year papers and General Test practice sets. Select premium papers with expanded analytics are available at a nominal fee starting at ₹7.',
+        'Yes. GridAcademy offers free CUET UG mock tests including CUET English previous year papers and General Test practice sets. The remaining papers unlock together with a single payment for the exam, with lifetime access; the price is shown on the exam page before you pay.',
     },
     {
       question: 'What is the marking scheme for CUET UG 2026?',
