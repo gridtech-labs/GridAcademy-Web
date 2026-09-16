@@ -13,6 +13,8 @@ interface Props {
   callbackUrl: string;
   token?: string;
   variant?: 'default' | 'hero' | 'ctaCard';
+  /** Overrides the button text — e.g. "Start Test" for a purchased (not free) test. */
+  label?: string;
 }
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
@@ -20,7 +22,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
 const isValidEmail  = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 const isValidMobile = (v: string) => /^[6-9]\d{9}$/.test(v.trim());
 
-export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token, variant = 'default' }: Props) {
+export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token, variant = 'default', label }: Props) {
   const router = useRouter();
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState<string | null>(null);
@@ -129,7 +131,7 @@ export default function FreeTestButton({ testId, isLoggedIn, callbackUrl, token,
           {loading
             ? <Loader2 className={`animate-spin ${isHero ? 'w-5 h-5' : 'w-3.5 h-3.5'}`} />
             : <Play    className={isHero ? 'w-5 h-5' : 'w-3.5 h-3.5'} />}
-          {loading ? 'Starting…' : isCtaCard ? 'Start Free Test' : 'Take Free Test'}
+          {loading ? 'Starting…' : label ?? (isCtaCard ? 'Start Free Test' : 'Take Free Test')}
         </button>
         {error && !showModal && (
           <p className="text-xs text-red-500 mt-1.5 text-center">{error}</p>

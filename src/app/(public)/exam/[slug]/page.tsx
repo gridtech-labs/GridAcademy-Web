@@ -160,6 +160,11 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
   const freeTestCount = freeTests.length;
   const firstFreeTest = freeTests[0] ?? null;
 
+  // Price is exam-level: one purchase unlocks every paid test in the exam, so the
+  // page shows a single checkout (#unlock) instead of one per test card.
+  const paidTestCount = sortedTests.length - freeTestCount;
+  const showUnlock    = exam.priceInr > 0 && paidTestCount > 0 && !hasAccess;
+
   return (
     <>
       {/* ── JSON-LD Structured Data ──────────────────────────────────────── */}
@@ -304,6 +309,19 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                     />
                   </div>
                 )}
+                {showUnlock && (
+                  <div className="mb-3">
+                    <a href="#unlock"
+                      className={`flex items-center justify-center gap-2 w-full text-sm font-bold py-2.5 rounded-xl transition-colors shadow-sm ${firstFreeTest ? 'text-white border border-white/60 hover:bg-white/10' : 'bg-white text-[#1760f4] hover:bg-blue-50'}`}>
+                      <Lock className="w-3.5 h-3.5" />Unlock all {paidTestCount} tests
+                    </a>
+                  </div>
+                )}
+                {exam.priceInr > 0 && hasAccess && (
+                  <p className="mb-3 w-full text-center text-sm font-bold py-2.5 rounded-xl bg-emerald-500/25 text-emerald-100 border border-emerald-400/30">
+                    ✓ You own this exam
+                  </p>
+                )}
                 <div className="grid grid-cols-2 gap-2 text-center">
                   <div className="bg-white/10 rounded-xl py-2">
                     <p className="text-white font-extrabold text-lg leading-none">{exam.testCount ?? sortedTests.length}</p>
@@ -353,6 +371,31 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
         {/* ── Main content ─────────────────────────────────────────────── */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 space-y-6">
 
+          {/* ── Exam-level purchase: one price unlocks all paid tests ──── */}
+          {showUnlock && (
+            <section id="unlock" className="scroll-mt-24 bg-white rounded-2xl border border-blue-100 shadow-sm p-5 sm:p-6">
+              <div className="flex flex-col md:flex-row gap-6 md:items-center">
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-base font-bold text-gray-800 flex items-center gap-2 mb-2">
+                    <Lock className="w-4 h-4 text-[#1760f4]" />Unlock all {paidTestCount} mock tests
+                  </h2>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    One payment of <strong>₹{exam.priceInr.toLocaleString('en-IN')}</strong> gives you lifetime access
+                    to every test in this exam{freeTestCount > 0 ? ' — free tests stay free' : ''}. No per-test charges.
+                  </p>
+                </div>
+                <div className="w-full md:w-80 shrink-0">
+                  <ExamBuyButton examPageId={exam.id} examTitle={exam.title} examSlug={exam.slug} priceInr={exam.priceInr} hasAccess={hasAccess} token={token} offers={examOffers} />
+                </div>
+              </div>
+            </section>
+          )}
+          {exam.priceInr > 0 && hasAccess && (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-2xl px-5 py-3 text-sm text-emerald-800 font-semibold">
+              ✓ You own this exam — lifetime access to all {sortedTests.length} tests.
+            </div>
+          )}
+
           {/* ── Test Cards ────────────────────────────────────────────── */}
           {sortedTests.length > 0 && (
             <section>
@@ -370,6 +413,10 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                         {test.isFree ? (
                           <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500 text-white uppercase tracking-wide">
                             FREE
+                          </span>
+                        ) : hasAccess ? (
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white uppercase tracking-wide">
+                            UNLOCKED
                           </span>
                         ) : (
                           <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#1760f4] text-white uppercase tracking-wide flex items-center gap-1">
@@ -398,9 +445,13 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
                         <FreeTestButton testId={test.testId} isLoggedIn={!!session} callbackUrl={`/exam/${exam.slug}`} token={token} />
                       ) : exam.priceInr > 0 ? (
                         hasAccess ? (
-                          <FreeTestButton testId={test.testId} isLoggedIn={!!session} callbackUrl={`/exam/${exam.slug}`} token={token} />
+                          <FreeTestButton testId={test.testId} isLoggedIn={!!session} callbackUrl={`/exam/${exam.slug}`} token={token} label="Start Test" />
                         ) : (
-                          <ExamBuyButton examPageId={exam.id} examTitle={exam.title} examSlug={exam.slug} priceInr={exam.priceInr} hasAccess={hasAccess} token={token} offers={examOffers} />
+                          // Price is exam-level — no per-test checkout; point to the single #unlock section.
+                          <a href="#unlock"
+                            className="flex items-center justify-center gap-2 w-full text-sm font-bold py-2.5 rounded-xl border-2 border-[#1760f4] text-[#1760f4] hover:bg-blue-50 transition-colors">
+                            <Lock className="w-3.5 h-3.5" />Unlock
+                          </a>
                         )
                       ) : (
                         <Link href={`/test/${exam.slug}`}
