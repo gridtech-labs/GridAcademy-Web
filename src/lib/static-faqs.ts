@@ -176,7 +176,7 @@ const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
       {
         question: 'Do I get a performance analysis after the test?',
         answer:
-          'Yes, every test provides an instant result with section-wise accuracy, speed, and rank comparison.',
+          'Yes, every test gives an instant result with your score, section-wise correct, incorrect and unattempted counts, the total time you took, and the correct answer with a solution for every question.',
       },
       {
         question: 'What sections are covered in SSC CGL Tier 1?',
@@ -206,7 +206,7 @@ const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
       {
         question: 'Do I get a performance analysis after the test?',
         answer:
-          'Yes, every GridAcademy mock test gives instant results with section-wise accuracy, time spent, and rank comparison among all test takers.',
+          'Yes, every test gives an instant result with your score, section-wise correct, incorrect and unattempted counts, the total time you took, and the correct answer with a solution for every question.',
       },
       {
         question: 'What posts are filled through SSC CHSL?',
@@ -231,7 +231,7 @@ const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
       {
         question: 'Do I get a performance analysis after the test?',
         answer:
-          'Yes, every test provides instant results with section-wise accuracy, speed, and rank comparison.',
+          'Yes, every test gives an instant result with your score, section-wise correct, incorrect and unattempted counts, the total time you took, and the correct answer with a solution for every question.',
       },
     ],
   },
@@ -251,7 +251,7 @@ const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
       {
         question: 'Do I get a performance analysis after the test?',
         answer:
-          'Yes, every test provides an instant result with section-wise accuracy, time analysis, and rank comparison among all test takers.',
+          'Yes, every test gives an instant result with your score, section-wise correct, incorrect and unattempted counts, the total time you took, and the correct answer with a solution for every question.',
       },
       {
         question: 'What subjects are covered in CUET UG 2026?',
@@ -281,7 +281,7 @@ const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
       {
         question: 'Do I get a performance analysis after the test?',
         answer:
-          'Yes, every test provides instant results with subject-wise accuracy, time spent per question, and rank comparison.',
+          'Yes, every test gives an instant result with your score, subject-wise correct, incorrect and unattempted counts, the total time you took, and the correct answer with a solution for every question.',
       },
       {
         question: 'Is there negative marking in RRB exams?',
@@ -306,7 +306,7 @@ const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
       {
         question: 'Do I get a performance analysis after the test?',
         answer:
-          'Yes, every test provides instant results with section-wise accuracy, speed analysis, and rank comparison among all test takers.',
+          'Yes, every test gives an instant result with your score, section-wise correct, incorrect and unattempted counts, the total time you took, and the correct answer with a solution for every question.',
       },
       {
         question: 'What sections are covered in Banking exams?',
@@ -336,7 +336,7 @@ const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
       {
         question: 'Do I get a performance analysis after the test?',
         answer:
-          'Yes, every test provides an instant result with subject-wise accuracy, time spent, and rank comparison among all test takers.',
+          'Yes, every test gives an instant result with your score, subject-wise correct, incorrect and unattempted counts, the total time you took, and the correct answer with a solution for every question.',
       },
       {
         question: 'Is there negative marking in UPSC Prelims?',
@@ -361,7 +361,7 @@ const categoryFaqs: Array<{ keywords: string[]; faqs: ExamFaq[] }> = [
       {
         question: 'Do I get a performance analysis after the test?',
         answer:
-          'Yes, every test provides an instant result with subject and chapter-wise accuracy, time analysis, and rank comparison.',
+          'Yes, every test gives an instant result with your score, subject-wise correct, incorrect and unattempted counts, the total time you took, and the correct answer with a solution for every question.',
       },
       {
         question: 'Is there negative marking in NEET 2026?',

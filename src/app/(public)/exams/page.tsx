@@ -4,12 +4,12 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Mock Tests & Practice Sets for SSC, Banking, Railway, NEET 2026 | GridAcademy',
-  description: 'Practice 10,000+ free & paid mock tests for SSC CGL, IBPS PO, RRB NTPC, NEET, UPSC, CUET 2026. Instant results, all-India rank & detailed analytics. Start free today.',
+  description: 'Practice 10,000+ free & paid mock tests for SSC CGL, IBPS PO, RRB NTPC, NEET, UPSC, CUET 2026. Instant results, section-wise scores and a solution for every question. Start free today.',
   keywords: 'mock test, free mock test, SSC CGL mock test, IBPS PO mock test, NEET mock test 2026, RRB NTPC mock test, UPSC mock test, CUET mock test 2026, online test series, practice test',
   alternates: { canonical: 'https://www.gridacademy.in/exams' },
   openGraph: {
     title: 'Free Mock Tests for All Government & Entrance Exams | GridAcademy',
-    description: 'India\'s fastest-growing exam prep platform. 10,000+ mock tests, instant AI analysis, all-India rank. Free to start.',
+    description: 'India\'s fastest-growing exam prep platform. 10,000+ mock tests, instant results and a solution for every question. Free to start.',
     url: 'https://www.gridacademy.in/exams',
     type: 'website',
     images: [{ url: 'https://www.gridacademy.in/og-image.jpg', width: 1200, height: 630 }],
@@ -226,7 +226,7 @@ const FAQS = [
   },
   {
     q: 'How are GridAcademy mock tests different from other platforms?',
-    a: 'GridAcademy uses AI-powered analysis to give you subject-wise accuracy, time-per-question breakdown, and a live All-India Rank after every test — instantly. Most platforms make you wait hours for results.',
+    a: 'Tests run on the computer-based exam interface, and the moment you submit you see your score, section-wise correct, incorrect and unattempted counts, and the correct answer with a solution for every question.',
   },
   {
     q: 'Do the mock tests follow the latest 2025–26 exam pattern?',
@@ -241,8 +241,8 @@ const FAQS = [
     a: 'GridAcademy covers SSC (CGL, CHSL, MTS, CPO), Banking (IBPS PO/Clerk, SBI PO/Clerk), Railway (RRB NTPC, ALP, Group D), UPSC, NEET UG, CUET UG/PG, State PSCs, Defence (NDA, CDS), Teaching (CTET, DSSSB), and many more.',
   },
   {
-    q: 'How does the All-India Rank work?',
-    a: 'After you submit a test, your score is compared with all other students who have attempted the same test on GridAcademy. Your rank, percentile, and accuracy are calculated instantly and displayed on your result dashboard.',
+    q: 'What do I see after submitting a test?',
+    a: 'Your result shows your total score and percentage, whether you passed, your accuracy, section-wise correct, incorrect and unattempted counts, the time you took, and the correct answer with a solution for every question.',
   },
 ];
 
@@ -330,7 +330,7 @@ export default async function ExamsPage({
                     </h1>
                     <p className="text-blue-100 text-sm md:text-base leading-relaxed mb-6 opacity-90 max-w-xl">
                       Practice with India&apos;s most accurate mock tests — updated for 2025–26 exam patterns.
-                      Get instant AI analysis, All-India Rank, and detailed subject-wise feedback after every test.
+                      Get your score, section-wise results and a solution for every question the moment you submit.
                     </p>
 
                     {/* Stats row */}
@@ -339,7 +339,7 @@ export default async function ExamsPage({
                         { icon: FileText,   val: `${allExams.length}+`, label: 'Exam Series' },
                         { icon: Zap,        val: `${totalFree}+`,       label: 'Free Tests'  },
                         { icon: Users,      val: '10K+',                label: 'Students'    },
-                        { icon: TrendingUp, val: 'Instant',             label: 'AI Results'  },
+                        { icon: TrendingUp, val: 'Instant',             label: 'Results'     },
                       ].map(s => (
                         <div key={s.label} className="flex items-center gap-2">
                           <div className="w-8 h-8 bg-white/15 rounded-xl flex items-center justify-center shrink-0">
@@ -489,16 +489,16 @@ export default async function ExamsPage({
                     </h2>
                     <p className="text-sm text-gray-600 leading-relaxed mb-6 max-w-3xl">
                       GridAcademy offers free and premium mock tests for every major government and entrance exam — SSC CGL, IBPS PO,
-                      RRB NTPC, NEET 2026, CUET UG, UPSC, State PSCs, and more. Unlike traditional test platforms, GridAcademy uses
-                      AI-powered analytics to instantly show your accuracy, speed, and topic-wise weak areas, so you can fix gaps
+                      RRB NTPC, NEET 2026, CUET UG, UPSC, State PSCs, and more. After every test you instantly see your score, section-wise
+                      correct, incorrect and unattempted counts, and a solution for every question, so you can fix gaps
                       before exam day. Every test follows the latest 2025–26 exam pattern, marking scheme, and time limit.
                     </p>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {[
-                        { icon: Zap,        title: 'Instant AI Results',     desc: 'Get your score, rank & analysis in seconds — not hours.' },
+                        { icon: Zap,        title: 'Instant Results',        desc: 'See your score and section-wise results the moment you submit.' },
                         { icon: Shield,     title: 'Latest 2026 Pattern',    desc: 'Every test updated after each new official notification.' },
-                        { icon: TrendingUp, title: 'All-India Rank',         desc: 'See where you stand among lakhs of aspirants nationwide.' },
+                        { icon: TrendingUp, title: 'Worked Solutions',       desc: 'Review the correct answer and solution for every question.' },
                         { icon: Users,      title: '10K+ Students',          desc: 'Join India\'s fastest-growing exam prep community.' },
                       ].map(f => (
                         <div key={f.title} className="bg-blue-50/60 rounded-xl p-4">

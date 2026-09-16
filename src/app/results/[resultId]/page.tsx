@@ -4,7 +4,7 @@ import { api } from '@/lib/api-client';
 import { TestResult } from '@/types';
 import { redirect } from 'next/navigation';
 import { formatTimer, calcPercentage } from '@/lib/utils';
-import { Trophy, TrendingUp, Clock, Target, Share2, RotateCcw } from 'lucide-react';
+import { Clock, Share2, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function ResultPage({ params }: { params: { resultId: string } }) {
@@ -38,10 +38,7 @@ export default async function ResultPage({ params }: { params: { resultId: strin
         {/* Stats row */}
         <div className="flex flex-wrap justify-center gap-6 mt-6 text-sm">
           {[
-            { icon: Trophy, label: 'All India Rank', value: `#${result.allIndiaRank.toLocaleString()}` },
-            { icon: TrendingUp, label: 'Percentile', value: `${result.percentile}%ile` },
             { icon: Clock, label: 'Time Taken', value: formatTimer(result.timeTakenSeconds) },
-            { icon: Target, label: 'Test Takers', value: result.totalTestTakers.toLocaleString() },
           ].map(({ icon: Icon, label, value }) => (
             <div key={label} className="flex flex-col items-center">
               <Icon className="w-4 h-4 text-white/70 mb-1" />

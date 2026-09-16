@@ -78,7 +78,7 @@ function LoginForm() {
             Crack your<br />dream exam 🎯
           </h2>
           <p className="text-indigo-200/80 text-base mb-8 leading-relaxed max-w-xs">
-            Prepare smarter with expert-crafted mock tests, instant analysis and an all-India rank.
+            Prepare smarter with expert-crafted mock tests, instant results and a solution for every question.
           </p>
           <div className="space-y-3">
             {PERKS.map(({ icon: Icon, text }) => (

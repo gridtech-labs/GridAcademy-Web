@@ -25,7 +25,7 @@ export default function HeroBanner() {
         </h1>
         <p className="text-gray-500 text-base md:text-lg max-w-xl mb-8">
           Practice with tests from top coaching institutes.
-          Get real exam experience, all-India rank, and detailed analysis.
+          Get real exam experience, section-wise results, and a solution for every question.
         </p>
 
         {/* Search bar */}

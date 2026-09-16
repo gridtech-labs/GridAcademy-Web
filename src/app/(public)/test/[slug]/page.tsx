@@ -319,7 +319,7 @@ export default async function TestDetailPage({ params }: { params: { slug: strin
                 <div className="pt-3 border-t border-gray-100 space-y-2">
                   {[
                     'Detailed solutions for every question',
-                    'All-India Rank & Percentile',
+                    'Score and time taken after every test',
                     'Section-wise performance analysis',
                     'Attempt anytime, anywhere',
                   ].map(f => (

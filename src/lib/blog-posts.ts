@@ -72,7 +72,7 @@ const sscCglExamPattern: BlogPost = {
 <p>The breadth of Tier 1 (four distinct subjects) combined with the depth of Tier 2 (advanced mathematics, English, and constitutional awareness) makes SSC CGL one of the more demanding competitive exams in India. Here is a structured approach that works for most candidates with 4–6 months of preparation time.</p>
 <p><strong>Start with the basics.</strong> In month one, build fundamental concepts in Quantitative Aptitude — fractions, percentages, ratio, profit and loss — and establish a daily English reading habit using any national newspaper. These two subjects take the most time to improve and repay consistent daily effort over quick cramming.</p>
 <p><strong>Reasoning practice from day one.</strong> General Intelligence and Reasoning can be improved quickly with deliberate, topic-wise practice. Spend 30 minutes daily on analogies, number series, and coding-decoding before moving to full-section mocks.</p>
-<p><strong>Weekly mock tests from month two.</strong> Take at least one full-length Tier 1 mock per week. Review every wrong answer individually and classify your errors as conceptual, reading, or time-management mistakes. Each type needs a different fix. GridAcademy offers free SSC CGL Tier 1 mock tests built to the 2026 exam pattern — each attempt gives you section-wise accuracy, percentile rank, and detailed answer explanations.</p>
+<p><strong>Weekly mock tests from month two.</strong> Take at least one full-length Tier 1 mock per week. Review every wrong answer individually and classify your errors as conceptual, reading, or time-management mistakes. Each type needs a different fix. GridAcademy offers free SSC CGL Tier 1 mock tests built to the 2026 exam pattern — each attempt gives you your score, section-wise correct, incorrect and unattempted counts, and detailed answer explanations.</p>
 <p><strong>Shift to Tier 2 depth after Tier 1 practice stabilises.</strong> Once you are consistently scoring above the expected cut-off in Tier 1 mocks, begin Paper I Session 1 (Math + Reasoning) preparation at the harder level. If you are targeting JSO or AAO posts, start Statistics or Finance and Economics early — these subjects cannot be effectively crammed in the final weeks.</p>
   `,
   faqs: [
@@ -1013,7 +1013,7 @@ const sscCglTier1Prep: BlogPost = {
   <li><strong>Targeted intervention.</strong> K errors require content revision of that specific topic. R errors require deliberate slow reading on those question types. T errors require more timed practice on those question types until your speed improves without losing accuracy.</li>
   <li><strong>Re-test the fix.</strong> One week after addressing a knowledge gap or practicing a skill, take a topic-specific set to verify your accuracy has improved. If it has not, your intervention was wrong — change the approach before the next test cycle.</li>
 </ul>
-<p>GridAcademy offers free SSC CGL Tier 1 mock tests built to the 2026 exam pattern. Each attempt gives you section-wise accuracy, time-per-question data, percentile rank among recent test-takers, and detailed answer explanations for every question.</p>
+<p>GridAcademy offers free SSC CGL Tier 1 mock tests built to the 2026 exam pattern. Each attempt gives you your score, section-wise correct, incorrect and unattempted counts, the total time you took, and detailed answer explanations for every question.</p>
 
 <h2>Attempt Order on Exam Day</h2>
 <p>Since there is no section-wise time limit in Tier 1, your attempt order is a genuine strategic decision. The most effective order for the majority of candidates:</p>
@@ -1385,7 +1385,7 @@ const ibpsPOMockTest: BlogPost = {
 </ul>
 
 <h2>How GridAcademy's IBPS PO Mock Tests Are Designed</h2>
-<p>GridAcademy's IBPS PO Prelims mock tests replicate the actual exam interface — including sectional time locks that switch automatically after 20 minutes, the 0.25 negative marking deducted in real time, and question difficulty calibrated to match recent IBPS PO paper trends. After each attempt, you receive section-wise accuracy, your percentile rank among all GridAcademy aspirants, time-per-question data, and a full answer key with explanations. Most IBPS PO tests on GridAcademy are available free — start practicing at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
+<p>GridAcademy's IBPS PO Prelims mock tests follow the computer-based exam interface — section tabs, a countdown timer, a question palette and the 0.25 negative marking — with question difficulty calibrated to match recent IBPS PO paper trends. After each attempt, you receive your score, section-wise correct, incorrect and unattempted counts, the total time you took, and a full answer key with explanations. Most IBPS PO tests on GridAcademy are available free — start practicing at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
 
 <h2>Final 10-Day Sprint Strategy Before IBPS PO Prelims</h2>
 <p>If your exam is 10 days away, shift entirely to the test-and-analyse cycle. Take one full mock daily. Spend equal or more time on analysis. Avoid starting new topics — your goal is to maximise accuracy on what you already know. Review your personal error notebook daily and redo the specific question types where you consistently lose marks. In the final two days, stop taking full mocks and do only light sectional drills to preserve confidence without exhausting yourself.</p>
@@ -1485,7 +1485,7 @@ const rrbNtpcMockTest: BlogPost = {
 <h2>How to Use Mock Tests Effectively for RRB NTPC</h2>
 <p>The free-allocation format (no sectional time limits) means your mock test analysis must include a time-distribution audit. After each mock, check: how many minutes did you spend on each subject? If you spent 45 minutes on Mathematics and only 15 minutes on General Awareness, you likely left accuracy marks on the table in the easiest section.</p>
 <p>The 1/3 negative marking is less punishing than Banking's 0.25 deduction, but still significant. A wrong answer costs you 0.33 marks; an unattempted question costs you nothing. Track your precision: if your accuracy falls below 75% in any section across multiple mocks, reduce your attempt count in that section until accuracy improves.</p>
-<p>GridAcademy offers free RRB NTPC CBT 1 and CBT 2 mock tests built to the 2026 exam pattern. Each mock includes section-wise accuracy, time analysis, a full solution key with explanations, and your percentile rank among all students who attempted the same paper. Practice now at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
+<p>GridAcademy offers free RRB NTPC CBT 1 and CBT 2 mock tests built to the 2026 exam pattern. Each mock shows your score, section-wise correct, incorrect and unattempted counts, the total time you took, and a full solution key with explanations. Practice now at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
 
 <h2>RRB NTPC Preparation Timeline: 3-Month Plan</h2>
 <p><strong>Month 1 — Concepts & Syllabus Coverage:</strong> Complete all Mathematics topics (focus on Arithmetic, DI basics), cover Reasoning question types topic by topic, start daily current affairs reading (15–20 minutes). Solve 30–40 previous year questions daily by topic.</p>
@@ -1585,7 +1585,7 @@ const sbiPoPrelimsGuide: BlogPost = {
   <li><strong>Compare your attempt vs. accuracy:</strong> High-scoring candidates in SBI PO Prelims typically attempt 75–85 questions with 80–90% accuracy, not 95 questions with 65% accuracy.</li>
   <li><strong>Review all skipped questions:</strong> After the timed session, solve every question you skipped under no time pressure. This reveals whether you skipped due to time pressure (correct) or due to conceptual gaps (needs study).</li>
 </ul>
-<p>GridAcademy's SBI PO Prelims mock tests replicate the exact sectional timer interface, negative marking deduction, and question difficulty calibration. Each attempt generates section-wise accuracy data, percentile rank, and a detailed explanation for every question. Practice free at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
+<p>GridAcademy's SBI PO Prelims mock tests follow the computer-based exam interface — section tabs, a countdown timer and a question palette — with the correct negative marking and question difficulty calibration. Each attempt shows your score, section-wise correct, incorrect and unattempted counts, and a detailed explanation for every question. Practice free at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a>.</p>
 
 <h2>SBI PO Mains: What to Expect After Prelims</h2>
 <p>Once you clear Prelims, Mains is a more demanding test with 200 marks in 3 hours, plus a 30-minute Descriptive Paper (Letter writing + Essay). The Mains syllabus is broader — it includes Data Analysis & Interpretation (advanced DI, caselet, probability), Reasoning & Computer Aptitude (puzzles, input-output, computer basics), General/Economy/Banking Awareness (current affairs + banking/economics concepts), and an advanced English section. Begin Mains preparation in parallel with Prelims — at minimum, read banking and economy news daily during your Prelims preparation phase so the awareness section is not a cold start after Prelims results.</p>
@@ -1696,7 +1696,7 @@ const sscChslMockTest: BlogPost = {
 <p>These are estimates. Actual cutoffs depend on difficulty level of the 2026 paper and the number of candidates shortlisted for Tier 2.</p>
 
 <h2>How GridAcademy's SSC CHSL Mock Tests Help</h2>
-<p>GridAcademy's SSC CHSL Tier 1 mock tests are built to the 2026 exam pattern — 100 questions, 200 marks, 60 minutes, with 2-mark correct and 0.5-mark deduction for wrong answers. After each attempt, you receive section-wise accuracy data, time-per-question analytics, a full answer key with detailed explanations, and your percentile rank. Mock tests are available free at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a> — no registration required to start your first test.</p>
+<p>GridAcademy's SSC CHSL Tier 1 mock tests are built to the 2026 exam pattern — 100 questions, 200 marks, 60 minutes, with 2-mark correct and 0.5-mark deduction for wrong answers. After each attempt, you receive your score, section-wise correct, incorrect and unattempted counts, the total time you took, and a full answer key with detailed explanations. Free mock tests are available at <a href="/tests" class="text-orange-600 underline">gridacademy.in/tests</a> — start your first test with just your email and mobile number, no password needed.</p>
 
 <h2>Common Mistakes to Avoid in SSC CHSL 2026</h2>
 <ul>
