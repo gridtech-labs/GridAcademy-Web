@@ -72,7 +72,7 @@ const slugFaqs: Record<string, ExamFaq[]> = {
     {
       question: 'Is this CUET mock test free?',
       answer:
-        'This is a premium CUET mock test available at an affordable price of ₹7, designed with real exam-level questions and detailed analysis.',
+        'The free tests in this series need no payment — just your email and mobile number. The remaining tests unlock together with a single payment for this exam, with lifetime access; the current price is shown on this page before you pay.',
     },
     {
       question: 'Is this mock test based on the latest CUET 2026 pattern?',
