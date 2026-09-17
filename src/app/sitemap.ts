@@ -20,7 +20,6 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE_URL}/privacy`,            priority: 0.3,  changeFrequency: 'yearly'  },
   { url: `${BASE_URL}/terms`,              priority: 0.3,  changeFrequency: 'yearly'  },
   { url: `${BASE_URL}/refund-policy`,      priority: 0.3,  changeFrequency: 'yearly'  },
-  { url: `${BASE_URL}/leaderboard`,        priority: 0.5,  changeFrequency: 'daily'   },
 ];
 
 async function getExamSlugs(): Promise<string[]> {

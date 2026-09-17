@@ -17,7 +17,6 @@ const COLUMNS: { title: string; links: [string, string][] }[] = [
       ['Current Affairs', '/current-affairs'],
       ['Blog', '/blog'],
       ['Career Guide', '/career-guide'],
-      ['Leaderboard', '/leaderboard'],
     ],
   },
   {

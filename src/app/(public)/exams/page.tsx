@@ -21,7 +21,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ExamCard, ExamTypeFilter } from '@/types/exam';
 import {
-  FileText, Zap, Home, BookOpen, Trophy, BarChart2,
+  FileText, Zap, Home, BookOpen, BarChart2,
   ChevronRight, Search, Star, Users, TrendingUp, Shield,
 } from 'lucide-react';
 
@@ -93,10 +93,6 @@ function LeftSidebar({ examTypes, active, counts }: {
           <FileText className="w-4 h-4 shrink-0" />
           <span>Free Tests</span>
           <span className="ml-auto bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">Free</span>
-        </Link>
-        <Link href="/leaderboard"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-[#1760f4] transition-all">
-          <Trophy className="w-4 h-4" /> Leaderboard
         </Link>
         <Link href="/dashboard"
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-[#1760f4] transition-all">
