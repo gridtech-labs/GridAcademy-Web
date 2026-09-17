@@ -2,11 +2,11 @@ export const dynamic = 'force-dynamic';
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Search } from 'lucide-react';
+import { ChevronRight, Search, X } from 'lucide-react';
 import { api } from '@/lib/api-client';
-import { ExamCard, ExamTypeFilter } from '@/types/exam';
+import { ExamCard } from '@/types/exam';
 import { STREAMS, StreamKey, streamOf } from '@/lib/streams';
-import ExamCardLink from '@/components/exam/ExamCardLink';
+import ExamList from '@/components/exam/ExamList';
 import PageIntro from '@/components/ui/PageIntro';
 
 export const metadata: Metadata = {
@@ -27,13 +27,6 @@ export const metadata: Metadata = {
 async function getAllExams(): Promise<ExamCard[]> {
   try {
     const res = await api.get<ExamCard[]>('/api/exam-pages');
-    return Array.isArray(res) ? res : (res as any)?.data ?? [];
-  } catch { return []; }
-}
-
-async function getExamTypes(): Promise<ExamTypeFilter[]> {
-  try {
-    const res = await api.get<ExamTypeFilter[]>('/api/exam-pages/exam-types');
     return Array.isArray(res) ? res : (res as any)?.data ?? [];
   } catch { return []; }
 }
@@ -90,7 +83,7 @@ export default async function ExamsPage({
 }: {
   searchParams?: { category?: string; q?: string; stream?: string };
 }) {
-  const [allExams, examTypes] = await Promise.all([getAllExams(), getExamTypes()]);
+  const allExams = await getAllExams();
 
   const rawQuery = (searchParams?.q ?? '').trim();
   const query = rawQuery.toLowerCase();
@@ -114,7 +107,8 @@ export default async function ExamsPage({
     : activeCategory ? activeCategory
     : 'All exams';
 
-  const typesWithExams = examTypes.filter(t => withTests.some(e => e.examTypeName === t.name));
+  // Unfiltered, the directory reads as one table per stream
+  const groups = isFiltered ? [] : STREAMS.map(st => ({ ...st, exams: filtered.filter(e => streamOf(e) === st.key) })).filter(g => g.exams.length > 0);
 
   const crumbs = [{ label: 'Home', href: '/' }, ...(isFiltered ? [{ label: 'Exams', href: '/exams' }, { label: rawQuery || streamName || activeCategory }] : [{ label: 'Exams' }])];
 
@@ -172,27 +166,27 @@ export default async function ExamsPage({
             })}
           </div>
 
-          {/* Exam type chips */}
-          {typesWithExams.length > 1 && (
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-              {[{ id: 0, name: '' }, ...typesWithExams].map(t => {
-                const on = t.name === activeCategory;
-                return (
-                  <Link key={t.id} href={buildHref({ q: rawQuery, stream: activeStream, category: t.name })}
-                    className={`h-9 inline-flex items-center px-3.5 rounded-full text-[13.5px] font-medium whitespace-nowrap ${
-                      on ? 'bg-ink text-white' : 'bg-[#f2f4f7] text-[#344054] hover:bg-[#e4e7ec]'
-                    }`}>
-                    {t.name || 'All types'}
-                  </Link>
-                );
-              })}
-            </div>
+          {activeCategory && (
+            <Link href={buildHref({ q: rawQuery, stream: activeStream })}
+              className="self-start h-8 inline-flex items-center gap-1.5 pl-3 pr-2 rounded-full bg-ink text-white text-[13px] font-medium">
+              {activeCategory} <X className="w-3.5 h-3.5" aria-label="Remove filter" />
+            </Link>
           )}
 
           {filtered.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
-              {filtered.map(e => <ExamCardLink key={e.id} exam={e} />)}
-            </div>
+            isFiltered ? <ExamList exams={filtered} /> : (
+              <div className="flex flex-col gap-8 md:gap-10">
+                {groups.map(g => (
+                  <section key={g.key} className="flex flex-col gap-3">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <h2 className="text-lg md:text-xl font-semibold">{g.name}</h2>
+                      <Link href={buildHref({ stream: g.key })} className="text-sm font-semibold text-primary-dark hover:underline whitespace-nowrap">Only {g.name}</Link>
+                    </div>
+                    <ExamList exams={g.exams} />
+                  </section>
+                ))}
+              </div>
+            )
           ) : (
             <div className="rounded-xl border border-dashed border-[#d0d5dd] px-6 py-12 text-center flex flex-col items-center gap-3">
               <p className="text-lg font-semibold">No exams found</p>
