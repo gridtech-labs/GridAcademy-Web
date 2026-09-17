@@ -11,6 +11,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { StatusLegend, StatusMark, QStatus } from '@/components/exam/PaletteStatus';
 import ExamList from '@/components/exam/ExamList';
+import { StreamProvider, StreamCard, StreamTabs } from '@/components/home/StreamSwitcher';
 import { ExamCard, ExamNotification } from '@/types/exam';
 import { STREAMS, StreamKey, groupByStream } from '@/lib/streams';
 import { getAllDates, getStoriesByDate } from '@/lib/current-affairs';
@@ -93,8 +94,6 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
 
   const requested = STREAMS.find(s => s.key === searchParams?.stream)?.key;
   const activeStream: StreamKey = requested ?? STREAMS.find(s => byStream[s.key].length > 0)?.key ?? 'jee';
-  const activeExams = byStream[activeStream].slice(0, 4);
-  const activeMeta = STREAMS.find(s => s.key === activeStream)!;
 
   const govExams = byStream.gov.slice(0, 5);
   const latestDate = getAllDates()[0];
@@ -146,6 +145,8 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
 
       <main className="bg-white text-ink">
         {/* ── Hero ─────────────────────────────────────────────────────── */}
+        {/* Hero cards and exam tabs share one client-side stream state (see StreamSwitcher) */}
+        <StreamProvider initial={activeStream}>
         <section className="bg-gradient-to-b from-paper to-white">
           <div className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 pt-7 pb-6 md:pt-16 md:pb-14 grid lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-16">
             <div className="flex flex-col gap-4 md:gap-5 lg:pt-3 min-w-0">
@@ -191,7 +192,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
                 const Icon = STREAM_ICON[s.key];
                 const list = byStream[s.key];
                 return (
-                  <Link key={s.key} href={s.key === 'gov' ? '/#govt-jobs' : `/?stream=${s.key}#exams`} scroll={s.key === 'gov'}
+                  <StreamCard key={s.key} stream={s.key === 'gov' ? undefined : s.key} target={s.key === 'gov' ? 'govt-jobs' : 'exams'}
                     className="group flex items-center gap-3 md:gap-4 p-3.5 md:px-[18px] md:py-4 min-h-[64px] rounded-[10px] border border-line bg-white hover:border-primary/40 hover:bg-primary-tint/30 transition-colors">
                     <span className="w-[38px] h-[38px] md:w-11 md:h-11 rounded-[10px] bg-primary-tint text-primary-dark flex items-center justify-center shrink-0">
                       <Icon className="w-5 h-5 md:w-[22px] md:h-[22px]" />
@@ -207,7 +208,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
                       </span>
                     </span>
                     <ChevronRight className="w-[18px] h-[18px] text-[#98a2b3] group-hover:text-primary shrink-0" />
-                  </Link>
+                  </StreamCard>
                 );
               })}
             </div>
@@ -226,25 +227,21 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
             </Link>
           </div>
 
-          <div className="flex gap-1 border-b border-line overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0" role="tablist">
-            {STREAMS.map(s => (
-              <Link key={s.key} href={`/?stream=${s.key}#exams`} scroll={false} role="tab" aria-selected={s.key === activeStream}
-                className={`h-11 flex items-center px-4 text-[14.5px] font-semibold whitespace-nowrap border-b-[3px] transition-colors ${
-                  s.key === activeStream ? 'text-primary-dark border-primary' : 'text-[#475467] border-transparent hover:text-ink'
-                }`}>
-                {s.name}
-              </Link>
-            ))}
-          </div>
-
-          {activeExams.length > 0 ? (
-            <ExamList exams={activeExams} />
-          ) : (
-            <div className="rounded-xl border border-dashed border-[#d0d5dd] p-8 text-center text-[#475467]">
-              {activeMeta.name} tests are being added. <Link href="/exams" className="font-semibold text-primary-dark hover:underline">Browse all exams</Link>
-            </div>
-          )}
+          <StreamTabs
+            tabs={STREAMS.map(s => ({ key: s.key, name: s.name }))}
+            panels={Object.fromEntries(STREAMS.map(s => [
+              s.key,
+              byStream[s.key].length > 0 ? (
+                <ExamList exams={byStream[s.key].slice(0, 4)} />
+              ) : (
+                <div className="rounded-xl border border-dashed border-[#d0d5dd] p-8 text-center text-[#475467]">
+                  {s.name} tests are being added. <Link href="/exams" className="font-semibold text-primary-dark hover:underline">Browse all exams</Link>
+                </div>
+              ),
+            ])) as Record<StreamKey, React.ReactNode>}
+          />
         </section>
+        </StreamProvider>
 
         {/* ── Government jobs ──────────────────────────────────────────── */}
         <section id="govt-jobs" className="scroll-mt-16 bg-paper">
