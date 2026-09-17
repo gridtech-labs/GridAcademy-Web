@@ -45,7 +45,7 @@ export default function Footer() {
       <div className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 py-10 md:py-12">
         <div className="grid grid-cols-2 md:grid-cols-[1.4fr_repeat(4,minmax(0,1fr))] gap-8">
           <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-            <Logo size={28} dark />
+            <Logo size={34} dark />
             <p className="text-sm leading-relaxed max-w-xs">
               Mock tests on the real computer-based exam interface, for JEE, NEET, CUET and government jobs.
             </p>

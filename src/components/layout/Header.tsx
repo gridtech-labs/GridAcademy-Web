@@ -28,7 +28,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-line" style={{ height: 'var(--topbar-h, 56px)' }}>
       <div className="h-full max-w-[1328px] mx-auto flex items-center gap-6 px-4 md:px-6 lg:px-8">
-        <Logo size={28} />
+        <Logo size={32} />
 
         <nav className="hidden xl:flex items-center gap-1 text-[15px] font-medium text-[#344054]" aria-label="Main">
           {NAV.map(item => (
