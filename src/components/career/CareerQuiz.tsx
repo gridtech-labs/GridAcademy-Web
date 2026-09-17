@@ -175,8 +175,8 @@ export default function CareerQuiz() {
   if (quizState === 'loading') {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600" />
-        <p className="text-sm text-gray-500">Loading your quiz…</p>
+        <div className="h-9 w-9 animate-spin rounded-full border-[3px] border-primary-tint border-t-primary" />
+        <p className="text-sm text-[#667085]">Loading your quiz…</p>
       </div>
     );
   }
@@ -185,12 +185,11 @@ export default function CareerQuiz() {
   if (quizState === 'error') {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
-        <span className="text-5xl">⚠️</span>
-        <p className="text-lg font-semibold text-gray-800">Couldn&apos;t load the quiz</p>
-        <p className="text-sm text-gray-500">Please check your connection and try again.</p>
+        <p className="text-lg font-semibold">Couldn&apos;t load the quiz</p>
+        <p className="text-sm text-[#475467]">Please check your connection and try again.</p>
         <button
           onClick={fetchQuiz}
-          className="mt-2 rounded-xl bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
+          className="mt-2 h-11 rounded-lg bg-primary px-6 font-semibold text-white hover:bg-primary-dark"
         >
           Retry
         </button>
@@ -201,11 +200,10 @@ export default function CareerQuiz() {
   // ── Intro ────────────────────────────────────────────────────────────────────
   if (quizState === 'intro') {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center text-center gap-6">
-        <div className="text-6xl">🧭</div>
+      <div className="bg-white border border-line rounded-xl p-6 md:p-8 flex flex-col items-center text-center gap-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-extrabold text-gray-900">Find Your Career Type</h1>
-          <p className="text-gray-500 max-w-sm">
+          <h1 className="text-2xl md:text-[28px] font-bold">Find your career type</h1>
+          <p className="text-[15px] text-[#475467] max-w-sm leading-relaxed">
             Answer {questions.length} quick questions and discover which of the 8 career
             personality types fits you best. Takes about 2 minutes.
           </p>
@@ -214,17 +212,17 @@ export default function CareerQuiz() {
           {CAREER_CATEGORIES.map((cat) => (
             <span
               key={cat.slug}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${cat.color} ${cat.text}`}
+              className="h-7 inline-flex items-center rounded-full px-2.5 text-[12.5px] font-medium bg-[#f2f4f7] text-[#344054]"
             >
-              {cat.icon} {cat.label}
+              {cat.label}
             </span>
           ))}
         </div>
         <button
           onClick={handleStartQuiz}
-          className="rounded-xl bg-indigo-600 px-8 py-3 text-base font-bold text-white hover:bg-indigo-700 transition-colors shadow-md"
+          className="h-12 rounded-lg bg-primary px-8 text-base font-semibold text-white hover:bg-primary-dark"
         >
-          Start Quiz →
+          Start quiz
         </button>
       </div>
     );
@@ -237,23 +235,23 @@ export default function CareerQuiz() {
     const optionLabels = ['A', 'B', 'C', 'D'];
 
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col gap-6">
+      <div className="bg-white border border-line rounded-xl p-6 md:p-8 flex flex-col gap-6">
         {/* Progress */}
         <div className="flex flex-col gap-2">
-          <div className="flex justify-between text-xs text-gray-500 font-medium">
+          <div className="flex justify-between text-[13px] text-[#667085] font-medium">
             <span>Question {currentIndex + 1} of {questions.length}</span>
             <span>{Math.round(progress)}% done</span>
           </div>
-          <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+          <div className="h-2 rounded-full bg-[#eef1f5] overflow-hidden">
             <div
-              className="h-full rounded-full bg-indigo-500 transition-all duration-500"
+              className="h-full rounded-full bg-primary transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
         {/* Question text */}
-        <h2 className="text-xl font-bold text-gray-900 leading-snug">
+        <h2 className="text-xl md:text-[22px] font-semibold leading-snug">
           {question.questionText}
         </h2>
 
@@ -268,19 +266,17 @@ export default function CareerQuiz() {
                   key={option.id}
                   onClick={() => handleOptionSelect(option.id, option.careerCategory)}
                   disabled={selectedOption !== null}
-                  className={`flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-all duration-150 ${
+                  className={`flex items-center gap-3.5 min-h-[56px] rounded-[10px] border-[1.5px] px-4 py-3 text-left text-[15px] transition-colors ${
                     isSelected
-                      ? 'border-indigo-500 bg-indigo-50 text-indigo-800 shadow-sm'
+                      ? 'border-primary bg-[#f0f5ff] text-ink'
                       : selectedOption !== null
-                      ? 'border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-indigo-300 hover:bg-indigo-50/50'
+                      ? 'border-line bg-paper text-[#98a2b3] cursor-not-allowed'
+                      : 'border-[#d0d5dd] bg-white text-ink hover:border-[#98a2b3]'
                   }`}
                 >
                   <span
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                      isSelected
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-gray-100 text-gray-500'
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-[1.5px] text-[13px] font-semibold ${
+                      isSelected ? 'bg-primary border-primary text-white' : 'border-[#98a2b3] text-[#344054]'
                     }`}
                   >
                     {optionLabels[idx]}
@@ -302,48 +298,47 @@ export default function CareerQuiz() {
     return (
       <div className="flex flex-col gap-6">
         <div
-          className={`rounded-2xl border ${winnerCategory.border} ${winnerCategory.color} p-8 flex flex-col items-center text-center gap-4`}
+          className="rounded-xl bg-ink text-white p-6 md:p-8 flex flex-col items-center text-center gap-4"
         >
-          <div className="text-7xl">{winnerCategory.icon}</div>
           <div className="flex flex-col gap-1">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+            <p className="text-[12.5px] font-semibold uppercase tracking-[0.08em] text-[#8fb3ff]">
               Your career type is
             </p>
-            <h2 className={`text-3xl font-extrabold ${winnerCategory.text}`}>
+            <h2 className="text-[30px] md:text-[36px] font-bold leading-tight">
               You&apos;re a {winnerCategory.label}!
             </h2>
-            <p className={`text-base font-medium ${winnerCategory.text} opacity-80`}>
+            <p className="text-base text-ink-muted">
               {winnerCategory.tagline}
             </p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h3 className="text-base font-semibold text-gray-900 mb-3">What this means for you</h3>
-          <p className="text-gray-600 leading-relaxed text-sm">{description}</p>
+        <div className="bg-white border border-line rounded-xl p-5 md:p-6">
+          <h3 className="font-semibold mb-2">What this means for you</h3>
+          <p className="text-[15px] leading-relaxed text-[#344054]">{description}</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
           <Link
             href={`/career-guide?category=${winner}`}
-            className={`flex-1 inline-flex items-center justify-center gap-2 rounded-xl ${winnerCategory.accent} text-white font-bold px-6 py-3 hover:opacity-90 transition-opacity shadow-sm`}
+            className="flex-1 h-12 inline-flex items-center justify-center rounded-lg bg-primary text-white font-semibold px-6 hover:bg-primary-dark"
           >
-            Explore {winnerCategory.label} Careers →
+            Explore {winnerCategory.label} careers
           </Link>
           <button
             onClick={handleRetake}
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white text-gray-700 font-semibold px-6 py-3 hover:bg-gray-50 transition-colors"
+            className="flex-1 h-12 inline-flex items-center justify-center rounded-lg border border-[#d0d5dd] bg-white font-semibold px-6 hover:bg-paper"
           >
-            Retake Quiz
+            Retake quiz
           </button>
         </div>
 
         <div className="text-center">
           <Link
             href="/career-guide"
-            className="text-sm text-indigo-600 hover:text-indigo-800"
+            className="text-[15px] font-semibold text-primary-dark hover:underline"
           >
-            ← Browse all 100 careers
+            Browse all careers
           </Link>
         </div>
       </div>

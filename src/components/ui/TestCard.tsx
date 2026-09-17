@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Star, Clock, FileText } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { TestSeries } from '@/types';
 import { formatPrice, formatDuration, cn } from '@/lib/utils';
 
@@ -8,78 +8,41 @@ interface TestCardProps {
   className?: string;
 }
 
+/** Marketplace test-series card (provider-sold series). */
 export default function TestCard({ series, className }: TestCardProps) {
   return (
     <Link href={`/test/${series.slug}`}
       className={cn(
-        'group block bg-white rounded-xl border border-gray-200 overflow-hidden',
-        'hover:border-gray-300 hover:shadow-sm transition-all duration-150',
-        className
+        'group bg-white border border-line rounded-xl p-5 flex flex-col gap-3 hover:border-primary/40 hover:shadow-[0_8px_24px_-12px_rgba(14,23,38,.18)] transition',
+        className,
       )}>
-
-      {/* Thumbnail */}
-      <div className="relative h-36 bg-gray-100 overflow-hidden">
-        {series.thumbnailUrl ? (
-          <img src={series.thumbnailUrl} alt={series.title}
-            className="w-full h-full object-cover" />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <FileText className="w-10 h-10 text-gray-300" />
-          </div>
-        )}
-
-        {/* Exam badge */}
-        <span className="absolute top-2 left-2 bg-white text-gray-600
-          text-xs font-medium px-2 py-0.5 rounded border border-gray-200">
-          {series.examType}
-        </span>
-
-        {/* Free preview badge */}
+      <div className="flex items-center justify-between gap-2 min-h-[22px]">
+        <span className="text-[13px] text-[#667085] truncate">{series.providerName}</span>
         {series.isFirstTestFree && (
-          <span className="absolute top-2 right-2 bg-green-100 text-green-700
-            text-xs font-semibold px-2 py-0.5 rounded border border-green-200">
-            Free Test
-          </span>
+          <span className="h-[22px] inline-flex items-center px-2 rounded-full bg-[#e7f6ec] text-[#0b6b31] text-[11.5px] font-medium shrink-0">Free preview</span>
         )}
       </div>
-
-      {/* Content */}
-      <div className="p-4">
-        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-[#1760f4] transition-colors leading-snug">
-          {series.title}
-        </h3>
-        <p className="text-xs text-gray-400 mt-1">{series.providerName}</p>
-
-        {/* Stats row */}
-        <div className="flex items-center gap-3 mt-3 text-xs text-gray-400">
-          <span className="flex items-center gap-1">
-            <FileText className="w-3 h-3" /> {series.testCount} Tests
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock className="w-3 h-3" /> {formatDuration(series.durationMinutes * 60)}
-          </span>
-        </div>
-
-        {/* Rating */}
-        {series.reviewCount > 0 && (
-          <div className="flex items-center gap-1 mt-2">
-            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span className="text-xs font-semibold text-gray-700">{series.avgRating.toFixed(1)}</span>
-            <span className="text-xs text-gray-400">({series.reviewCount})</span>
-          </div>
+      <h3 className="text-[17px] font-semibold leading-snug line-clamp-2 group-hover:text-primary-dark">{series.title}</h3>
+      <div className="flex flex-wrap gap-2">
+        {series.examType && (
+          <span className="h-[26px] inline-flex items-center px-2.5 rounded-full bg-primary-tint text-primary-dark text-[12.5px] font-medium">{series.examType}</span>
         )}
-
-        {/* Price */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-          {series.priceInr === 0 ? (
-            <span className="text-sm font-bold text-green-700">FREE</span>
-          ) : (
-            <span className="text-sm font-bold text-gray-900">{formatPrice(series.priceInr)}</span>
-          )}
-          <span className="text-xs text-gray-400 group-hover:text-[#1760f4] transition-colors font-medium">
-            View Details →
-          </span>
-        </div>
+        <span className="h-[26px] inline-flex items-center px-2.5 rounded-full bg-[#f2f4f7] text-[#344054] text-[12.5px] font-medium">
+          {series.testCount} test{series.testCount === 1 ? '' : 's'}{series.durationMinutes > 0 ? ` · ${formatDuration(series.durationMinutes * 60)}` : ''}
+        </span>
+      </div>
+      {series.reviewCount > 0 && (
+        <p className="flex items-center gap-1 text-[13px] text-[#475467]">
+          <Star className="w-3.5 h-3.5 fill-saffron text-saffron" />
+          <b className="text-ink">{series.avgRating.toFixed(1)}</b> ({series.reviewCount})
+        </p>
+      )}
+      <div className="h-px bg-line mt-auto" />
+      <div className="flex items-center justify-between">
+        {series.priceInr === 0
+          ? <b className="text-[15px] text-[#0b6b31]">Free</b>
+          : <b className="text-[15px]">{formatPrice(series.priceInr)}</b>}
+        <span className="text-sm font-semibold text-primary-dark">View details</span>
       </div>
     </Link>
   );

@@ -101,27 +101,21 @@ export default function CareerExplorer({
   return (
     <div className="flex flex-col gap-6">
       {/* Search */}
-      <div className="relative">
-        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm pointer-events-none">
-          🔍
-        </span>
-        <input
-          type="text"
-          placeholder="Search careers..."
-          value={searchQuery}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          className="w-full rounded-xl border border-gray-200 bg-white pl-9 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-        />
-      </div>
+      <input
+        type="search"
+        placeholder="Search careers"
+        aria-label="Search careers"
+        value={searchQuery}
+        onChange={(e) => handleSearchChange(e.target.value)}
+        className="w-full md:max-w-[440px] h-11 rounded-lg border border-[#d0d5dd] bg-white px-3.5 text-[15px] placeholder:text-[#98a2b3] focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+      />
 
       {/* Category pills */}
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => handleCategoryChange('')}
-          className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-            !activeCategory
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'bg-white border border-gray-200 text-gray-600 hover:border-indigo-300 hover:text-indigo-600'
+          className={`h-9 rounded-full px-3.5 text-[13.5px] font-medium transition-colors ${
+            !activeCategory ? 'bg-ink text-white' : 'bg-[#f2f4f7] text-[#344054] hover:bg-[#e4e7ec]'
           }`}
         >
           All
@@ -130,13 +124,10 @@ export default function CareerExplorer({
           <button
             key={cat.slug}
             onClick={() => handleCategoryChange(cat.slug)}
-            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-              activeCategory === cat.slug
-                ? `${cat.accent} text-white shadow-sm`
-                : `bg-white border border-gray-200 ${cat.text} hover:border-current`
+            className={`h-9 inline-flex items-center rounded-full px-3.5 text-[13.5px] font-medium transition-colors ${
+              activeCategory === cat.slug ? 'bg-ink text-white' : 'bg-[#f2f4f7] text-[#344054] hover:bg-[#e4e7ec]'
             }`}
           >
-            <span>{cat.icon}</span>
             {cat.label}
           </button>
         ))}
@@ -144,17 +135,13 @@ export default function CareerExplorer({
 
       {/* Cost filter */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Cost:
-        </span>
+        <span className="text-[13px] font-medium text-[#667085]">Cost</span>
         {costOptions.map((opt) => (
           <button
             key={opt.value}
             onClick={() => handleCostChange(opt.value)}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-              costFilter === opt.value
-                ? 'bg-gray-800 text-white'
-                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+            className={`h-8 rounded-full px-3 text-[13px] font-medium transition-colors ${
+              costFilter === opt.value ? 'bg-primary-tint text-primary-dark' : 'bg-white border border-line text-[#344054] hover:bg-paper'
             }`}
           >
             {opt.label}
@@ -163,10 +150,10 @@ export default function CareerExplorer({
       </div>
 
       {/* Results count */}
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-[#667085]">
         Showing{' '}
-        <strong className="text-gray-800">{filtered.length}</strong> of{' '}
-        <strong className="text-gray-800">100</strong> careers
+        <strong className="text-ink">{filtered.length}</strong> of{' '}
+        <strong className="text-ink">{CAREERS.length}</strong> careers
       </p>
 
       {/* Grid */}
@@ -180,10 +167,9 @@ export default function CareerExplorer({
           })}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
-          <span className="text-5xl">🔍</span>
-          <p className="text-lg font-semibold text-gray-700">No careers found</p>
-          <p className="text-sm text-gray-500 max-w-xs">
+        <div className="flex flex-col items-center justify-center py-16 text-center gap-3 rounded-xl border border-dashed border-[#d0d5dd]">
+          <p className="text-lg font-semibold">No careers found</p>
+          <p className="text-[15px] text-[#475467] max-w-xs">
             Try a different search term, select a different category, or remove the cost
             filter — there are 100 paths waiting for you.
           </p>
@@ -194,7 +180,7 @@ export default function CareerExplorer({
               setCostFilter('all');
               router.replace('/career-guide', { scroll: false });
             }}
-            className="mt-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
+            className="mt-1 h-11 rounded-lg bg-primary px-5 font-semibold text-white hover:bg-primary-dark"
           >
             Clear all filters
           </button>

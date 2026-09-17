@@ -222,7 +222,7 @@ export default function FreeTestButton({
 
             <p className="text-center text-[13px] text-[#667085] mt-4">
               Have a password?{' '}
-              <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="font-semibold text-primary-dark hover:underline">
+              <Link href={`/login?mode=password&callbackUrl=${encodeURIComponent(callbackUrl)}`} className="font-semibold text-primary-dark hover:underline">
                 Log in
               </Link>
             </p>

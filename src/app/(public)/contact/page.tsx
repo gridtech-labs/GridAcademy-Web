@@ -1,21 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Phone, Clock, Send, CheckCircle, AlertCircle, MapPin, BookOpen } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, Send } from 'lucide-react';
+import PageIntro from '@/components/ui/PageIntro';
+import { fieldClass, labelClass } from '@/components/auth/AuthShell';
+
+const SUBJECTS = [
+  'Course / Exam Enquiry',
+  'Technical Support',
+  'Payment / Billing',
+  'Partnership / Collaboration',
+  'Feedback / Suggestion',
+  'Other',
+];
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const subjects = [
-    'Course / Exam Enquiry',
-    'Technical Support',
-    'Payment / Billing',
-    'Partnership / Collaboration',
-    'Feedback / Suggestion',
-    'Other',
-  ];
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    setForm(f => ({ ...f, [k]: e.target.value }));
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -38,219 +43,104 @@ export default function ContactPage() {
   }
 
   return (
-    <>
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <nav className="text-sm text-orange-100 mb-3">
-            <a href="/" className="hover:text-white">Home</a>
-            <span className="mx-2">/</span>
-            <span className="text-white font-medium">Contact Us</span>
-          </nav>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Contact Us</h1>
-          <p className="text-orange-100 text-lg">Have a question? We&apos;d love to hear from you.</p>
+    <div className="bg-white text-ink">
+      <PageIntro
+        crumbs={[{ label: 'Home', href: '/' }, { label: 'Contact' }]}
+        eyebrow="Contact"
+        title="How can we help?"
+        description="Questions about tests, payments or partnerships — our team replies within 24 hours."
+      />
+
+      <div className="max-w-[1100px] mx-auto px-4 md:px-6 py-8 md:py-12 grid lg:grid-cols-[1fr_340px] gap-8 lg:gap-12 items-start [&>*]:min-w-0">
+        <div className="border border-line rounded-xl p-5 md:p-8 flex flex-col gap-5">
+          <h2 className="text-xl md:text-2xl font-semibold">Send us a message</h2>
+
+          {status === 'success' && (
+            <div className="flex items-start gap-3 rounded-lg bg-[#e7f6ec] text-[#0b6b31] px-4 py-3">
+              <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
+              <p className="text-[15px]"><b>Message sent.</b> A confirmation is on its way to your email — we’ll reply within 24 hours.</p>
+            </div>
+          )}
+          {status === 'error' && (
+            <div className="flex items-start gap-3 rounded-lg bg-[#fef3f2] border border-[#fecdca] text-[#b42318] px-4 py-3">
+              <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
+              <p className="text-[15px]">{errorMsg}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <label className="flex flex-col gap-1.5">
+                <span className={labelClass}>Full name</span>
+                <input type="text" required placeholder="Your full name" value={form.name} onChange={set('name')} autoComplete="name" className={fieldClass()} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={labelClass}>Email</span>
+                <input type="email" required placeholder="you@example.com" value={form.email} onChange={set('email')} autoComplete="email" className={fieldClass()} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={labelClass}>Phone <span className="font-normal text-[#667085]">(optional)</span></span>
+                <input type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={set('phone')} autoComplete="tel" className={fieldClass()} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={labelClass}>Subject</span>
+                <select required value={form.subject} onChange={set('subject')} className={fieldClass()}>
+                  <option value="">Select a subject</option>
+                  {SUBJECTS.map(s => <option key={s}>{s}</option>)}
+                </select>
+              </label>
+            </div>
+            <label className="flex flex-col gap-1.5">
+              <span className={labelClass}>Message</span>
+              <textarea required minLength={10} rows={5} placeholder="Write your message here" value={form.message} onChange={set('message')}
+                className={`${fieldClass()} h-auto py-3 resize-y`} />
+            </label>
+            <button type="submit" disabled={status === 'loading'}
+              className="h-12 rounded-lg bg-primary hover:bg-primary-dark disabled:opacity-60 text-white font-semibold inline-flex items-center justify-center gap-2">
+              {status === 'loading' ? <Loader2 className="w-[18px] h-[18px] animate-spin" /> : <Send className="w-[18px] h-[18px]" />}
+              {status === 'loading' ? 'Sending…' : 'Send message'}
+            </button>
+            <p className="text-[13px] text-[#667085] text-center">We never share your details.</p>
+          </form>
         </div>
+
+        <aside className="flex flex-col gap-5">
+          <div className="rounded-xl bg-ink text-white p-5 md:p-6">
+            <h3 className="font-semibold text-lg mb-3">Get in touch</h3>
+            <dl className="flex flex-col divide-y divide-white/10">
+              <div className="py-2.5"><dt className="text-[13px] text-ink-muted">Email</dt><dd><a href="mailto:info@gridacademy.in" className="font-semibold hover:underline">info@gridacademy.in</a></dd></div>
+              <div className="py-2.5"><dt className="text-[13px] text-ink-muted">Phone</dt><dd><a href="tel:+918000000000" className="font-semibold hover:underline">+91 80000 00000</a></dd></div>
+              <div className="py-2.5"><dt className="text-[13px] text-ink-muted">Support hours</dt><dd className="font-semibold">Mon–Sat, 9 AM – 6 PM IST</dd></div>
+            </dl>
+          </div>
+          <div className="border border-line rounded-xl p-5 md:p-6">
+            <h3 className="font-semibold mb-3">What to expect</h3>
+            <ul className="flex flex-col gap-2 text-[15px] text-[#344054]">
+              {['Email replies within 24 hours', 'Technical issues resolved in 48 hours', 'Payment queries in 24 hours'].map(t => (
+                <li key={t} className="flex items-start gap-2"><CheckCircle2 className="w-[18px] h-[18px] text-[#12803c] shrink-0 mt-0.5" />{t}</li>
+              ))}
+            </ul>
+          </div>
+        </aside>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-          {/* ── Contact Form ─────────────────────────────────────── */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-1">Send Us a Message</h2>
-              <p className="text-sm text-gray-500 mb-6">Our team will get back to you within 24 hours.</p>
-
-              {status === 'success' && (
-                <div className="flex items-start gap-3 bg-green-50 border border-green-200 text-green-800 rounded-xl p-4 mb-6">
-                  <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold">Message sent successfully!</p>
-                    <p className="text-sm mt-0.5">Thank you! A confirmation has been sent to your email. We&apos;ll get back to you within 24 hours.</p>
-                  </div>
-                </div>
-              )}
-
-              {status === 'error' && (
-                <div className="flex items-start gap-3 bg-red-50 border border-red-200 text-red-800 rounded-xl p-4 mb-6">
-                  <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">{errorMsg}</p>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Full Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text" required
-                      placeholder="Your full name"
-                      value={form.name}
-                      onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email Address <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email" required
-                      placeholder="you@example.com"
-                      value={form.email}
-                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                    <input
-                      type="tel"
-                      placeholder="+91 98765 43210"
-                      value={form.phone}
-                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Subject <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      required
-                      value={form.subject}
-                      onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition bg-white"
-                    >
-                      <option value="">— Select a subject —</option>
-                      {subjects.map(s => <option key={s}>{s}</option>)}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Message <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    required minLength={10}
-                    rows={5}
-                    placeholder="Write your message here…"
-                    value={form.message}
-                    onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition resize-y"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors text-sm"
-                >
-                  {status === 'loading' ? (
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                  {status === 'loading' ? 'Sending…' : 'Send Message'}
-                </button>
-
-                <p className="text-xs text-gray-400 text-center">
-                  🔒 We respect your privacy. Your information will never be shared.
-                </p>
-              </form>
-            </div>
-          </div>
-
-          {/* ── Contact Info Sidebar ──────────────────────────────── */}
-          <div className="space-y-4">
-
-            {/* Direct contact */}
-            <div className="bg-orange-500 text-white rounded-2xl p-6">
-              <h3 className="font-bold text-lg mb-4">Get In Touch</h3>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-orange-100 text-xs mb-0.5">Email Us</p>
-                    <a href="mailto:info@gridacademy.in" className="font-semibold text-sm hover:underline">
-                      info@gridacademy.in
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-orange-100 text-xs mb-0.5">Call Us</p>
-                    <a href="tel:+918000000000" className="font-semibold text-sm hover:underline">
-                      +91 80000 00000
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-orange-100 text-xs mb-0.5">Support Hours</p>
-                    <p className="font-semibold text-sm">Mon–Sat, 9 AM – 6 PM IST</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-orange-100 text-xs mb-0.5">Location</p>
-                    <p className="font-semibold text-sm">India</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            {/* Response time */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-bold text-gray-900 mb-3 text-sm">⚡ What to Expect</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                {[
-                  'Email replies within 24 hours',
-                  'Technical issues resolved in 48 hours',
-                  'Payment queries in 24 hours',
-                ].map(t => (
-                  <li key={t} className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* FAQ Strip */}
-        <div className="mt-14">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">Frequently Asked Questions</h2>
-          <p className="text-gray-500 text-center mb-8 text-sm">Quick answers to common queries.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <section className="bg-paper border-t border-line">
+        <div className="max-w-[1100px] mx-auto px-4 md:px-6 py-10 md:py-12 flex flex-col gap-5">
+          <h2 className="text-xl md:text-2xl font-semibold">Common questions</h2>
+          <div className="grid md:grid-cols-3 gap-4">
             {[
-              { q: 'How do I enroll in a course?', a: 'Browse exams, click "Buy Now", and complete payment. You get instant access.' },
-              { q: 'What payment methods are accepted?', a: 'UPI, Net Banking, Credit/Debit cards and wallets via Razorpay\'s secure gateway.' },
-              { q: 'How can I get a refund?', a: 'Email info@gridacademy.in within 7 days of purchase. Refunds process in 5–7 business days.' },
+              { q: 'How do I buy tests?', a: 'Open an exam and choose “Unlock all tests”. One payment unlocks every paid test in that exam, with lifetime access.' },
+              { q: 'What payment methods are accepted?', a: 'UPI, net banking, credit/debit cards and wallets through Razorpay’s secure checkout.' },
+              { q: 'How can I get a refund?', a: 'Email info@gridacademy.in within 7 days of purchase. Refunds are processed in 5–7 business days.' },
             ].map(({ q, a }) => (
-              <div key={q} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                <h4 className="font-semibold text-gray-900 mb-2 text-sm">{q}</h4>
-                <p className="text-gray-500 text-sm leading-relaxed">{a}</p>
+              <div key={q} className="bg-white border border-line rounded-xl p-5">
+                <h3 className="font-semibold mb-1.5">{q}</h3>
+                <p className="text-sm leading-relaxed text-[#475467]">{a}</p>
               </div>
             ))}
           </div>
         </div>
-      </div>
-    </>
+      </section>
+    </div>
   );
 }

@@ -17,8 +17,8 @@ export default function BuyButton({ series, hasAccess }: Props) {
   if (hasAccess) {
     return (
       <a href={`/exam/${series.id}/1`}
-        className="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2">
-        <BookOpen className="w-5 h-5" /> Continue Learning
+        className="h-12 w-full rounded-lg bg-primary hover:bg-primary-dark text-white font-semibold flex items-center justify-center gap-2">
+        <BookOpen className="w-[18px] h-[18px]" /> Continue
       </a>
     );
   }
@@ -56,7 +56,7 @@ export default function BuyButton({ series, hasAccess }: Props) {
         description: series.title,
         order_id: data.data.razorpayOrderId,
         prefill: data.data.prefill,
-        theme: { color: '#4f46e5' },
+        theme: { color: '#1760f4' },
         handler: async (response: any) => {
           // Step 4: Verify payment on server
           const verifyRes = await fetch('/api/orders/verify', {
@@ -86,9 +86,9 @@ export default function BuyButton({ series, hasAccess }: Props) {
 
   return (
     <button onClick={handleBuy} disabled={loading}
-      className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2">
-      {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ShoppingCart className="w-5 h-5" />}
-      {loading ? 'Processing...' : series.priceInr === 0 ? 'Start Free Test' : `Buy Now — ${series.priceInr.toLocaleString('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 })}`}
+      className="h-12 w-full rounded-lg bg-primary hover:bg-primary-dark disabled:opacity-60 text-white font-semibold flex items-center justify-center gap-2">
+      {loading ? <Loader2 className="w-[18px] h-[18px] animate-spin" /> : <ShoppingCart className="w-[18px] h-[18px]" />}
+      {loading ? 'Processing…' : series.priceInr === 0 ? 'Start Free Test' : `Buy now · ${series.priceInr.toLocaleString('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 })}`}
     </button>
   );
 }
