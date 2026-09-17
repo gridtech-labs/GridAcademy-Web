@@ -1,17 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1a1740"/>
-      <stop offset="100%" stop-color="#3730a3"/>
+    <linearGradient id="sheen" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <!-- Background rounded square -->
-  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
-  <!-- Bold "G" -->
-  <text x="16" y="19"
-    text-anchor="middle" dominant-baseline="middle"
-    font-family="'Arial Black','Impact',Arial,sans-serif"
-    font-size="19" font-weight="900" fill="white">G</text>
-  <!-- Orange accent underbar -->
-  <rect x="8.5" y="26.5" width="15" height="2.5" rx="1.25" fill="#f97316"/>
+  <rect width="40" height="40" rx="10" fill="#1760f4"/>
+  <rect width="40" height="40" rx="10" fill="url(#sheen)"/>
+  <g fill="#fff">
+    <rect x="9" y="9" width="9.5" height="9.5" rx="2.5"/>
+    <rect x="21.5" y="9" width="9.5" height="9.5" rx="2.5" opacity=".55"/>
+    <rect x="9" y="21.5" width="9.5" height="9.5" rx="2.5" opacity=".55"/>
+  </g>
+  <rect x="21.5" y="21.5" width="9.5" height="9.5" rx="2.5" fill="#f5a524"/>
 </svg>

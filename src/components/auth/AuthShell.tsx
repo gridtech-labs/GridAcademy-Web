@@ -29,7 +29,7 @@ export default function AuthShell({ eyebrow, headline, points, children, footer,
   return (
     <div className="min-h-screen flex bg-paper text-ink">
       <aside className="hidden lg:flex lg:w-[44%] xl:w-[40%] flex-col justify-between bg-ink text-white p-12 xl:p-14">
-        <Logo size={30} dark />
+        <Logo size={36} dark />
         <div className="flex flex-col gap-5 max-w-[420px]">
           <p className="text-[12.5px] font-semibold uppercase tracking-[0.08em] text-[#8fb3ff]">{eyebrow}</p>
           <h2 className="text-[40px] xl:text-[44px] leading-[1.08] font-bold tracking-[-0.02em]">{headline}</h2>
@@ -48,7 +48,7 @@ export default function AuthShell({ eyebrow, headline, points, children, footer,
       </aside>
 
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 md:py-12">
-        <div className="lg:hidden mb-7"><Logo size={30} /></div>
+        <div className="lg:hidden mb-7"><Logo size={34} /></div>
         <div className={`w-full ${wide ? 'max-w-[560px]' : 'max-w-[420px]'}`}>
           {children}
           {footer && <div className="mt-5 text-center text-[13.5px] text-[#475467]">{footer}</div>}
