@@ -4,6 +4,8 @@ import { TestSeries } from '@/types';
 import TestCard from '@/components/ui/TestCard';
 import ExamListingFilters from '@/components/exam/ExamListingFilters';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import PageIntro from '@/components/ui/PageIntro';
 
 const BASE_URL = 'https://www.gridacademy.in';
 
@@ -89,51 +91,33 @@ export default async function ExamListingPage({
   if (!meta) notFound();
 
   const tests = await getTests(params.slug, searchParams) ?? [];
+  const cleanTitle = meta.title.replace(/\s*\|\s*GridAcademy$/, '');
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{meta.title.replace(/\s*\|\s*GridAcademy$/, '')}</h1>
-        <p className="text-gray-500 mt-1">{meta.description}</p>
-        <p className="text-sm text-indigo-600 font-medium mt-2">{tests.length} test series available</p>
-      </div>
+    <div className="bg-white text-ink">
+      <PageIntro
+        crumbs={[{ label: 'Home', href: '/' }, { label: 'Test series', href: '/tests' }, { label: cleanTitle }]}
+        title={cleanTitle}
+        description={meta.description}
+      >
+        <div className="mt-2"><ExamListingFilters /></div>
+      </PageIntro>
 
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* Filters sidebar */}
-        <aside className="w-full md:w-56 shrink-0">
-          <ExamListingFilters />
-        </aside>
-
-        {/* Results grid */}
-        <div className="flex-1">
-          {/* Sort bar */}
-          <div className="flex items-center justify-between mb-5">
-            <p className="text-sm text-gray-500">{tests.length} results</p>
-            <select defaultValue={searchParams.sort ?? 'popular'}
-              className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <option value="popular">Most Popular</option>
-              <option value="newest">Newest First</option>
-              <option value="price_asc">Price: Low to High</option>
-              <option value="price_desc">Price: High to Low</option>
-              <option value="rating">Highest Rated</option>
-            </select>
+      <div className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
+        {tests.length > 0 ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+            {tests.map(s => <TestCard key={s.id} series={s} />)}
           </div>
-
-          {tests.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-              {tests.map(s => <TestCard key={s.id} series={s} />)}
+        ) : (
+          <div className="rounded-xl border border-dashed border-[#d0d5dd] px-6 py-14 text-center flex flex-col items-center gap-3">
+            <p className="text-lg font-semibold">No test series here yet</p>
+            <p className="text-[15px] text-[#475467] max-w-md">Coaching institutes haven&apos;t published {cleanTitle.toLowerCase()} on GridAcademy yet.</p>
+            <div className="flex gap-2 mt-1">
+              <Link href="/exams" className="h-11 inline-flex items-center px-5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-dark">Browse exams</Link>
+              <Link href="/provider/register" className="h-11 inline-flex items-center px-5 rounded-lg border border-[#d0d5dd] font-semibold hover:bg-paper">Publish as a provider</Link>
             </div>
-          ) : (
-            <div className="text-center py-20">
-              <div className="text-5xl mb-4">📭</div>
-              <h3 className="text-lg font-semibold text-gray-800">No tests found</h3>
-              <p className="text-gray-500 mt-2 text-sm">
-                Be the first provider to upload {meta.title.toLowerCase()}!
-              </p>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

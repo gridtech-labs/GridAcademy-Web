@@ -4,6 +4,16 @@ import { formatDate } from '@/lib/utils';
 
 interface Props { seriesId: string; reviews: TestReview[] }
 
+function Stars({ value, size = 'w-4 h-4' }: { value: number; size?: string }) {
+  return (
+    <span className="flex gap-0.5" aria-label={`${value} out of 5`}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star key={i} className={`${size} ${i < Math.round(value) ? 'fill-saffron text-saffron' : 'text-[#d0d5dd]'}`} />
+      ))}
+    </span>
+  );
+}
+
 export default function ReviewsList({ reviews }: Props) {
   if (!reviews.length) return null;
 
@@ -11,56 +21,43 @@ export default function ReviewsList({ reviews }: Props) {
   const dist = [5, 4, 3, 2, 1].map(r => ({ r, count: reviews.filter(x => x.rating === r).length }));
 
   return (
-    <div>
-      <h2 className="text-lg font-bold text-gray-900 mb-6">Student Reviews</h2>
+    <section className="flex flex-col gap-4">
+      <h2 className="text-xl md:text-2xl font-semibold">Student reviews</h2>
 
-      {/* Summary */}
-      <div className="flex flex-col sm:flex-row gap-8 mb-6 bg-gray-50 rounded-2xl p-6 border border-gray-100">
-        <div className="text-center">
-          <div className="text-5xl font-extrabold text-gray-900">{avg.toFixed(1)}</div>
-          <div className="flex justify-center gap-0.5 mt-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className={`w-5 h-5 ${i < Math.round(avg) ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
-            ))}
-          </div>
-          <p className="text-sm text-gray-500 mt-1">{reviews.length} reviews</p>
+      <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 bg-paper border border-line rounded-xl p-5 md:p-6">
+        <div className="flex flex-col items-center sm:items-start gap-1.5">
+          <p className="font-mono font-semibold text-[40px] leading-none">{avg.toFixed(1)}</p>
+          <Stars value={avg} size="w-5 h-5" />
+          <p className="text-sm text-[#667085]">{reviews.length} review{reviews.length === 1 ? '' : 's'}</p>
         </div>
-        <div className="flex-1 space-y-1.5">
+        <div className="flex-1 flex flex-col gap-1.5 justify-center">
           {dist.map(({ r, count }) => (
-            <div key={r} className="flex items-center gap-3">
-              <span className="text-xs text-gray-500 w-4">{r}★</span>
-              <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div className="h-full bg-amber-400 rounded-full"
-                  style={{ width: `${reviews.length ? (count / reviews.length) * 100 : 0}%` }} />
+            <div key={r} className="flex items-center gap-3 text-xs text-[#475467]">
+              <span className="w-6 font-mono">{r}★</span>
+              <div className="flex-1 h-2 bg-[#e4e7ec] rounded overflow-hidden">
+                <div className="h-2 bg-saffron" style={{ width: `${(count / reviews.length) * 100}%` }} />
               </div>
-              <span className="text-xs text-gray-500 w-6">{count}</span>
+              <span className="w-6 text-right font-mono">{count}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Individual reviews */}
-      <div className="space-y-4">
+      <ul className="flex flex-col divide-y divide-line border-y border-line">
         {reviews.slice(0, 6).map(r => (
-          <div key={r.id} className="border border-gray-100 rounded-xl p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-sm font-bold">
-                {r.studentName[0]}
+          <li key={r.id} className="py-4 flex flex-col gap-2">
+            <div className="flex items-center gap-3">
+              <span className="w-9 h-9 rounded-full bg-primary-tint text-primary-dark flex items-center justify-center text-sm font-semibold">{r.studentName[0]}</span>
+              <div className="min-w-0">
+                <p className="font-semibold text-[15px] truncate">{r.studentName}</p>
+                <p className="text-xs text-[#667085]">{formatDate(r.createdAt)}</p>
               </div>
-              <div>
-                <p className="font-semibold text-gray-800 text-sm">{r.studentName}</p>
-                <p className="text-xs text-gray-400">{formatDate(r.createdAt)}</p>
-              </div>
-              <div className="ml-auto flex gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
-                ))}
-              </div>
+              <span className="ml-auto"><Stars value={r.rating} size="w-3.5 h-3.5" /></span>
             </div>
-            <p className="text-sm text-gray-700 leading-relaxed">{r.comment}</p>
-          </div>
+            <p className="text-[15px] text-[#344054] leading-relaxed">{r.comment}</p>
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 }

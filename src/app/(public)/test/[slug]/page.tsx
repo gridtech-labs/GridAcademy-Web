@@ -1,19 +1,16 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import Link from 'next/link';
+import { Check, MapPin, Star } from 'lucide-react';
 import { authOptions } from '@/lib/auth-options';
 import { api } from '@/lib/api-client';
 import { TestSeriesDetail } from '@/types';
 import { formatPrice } from '@/lib/utils';
-import {
-  Star, Clock, FileText, Users, MapPin, Zap,
-  CheckCircle, ChevronRight, Building2, BookOpen,
-} from 'lucide-react';
 import BuyButton from '@/components/test/BuyButton';
 import ReviewsList from '@/components/test/ReviewsList';
 import TestCard from '@/components/ui/TestCard';
-import Link from 'next/link';
-import Image from 'next/image';
+import PageIntro from '@/components/ui/PageIntro';
 
 export async function generateMetadata(
   { params }: { params: { slug: string } },
@@ -43,296 +40,135 @@ export default async function TestDetailPage({ params }: { params: { slug: strin
 
   if (token) {
     try {
-      const ent = await api.get<{ hasAccess: boolean }>(
-        `/api/student/entitlement/${series.id}`, token,
-      );
+      const ent = await api.get<{ hasAccess: boolean }>(`/api/student/entitlement/${series.id}`, token);
       hasAccess = ent?.hasAccess ?? false;
     } catch { /* not purchased */ }
   }
 
+  const chip = 'h-[26px] inline-flex items-center px-2.5 rounded-full text-[12.5px] font-medium';
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-white text-ink">
+      <PageIntro
+        crumbs={[{ label: 'Home', href: '/' }, { label: 'Test series', href: '/tests' }, { label: series.title }]}
+        title={series.title}
+        description={
+          <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[15px]">
+            <span>By <b className="text-ink font-semibold">{series.providerName}</b></span>
+            {series.providerCity && <span className="inline-flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{series.providerCity}</span>}
+            {series.reviewCount > 0 && (
+              <span className="inline-flex items-center gap-1">
+                <Star className="w-4 h-4 fill-saffron text-saffron" /><b className="text-ink">{series.avgRating.toFixed(1)}</b> ({series.reviewCount} reviews)
+              </span>
+            )}
+          </span>
+        }
+      >
+        <div className="flex flex-wrap gap-2">
+          {series.examType && <span className={`${chip} bg-primary-tint text-primary-dark`}>{series.examType}</span>}
+          {series.seriesType && <span className={`${chip} bg-[#f2f4f7] text-[#344054]`}>{series.seriesType}</span>}
+          {series.isFirstTestFree && <span className={`${chip} bg-[#e7f6ec] text-[#0b6b31]`}>Free preview test</span>}
+        </div>
+      </PageIntro>
 
-      {/* ── Hero ──────────────────────────────────────────────────────────────── */}
-
-      {/* Banner strip */}
-      <div className="relative w-full h-44 md:h-56 overflow-hidden"
-        style={{ background: 'linear-gradient(135deg,#0f0c29 0%,#1e1b4b 45%,#312e81 80%,#1e3a5f 100%)' }}>
-        {series.thumbnailUrl && (
-          <Image src={series.thumbnailUrl} alt={series.title} fill
-            className="object-cover object-center opacity-20"
-            sizes="100vw" unoptimized />
-        )}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at 70% 50%,rgba(249,115,22,.12),transparent 60%)' }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 pointer-events-none" />
-      </div>
-
-      {/* Info row — overlaps banner */}
-      <div style={{ background: 'linear-gradient(135deg,#0f172a,#1e1b4b)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-7">
-          <div className="flex flex-col md:flex-row gap-5 md:gap-8 items-start md:items-center">
-
-            {/* Thumbnail */}
-            <div className="shrink-0 -mt-12 md:-mt-14">
-              {series.thumbnailUrl ? (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden
-                  border-4 shadow-2xl bg-white"
-                  style={{ borderColor: 'rgba(249,115,22,.4)' }}>
-                  <Image src={series.thumbnailUrl} alt={series.title}
-                    width={96} height={96}
-                    className="w-full h-full object-cover" unoptimized />
-                </div>
-              ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl border-4 shadow-xl
-                  flex items-center justify-center text-4xl"
-                  style={{ background: 'rgba(249,115,22,.2)', borderColor: 'rgba(249,115,22,.35)' }}>
-                  📋
-                </div>
-              )}
-            </div>
-
-            {/* Title + meta */}
-            <div className="flex-1 min-w-0">
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2 mb-2">
-                <span className="text-xs font-bold px-3 py-1 rounded-full"
-                  style={{ background: 'rgba(249,115,22,.2)', border: '1px solid rgba(249,115,22,.35)', color: '#fdba74' }}>
-                  {series.examType}
-                </span>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full text-indigo-200"
-                  style={{ background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)' }}>
-                  {series.seriesType}
-                </span>
-                {series.isFirstTestFree && (
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1"
-                    style={{ background: 'rgba(34,197,94,.2)', border: '1px solid rgba(34,197,94,.35)', color: '#86efac' }}>
-                    <Zap className="w-3 h-3" /> Free Trial
-                  </span>
-                )}
-              </div>
-
-              <h1 className="text-xl md:text-2xl font-extrabold text-white leading-tight mb-1">
-                {series.title}
-              </h1>
-
-              {/* Rating */}
-              {series.reviewCount > 0 && (
-                <div className="flex items-center gap-3 mb-1.5">
-                  <div className="flex items-center gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`w-3.5 h-3.5 ${
-                        i < Math.round(series.avgRating)
-                          ? 'fill-amber-400 text-amber-400'
-                          : 'text-indigo-700'
-                      }`} />
-                    ))}
-                  </div>
-                  <span className="text-amber-400 font-bold text-sm">{series.avgRating.toFixed(1)}</span>
-                  <span className="text-indigo-300/70 text-xs">({series.reviewCount} reviews)</span>
-                  <span className="text-indigo-300/50">·</span>
-                  <span className="text-indigo-300/70 text-xs flex items-center gap-1">
-                    <Users className="w-3 h-3" />{series.purchaseCount.toLocaleString()} students
-                  </span>
-                </div>
-              )}
-
-              {/* Provider */}
-              <p className="text-indigo-300/70 text-sm flex items-center gap-1 flex-wrap">
-                <Building2 className="w-3.5 h-3.5 shrink-0" />
-                <span>By <strong className="text-indigo-200">{series.providerName}</strong></span>
-                {series.providerCity && (
-                  <span className="flex items-center gap-0.5">
-                    <MapPin className="w-3 h-3" />{series.providerCity}
-                  </span>
-                )}
+      <div className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-10 grid lg:grid-cols-[1fr_380px] gap-8 lg:gap-12 items-start [&>*]:min-w-0">
+        <aside className="lg:order-2 lg:sticky lg:top-20">
+          <div className="bg-white border border-line rounded-xl p-5 md:p-6 flex flex-col gap-4 shadow-[0_12px_32px_-14px_rgba(14,23,38,.18)]">
+            <div>
+              <p className="text-[34px] font-bold leading-tight">
+                {series.priceInr === 0 ? <span className="text-[#0b6b31]">Free</span> : formatPrice(series.priceInr)}
               </p>
+              <p className="text-sm text-[#475467] mt-0.5">Lifetime access · {series.testCount} test{series.testCount === 1 ? '' : 's'}</p>
             </div>
-
-            {/* Price CTA (desktop hero) */}
-            <div className="hidden md:block shrink-0 text-right">
-              {series.priceInr === 0 ? (
-                <p className="text-3xl font-extrabold text-green-400 mb-1">FREE</p>
-              ) : (
-                <p className="text-3xl font-extrabold text-white mb-1">{formatPrice(series.priceInr)}</p>
-              )}
-              <p className="text-indigo-300/60 text-xs">Lifetime access</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Breadcrumb ─────────────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
-          <nav className="flex items-center gap-1.5 text-xs text-gray-500">
-            <Link href="/" className="hover:text-orange-500 transition-colors">Home</Link>
-            <ChevronRight className="w-3 h-3" />
-            <Link href="/tests" className="hover:text-orange-500 transition-colors">Tests</Link>
-            <ChevronRight className="w-3 h-3" />
-            <span className="text-gray-800 font-medium truncate max-w-[200px]">{series.title}</span>
-          </nav>
-        </div>
-      </div>
-
-      {/* ── Body ──────────────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-
-          {/* ── Left: main content ──────────────────────────────────────────────── */}
-          <div className="flex-1 min-w-0 space-y-8">
-
-            {/* Stats bar */}
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { icon: FileText, label: `${series.testCount} Tests`,         sub: 'in this series' },
-                { icon: Clock,    label: `${series.durationMinutes} min`,      sub: 'per test'       },
-                { icon: Users,    label: series.language || 'English',         sub: 'language'       },
-              ].map(({ icon: Icon, label, sub }) => (
-                <div key={label} className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3 shadow-sm">
-                  <div className="w-9 h-9 bg-orange-50 rounded-xl flex items-center justify-center shrink-0">
-                    <Icon className="w-4 h-4 text-orange-500" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-bold text-gray-900 text-sm leading-tight truncate">{label}</p>
-                    <p className="text-xs text-gray-500">{sub}</p>
-                  </div>
-                </div>
+            <BuyButton series={series} hasAccess={hasAccess} />
+            {series.isFirstTestFree && !hasAccess && (
+              <a href={`/exam/${series.id}/1`}
+                className="h-11 inline-flex items-center justify-center rounded-lg bg-primary-tint text-primary-dark font-semibold hover:bg-[#d6e4fd]">
+                Try the first test free
+              </a>
+            )}
+            <ul className="flex flex-col gap-2 pt-3 border-t border-line">
+              {['Detailed solutions for every question', 'Score and time taken after every test', 'Section-wise results', 'Attempt anytime, on any device'].map(f => (
+                <li key={f} className="flex items-start gap-2 text-sm text-[#344054]">
+                  <Check className="w-4 h-4 text-[#12803c] mt-0.5 shrink-0" strokeWidth={2.4} />{f}
+                </li>
               ))}
-            </div>
-
-            {/* Description */}
-            {series.description && (
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-7 h-7 bg-orange-50 rounded-lg flex items-center justify-center">
-                    <BookOpen className="w-4 h-4 text-orange-500" />
-                  </div>
-                  <h2 className="font-bold text-gray-900">About This Test Series</h2>
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed">{series.description}</p>
-              </div>
-            )}
-
-            {/* What's included */}
-            {series.whatIncluded?.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-                <h2 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <span className="w-7 h-7 bg-green-50 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
-                  </span>
-                  What&apos;s Included
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {series.whatIncluded.map((item, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                      <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Exam Pattern */}
-            {series.examPattern?.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-                <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
-                  <div className="w-7 h-7 bg-indigo-50 rounded-lg flex items-center justify-center">
-                    <FileText className="w-4 h-4 text-indigo-600" />
-                  </div>
-                  <h2 className="font-bold text-gray-900">Exam Pattern</h2>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-indigo-50 border-b border-indigo-100">
-                        {['Section', 'Questions', 'Marks', 'Duration'].map(h => (
-                          <th key={h} className="px-4 py-3 text-left font-semibold text-indigo-700">{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      {series.examPattern.map((row, i) => (
-                        <tr key={i} className="hover:bg-orange-50/30 transition-colors">
-                          <td className="px-4 py-3 font-medium text-gray-800">{row.section}</td>
-                          <td className="px-4 py-3 text-gray-600">{row.questions}</td>
-                          <td className="px-4 py-3 text-gray-600">{row.marks}</td>
-                          <td className="px-4 py-3 text-gray-600">{row.duration ?? '—'}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {/* Reviews */}
-            <ReviewsList seriesId={series.id} reviews={series.reviews ?? []} />
-
-            {/* Related */}
-            {series.relatedSeries?.length > 0 && (
-              <div>
-                <h2 className="text-base font-bold text-gray-900 mb-4">Related Test Series</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {series.relatedSeries.slice(0, 3).map(s => <TestCard key={s.id} series={s} />)}
-                </div>
-              </div>
-            )}
+            </ul>
           </div>
+        </aside>
 
-          {/* ── Right: sticky buy panel ──────────────────────────────────────────── */}
-          <aside className="w-full lg:w-80 shrink-0">
-            <div className="sticky top-20 bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
-
-              {/* Orange accent header */}
-              <div className="px-6 py-4"
-                style={{ background: 'linear-gradient(135deg,#1e1b4b,#312e81)' }}>
-                <div className="flex items-end justify-between gap-2">
-                  <div>
-                    {series.priceInr === 0 ? (
-                      <p className="text-3xl font-extrabold text-green-400">FREE</p>
-                    ) : (
-                      <p className="text-3xl font-extrabold text-white">{formatPrice(series.priceInr)}</p>
-                    )}
-                    <p className="text-indigo-300/70 text-xs mt-0.5">Lifetime access · {series.testCount} tests</p>
-                  </div>
-                  {series.priceInr > 0 && (
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
-                      style={{ background: 'rgba(249,115,22,.25)', color: '#fdba74', border: '1px solid rgba(249,115,22,.4)' }}>
-                      Best Value
-                    </span>
-                  )}
-                </div>
+        <div className="lg:order-1 flex flex-col gap-10">
+          <dl className="grid grid-cols-3 border-y border-line">
+            {[
+              ['Tests', String(series.testCount)],
+              ['Per test', `${series.durationMinutes} min`],
+              ['Language', series.language || 'English'],
+            ].map(([k, v], i) => (
+              <div key={k} className={`py-4 ${i ? 'pl-4 md:pl-6 border-l border-line' : ''}`}>
+                <dt className="text-[13px] text-[#667085]">{k}</dt>
+                <dd className="font-mono font-semibold text-lg md:text-xl mt-1 truncate">{v}</dd>
               </div>
+            ))}
+          </dl>
 
-              <div className="p-6 space-y-3">
-                <BuyButton series={series} hasAccess={hasAccess} />
+          {series.description && (
+            <section className="flex flex-col gap-3">
+              <h2 className="text-xl md:text-2xl font-semibold">About this series</h2>
+              <p className="text-base leading-relaxed text-[#344054] max-w-[760px]">{series.description}</p>
+            </section>
+          )}
 
-                {series.isFirstTestFree && !hasAccess && (
-                  <a href={`/exam/${series.id}/1`}
-                    className="block w-full text-center py-3 border-2 border-orange-400 text-orange-600 rounded-xl font-semibold text-sm hover:bg-orange-50 transition-colors">
-                    Try First Test Free ⚡
-                  </a>
-                )}
+          {series.whatIncluded?.length > 0 && (
+            <section className="flex flex-col gap-3">
+              <h2 className="text-xl md:text-2xl font-semibold">What’s included</h2>
+              <ul className="grid sm:grid-cols-2 gap-2.5">
+                {series.whatIncluded.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-[15px] text-[#344054]">
+                    <Check className="w-[18px] h-[18px] text-[#12803c] shrink-0 mt-0.5" strokeWidth={2.4} />{item}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
-                <div className="pt-3 border-t border-gray-100 space-y-2">
-                  {[
-                    'Detailed solutions for every question',
-                    'Score and time taken after every test',
-                    'Section-wise performance analysis',
-                    'Attempt anytime, anywhere',
-                  ].map(f => (
-                    <div key={f} className="flex items-start gap-2 text-xs text-gray-600">
-                      <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5 shrink-0" />
-                      {f}
-                    </div>
-                  ))}
-                </div>
+          {series.examPattern?.length > 0 && (
+            <section className="flex flex-col gap-3">
+              <h2 className="text-xl md:text-2xl font-semibold">Exam pattern</h2>
+              <div className="border border-line rounded-xl overflow-x-auto">
+                <table className="w-full text-[14.5px]">
+                  <thead>
+                    <tr className="bg-[#f9fafb] text-[12.5px] text-[#475467] text-left">
+                      {['Section', 'Questions', 'Marks', 'Duration'].map(h => <th key={h} className="font-semibold px-4 py-2.5">{h}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {series.examPattern.map((row, i) => (
+                      <tr key={i} className="border-t border-[#eef0f3]">
+                        <td className="px-4 py-3">{row.section}</td>
+                        <td className="px-4 py-3 font-mono">{row.questions}</td>
+                        <td className="px-4 py-3 font-mono">{row.marks}</td>
+                        <td className="px-4 py-3 font-mono">{row.duration ?? '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            </div>
-          </aside>
+            </section>
+          )}
 
+          <ReviewsList seriesId={series.id} reviews={series.reviews ?? []} />
+
+          {series.relatedSeries?.length > 0 && (
+            <section className="flex flex-col gap-4">
+              <div className="flex items-end justify-between">
+                <h2 className="text-xl md:text-2xl font-semibold">Related test series</h2>
+                <Link href="/tests" className="text-[15px] font-semibold text-primary-dark hover:underline">See all</Link>
+              </div>
+              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                {series.relatedSeries.slice(0, 3).map(s => <TestCard key={s.id} series={s} />)}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>

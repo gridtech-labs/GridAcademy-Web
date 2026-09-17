@@ -6,10 +6,10 @@ import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const SORT_OPTIONS = [
-  { value: '',         label: 'Relevance' },
-  { value: 'popular',  label: 'Most Popular' },
-  { value: 'newest',   label: 'Newest First' },
-  { value: 'price_asc',label: 'Price: Low to High' },
+  { value: '',          label: 'Relevance' },
+  { value: 'popular',   label: 'Most popular' },
+  { value: 'newest',    label: 'Newest first' },
+  { value: 'price_asc', label: 'Price: low to high' },
 ];
 
 export default function TestsFilters({ total }: { total: number }) {
@@ -17,9 +17,9 @@ export default function TestsFilters({ total }: { total: number }) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const [query, setQuery]   = useState(searchParams.get('q') ?? '');
-  const sortBy              = searchParams.get('sortBy') ?? '';
-  const isFree              = searchParams.get('free') === 'true';
+  const [query, setQuery] = useState(searchParams.get('q') ?? '');
+  const sortBy            = searchParams.get('sortBy') ?? '';
+  const isFree            = searchParams.get('free') === 'true';
 
   function buildUrl(overrides: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString());
@@ -27,84 +27,39 @@ export default function TestsFilters({ total }: { total: number }) {
       if (v === null || v === '') params.delete(k);
       else params.set(k, v);
     });
-    // always reset to page 1 when filters change
-    params.delete('page');
+    params.delete('page'); // filters always reset to page 1
     return `/tests?${params.toString()}`;
   }
 
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    startTransition(() => router.push(buildUrl({ q: query || null })));
-  }
-
-  function handleSort(val: string) {
-    startTransition(() => router.push(buildUrl({ sortBy: val || null })));
-  }
-
-  function handleFreeToggle() {
-    startTransition(() => router.push(buildUrl({ free: isFree ? null : 'true' })));
-  }
+  const go = (url: string) => startTransition(() => router.push(url));
 
   return (
-    <div className={cn(
-      'bg-white border-b border-gray-200 sticky top-16 z-40 transition-opacity',
-      isPending && 'opacity-60 pointer-events-none'
-    )}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-
-        {/* Search */}
-        <form onSubmit={handleSearch} className="flex-1 flex gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder="Search tests, exams, subjects…"
-              className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-xl
-                         focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            />
-            {query && (
-              <button type="button" onClick={() => { setQuery(''); startTransition(() => router.push(buildUrl({ q: null }))); }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
-          </div>
-          <button type="submit"
-            className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors">
-            Search
+    <div className={cn('flex flex-col md:flex-row gap-3 md:items-center transition-opacity', isPending && 'opacity-60 pointer-events-none')}>
+      <form onSubmit={e => { e.preventDefault(); go(buildUrl({ q: query || null })); }} role="search" className="relative flex-1 md:max-w-[440px]">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#667085] pointer-events-none" />
+        <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search tests, exams, providers" aria-label="Search test series"
+          className="w-full h-11 pl-10 pr-10 rounded-lg border border-[#d0d5dd] bg-white text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+        {query && (
+          <button type="button" aria-label="Clear search" onClick={() => { setQuery(''); go(buildUrl({ q: null })); }}
+            className="absolute right-1 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-[#667085] hover:text-ink">
+            <X className="w-4 h-4" />
           </button>
-        </form>
+        )}
+      </form>
 
-        {/* Sort */}
-        <select
-          value={sortBy}
-          onChange={e => handleSort(e.target.value)}
-          className="text-sm border border-gray-300 rounded-xl px-3 py-2 focus:outline-none
-                     focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer">
-          {SORT_OPTIONS.map(o => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
+      <div className="flex items-center gap-2">
+        <select value={sortBy} onChange={e => go(buildUrl({ sortBy: e.target.value || null }))} aria-label="Sort"
+          className="h-11 px-3 rounded-lg border border-[#d0d5dd] bg-white text-[14.5px] focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
+          {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-
-        {/* Free toggle */}
-        <button
-          onClick={handleFreeToggle}
-          className={cn(
-            'text-sm font-medium px-4 py-2 rounded-xl border transition-colors whitespace-nowrap',
-            isFree
-              ? 'bg-green-600 text-white border-green-600'
-              : 'bg-white text-gray-600 border-gray-300 hover:border-green-500 hover:text-green-700'
-          )}>
-          {isFree ? '✓ Free Only' : 'Free Only'}
+        <button onClick={() => go(buildUrl({ free: isFree ? null : 'true' }))} aria-pressed={isFree}
+          className={cn('h-11 px-4 rounded-lg text-[14.5px] font-semibold whitespace-nowrap border',
+            isFree ? 'bg-ink text-white border-ink' : 'bg-white text-[#344054] border-[#d0d5dd] hover:bg-paper')}>
+          Free only
         </button>
-
-        {/* Result count */}
-        <span className="text-sm text-gray-500 whitespace-nowrap shrink-0">
-          {total} result{total !== 1 ? 's' : ''}
-        </span>
-
       </div>
+
+      <span className="text-sm text-[#667085] md:ml-auto whitespace-nowrap">{total} result{total !== 1 ? 's' : ''}</span>
     </div>
   );
 }
