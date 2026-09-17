@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { api } from '@/lib/api-client';
 import { TestSeries } from '@/types';
-import TestCard from '@/components/ui/TestCard';
+import TestSeriesList from '@/components/ui/TestSeriesList';
 import ExamListingFilters from '@/components/exam/ExamListingFilters';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -105,9 +105,7 @@ export default async function ExamListingPage({
 
       <div className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
         {tests.length > 0 ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
-            {tests.map(s => <TestCard key={s.id} series={s} />)}
-          </div>
+          <TestSeriesList series={tests} />
         ) : (
           <div className="rounded-xl border border-dashed border-[#d0d5dd] px-6 py-14 text-center flex flex-col items-center gap-3">
             <p className="text-lg font-semibold">No test series here yet</p>

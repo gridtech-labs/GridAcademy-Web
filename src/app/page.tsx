@@ -10,7 +10,7 @@ import { api } from '@/lib/api-client';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { StatusLegend, StatusMark, QStatus } from '@/components/exam/PaletteStatus';
-import ExamCardLink from '@/components/exam/ExamCardLink';
+import ExamList from '@/components/exam/ExamList';
 import { ExamCard, ExamNotification } from '@/types/exam';
 import { STREAMS, StreamKey, groupByStream } from '@/lib/streams';
 import { getAllDates, getStoriesByDate } from '@/lib/current-affairs';
@@ -238,9 +238,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
           </div>
 
           {activeExams.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-              {activeExams.map(exam => <ExamCardLink key={exam.id} exam={exam} />)}
-            </div>
+            <ExamList exams={activeExams} />
           ) : (
             <div className="rounded-xl border border-dashed border-[#d0d5dd] p-8 text-center text-[#475467]">
               {activeMeta.name} tests are being added. <Link href="/exams" className="font-semibold text-primary-dark hover:underline">Browse all exams</Link>
@@ -269,7 +267,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
                       {e.conductingBody && <span className="block text-[13px] text-[#667085] mt-0.5 truncate">{e.conductingBody}</span>}
                     </span>
                     <span className="h-[26px] inline-flex items-center px-2.5 rounded-full bg-[#f2f4f7] text-[#344054] text-[12.5px] font-medium whitespace-nowrap">
-                      {e.testCount} tests
+                      {e.testCount} test{e.testCount === 1 ? '' : 's'}
                     </span>
                   </Link>
                 )) : (

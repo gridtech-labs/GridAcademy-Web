@@ -6,7 +6,7 @@ import { api } from '@/lib/api-client';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ExamCard } from '@/types/exam';
-import ExamCardLink from '@/components/exam/ExamCardLink';
+import ExamList from '@/components/exam/ExamList';
 
 async function getExams(): Promise<ExamCard[]> {
   try {
@@ -37,9 +37,7 @@ export default async function AvailableTestsPage() {
           <p className="text-[15px] text-[#475467] mt-1">New exams are added after each official notification.</p>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {exams.map(exam => <ExamCardLink key={exam.id} exam={exam} />)}
-        </div>
+        <ExamList exams={exams} />
       )}
     </div>
   );

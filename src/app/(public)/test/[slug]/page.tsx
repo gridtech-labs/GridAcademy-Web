@@ -9,7 +9,7 @@ import { TestSeriesDetail } from '@/types';
 import { formatPrice } from '@/lib/utils';
 import BuyButton from '@/components/test/BuyButton';
 import ReviewsList from '@/components/test/ReviewsList';
-import TestCard from '@/components/ui/TestCard';
+import TestSeriesList from '@/components/ui/TestSeriesList';
 import PageIntro from '@/components/ui/PageIntro';
 
 export async function generateMetadata(
@@ -164,9 +164,7 @@ export default async function TestDetailPage({ params }: { params: { slug: strin
                 <h2 className="text-xl md:text-2xl font-semibold">Related test series</h2>
                 <Link href="/tests" className="text-[15px] font-semibold text-primary-dark hover:underline">See all</Link>
               </div>
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                {series.relatedSeries.slice(0, 3).map(s => <TestCard key={s.id} series={s} />)}
-              </div>
+              <TestSeriesList series={series.relatedSeries.slice(0, 3)} />
             </section>
           )}
         </div>
