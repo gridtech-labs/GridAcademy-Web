@@ -3,19 +3,30 @@
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import {
-  BookOpen, Loader2, Eye, EyeOff, CheckCircle,
-  Star, ShieldCheck, BarChart2, Clock,
-} from 'lucide-react';
+import { ArrowRight, Check, Eye, EyeOff, Loader2 } from 'lucide-react';
+import AuthShell, { FormError, errorTextClass, fieldClass, labelClass } from '@/components/auth/AuthShell';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
 
-const PERKS = [
-  { icon: Star,       text: 'Expert-crafted questions by top educators' },
-  { icon: BarChart2,  text: 'Detailed performance & accuracy analysis'  },
-  { icon: ShieldCheck,text: 'Worked solution for every question'         },
-  { icon: Clock,      text: 'Practice anytime — mobile-friendly'        },
-];
+function PasswordField({ label, value, onChange, placeholder, error }: {
+  label: string; value: string; onChange: (v: string) => void; placeholder: string; error?: string;
+}) {
+  const [show, setShow] = useState(false);
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className={labelClass}>{label}</span>
+      <span className="relative">
+        <input type={show ? 'text' : 'password'} value={value} onChange={e => onChange(e.target.value)}
+          placeholder={placeholder} autoComplete="new-password" className={`${fieldClass(!!error)} pr-12`} />
+        <button type="button" onClick={() => setShow(v => !v)} aria-label={show ? 'Hide password' : 'Show password'}
+          className="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-[#667085] hover:text-ink">
+          {show ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+        </button>
+      </span>
+      {error && <span className={errorTextClass}>{error}</span>}
+    </label>
+  );
+}
 
 function RegisterForm() {
   const searchParams = useSearchParams();
@@ -25,11 +36,11 @@ function RegisterForm() {
   const [email,           setEmail]           = useState('');
   const [password,        setPassword]        = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPw,          setShowPw]          = useState(false);
-  const [showCpw,         setShowCpw]         = useState(false);
   const [loading,         setLoading]         = useState(false);
   const [error,           setError]           = useState('');
   const [success,         setSuccess]         = useState(false);
+
+  const mismatch = !!confirmPassword && confirmPassword !== password;
 
   const validate = (): string | null => {
     if (!name.trim())   return 'Full name is required.';
@@ -64,197 +75,85 @@ function RegisterForm() {
     }
   };
 
-  /* ── Success screen ───────────────────────────────────────────────── */
+  const shell = {
+    eyebrow: 'Free to start',
+    headline: 'Your exam preparation starts here.',
+    points: [
+      'Full-length mocks for JEE, NEET, CUET and government exams',
+      'The same timer, palette and marking as the real test',
+      'A worked solution for every question',
+    ],
+    footer: <>Are you a coaching institute? <Link href="/provider/register" className="font-semibold text-primary-dark hover:underline">Register as a provider</Link></>,
+  };
+
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 w-full max-w-md p-10 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
-            <CheckCircle className="w-9 h-9 text-green-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Account Created! 🎉</h2>
-          <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-            Welcome to GridAcademy, <strong className="text-gray-800">{name}</strong>!<br />
-            Your account has been created. Sign in to start preparing.
+      <AuthShell {...shell}>
+        <div className="bg-white border border-line rounded-xl p-6 md:p-8 flex flex-col items-center text-center gap-4">
+          <span className="w-14 h-14 rounded-full bg-[#e7f6ec] text-[#0b6b31] flex items-center justify-center">
+            <Check className="w-7 h-7" strokeWidth={2.6} />
+          </span>
+          <h1 className="text-2xl font-bold">Account created</h1>
+          <p className="text-[15px] text-[#475467] leading-relaxed">
+            Welcome to GridAcademy, <b className="text-ink">{name.trim().split(/\s+/)[0]}</b>. Log in with your email and password to start preparing.
           </p>
-          <Link
-            href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
-            className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-colors text-center">
-            Sign In Now →
+          <Link href={`/login?mode=password&callbackUrl=${encodeURIComponent(callbackUrl)}`}
+            className="w-full h-12 rounded-lg bg-primary hover:bg-primary-dark text-white font-semibold inline-flex items-center justify-center gap-2">
+            Log in <ArrowRight className="w-[17px] h-[17px]" />
           </Link>
         </div>
-      </div>
+      </AuthShell>
     );
   }
 
-  /* ── Registration form ────────────────────────────────────────────── */
   return (
-    <div className="min-h-screen flex">
-
-      {/* ── Left hero panel (desktop only) ───────────────────────────── */}
-      <div className="hidden lg:flex lg:w-5/12 xl:w-1/2 flex-col justify-between p-12 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg,#0f0c29 0%,#1e1b4b 45%,#312e81 80%,#1e3a5f 100%)' }}>
-        {/* Decorative glows */}
-        <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle,rgba(249,115,22,.18),transparent 65%)', transform: 'translate(25%,-25%)' }} />
-        <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle,rgba(129,140,248,.12),transparent 65%)', transform: 'translate(-25%,25%)' }} />
-
-        {/* Logo */}
-        <div className="flex items-center gap-3 relative z-10">
-          <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-900/40">
-            <BookOpen className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-2xl font-extrabold text-white tracking-tight">GridAcademy</span>
-        </div>
-
-        {/* Hero copy */}
-        <div className="relative z-10">
-          <p className="text-orange-400 text-xs font-bold uppercase tracking-widest mb-3">Start for free today</p>
-          <h2 className="text-4xl xl:text-5xl font-extrabold text-white leading-tight mb-5">
-            Your exam success<br />starts here ✨
-          </h2>
-          <p className="text-indigo-200/80 text-base mb-8 leading-relaxed max-w-xs">
-            Join lakhs of aspirants preparing for SSC, Banking, Railway, UPSC and State PCS.
+    <AuthShell {...shell}>
+      <div className="bg-white border border-line rounded-xl p-6 md:p-8 flex flex-col gap-5 shadow-[0_12px_32px_-16px_rgba(14,23,38,.18)]">
+        <div>
+          <h1 className="text-2xl md:text-[28px] font-bold leading-tight">Create your account</h1>
+          <p className="text-[15px] text-[#475467] mt-1.5">
+            Only want to take a free test? You can start one with just your email and mobile number — no account needed.
           </p>
-          <div className="space-y-3">
-            {PERKS.map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ background: 'rgba(249,115,22,.18)', border: '1px solid rgba(249,115,22,.3)' }}>
-                  <Icon className="w-3.5 h-3.5 text-orange-400" />
-                </div>
-                <span className="text-indigo-100 text-sm">{text}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
-        <p className="text-indigo-400/50 text-xs relative z-10">
-          © {new Date().getFullYear()} GridAcademy. All rights reserved.
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+          <label className="flex flex-col gap-1.5">
+            <span className={labelClass}>Full name</span>
+            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Ananya Verma" autoComplete="name" className={fieldClass()} />
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className={labelClass}>Email</span>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" className={fieldClass()} />
+          </label>
+          <PasswordField label="Password" value={password} onChange={setPassword} placeholder="At least 8 characters" />
+          <PasswordField label="Confirm password" value={confirmPassword} onChange={setConfirmPassword} placeholder="Re-enter your password"
+            error={mismatch ? 'Passwords do not match.' : undefined} />
+
+          {error && <FormError>{error}</FormError>}
+
+          <button type="submit" disabled={loading}
+            className="h-12 rounded-lg bg-primary hover:bg-primary-dark disabled:opacity-60 text-white font-semibold text-base inline-flex items-center justify-center gap-2 mt-1">
+            {loading ? <><Loader2 className="w-[18px] h-[18px] animate-spin" /> Creating account…</> : <>Create free account <ArrowRight className="w-[17px] h-[17px]" /></>}
+          </button>
+
+          <p className="text-center text-[13px] text-[#667085]">
+            By continuing you agree to our <Link href="/terms" className="underline hover:text-ink">Terms</Link> and <Link href="/privacy" className="underline hover:text-ink">Privacy Policy</Link>.
+          </p>
+        </form>
+
+        <p className="text-center text-sm text-[#475467] border-t border-line pt-4">
+          Already have an account? <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="font-semibold text-primary-dark hover:underline">Log in</Link>
         </p>
       </div>
-
-      {/* ── Right form panel ──────────────────────────────────────────── */}
-      <div className="flex-1 flex items-center justify-center p-6 bg-gray-50 overflow-y-auto">
-        <div className="w-full max-w-md py-8">
-
-          {/* Mobile-only logo */}
-          <div className="flex items-center justify-center gap-2 mb-8 lg:hidden">
-            <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
-              <BookOpen className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-extrabold text-gray-900">GridAcademy</span>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">Create your account</h1>
-            <p className="text-sm text-gray-500 mb-6">Join millions of aspirants preparing smarter</p>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-
-              {/* Full Name */}
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">
-                  Full Name <span className="text-red-500">*</span>
-                </label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)}
-                  placeholder="Rajesh Kumar" required autoComplete="name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent" />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">
-                  Email Address <span className="text-red-500">*</span>
-                </label>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                  placeholder="rajesh@example.com" required autoComplete="email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent" />
-              </div>
-
-              {/* Password */}
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">
-                  Password <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <input type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
-                    placeholder="At least 8 characters" required autoComplete="new-password"
-                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent" />
-                  <button type="button" onClick={() => setShowPw(v => !v)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                    {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-                {password.length > 0 && (
-                  <div className="mt-1.5 flex gap-1">
-                    {[1, 2, 3, 4].map(level => (
-                      <div key={level} className={`h-1 flex-1 rounded-full transition-colors ${
-                        password.length >= level * 3
-                          ? level <= 1 ? 'bg-red-400' : level <= 2 ? 'bg-yellow-400' : level <= 3 ? 'bg-blue-400' : 'bg-green-500'
-                          : 'bg-gray-200'
-                      }`} />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">
-                  Confirm Password <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <input type={showCpw ? 'text' : 'password'} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
-                    placeholder="Re-enter your password" required autoComplete="new-password"
-                    className={`w-full px-4 py-3 pr-12 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent ${
-                      confirmPassword && confirmPassword !== password ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                    }`} />
-                  <button type="button" onClick={() => setShowCpw(v => !v)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                    {showCpw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-                {confirmPassword && confirmPassword !== password && (
-                  <p className="text-xs text-red-600 mt-1">Passwords do not match</p>
-                )}
-              </div>
-
-              {error && (
-                <p className="text-sm text-red-600 bg-red-50 rounded-xl px-4 py-2 border border-red-100">{error}</p>
-              )}
-
-              <button type="submit" disabled={loading}
-                className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 mt-2">
-                {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-                {loading ? 'Creating account...' : 'Create Free Account →'}
-              </button>
-            </form>
-
-            <p className="text-center text-sm text-gray-500 mt-6">
-              Already have an account?{' '}
-              <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="text-orange-600 font-semibold hover:underline">Sign In</Link>
-            </p>
-          </div>
-
-          <p className="text-center text-xs text-gray-400 mt-4">
-            Are you a coaching institute?{' '}
-            <Link href="/provider/register" className="text-indigo-500 hover:underline font-medium">
-              Register as a Provider
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 }
 
 export default function RegisterPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-paper flex items-center justify-center">
+        <Loader2 className="w-7 h-7 text-primary animate-spin" />
       </div>
     }>
       <RegisterForm />
