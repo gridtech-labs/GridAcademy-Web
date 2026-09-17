@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronRight, Clock, Tag, Download } from 'lucide-react';
+import { ChevronRight, Download } from 'lucide-react';
 import { getAllPosts, getPost } from '@/lib/blog-posts';
 
 interface PageProps { params: { slug: string } }
@@ -97,129 +97,92 @@ export default function BlogPostPage({ params }: PageProps) {
         }}
       />
 
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-2.5">
-          <nav className="flex items-center gap-1.5 text-xs text-gray-500">
-            <Link href="/" className="hover:text-orange-500 transition-colors">Home</Link>
-            <ChevronRight className="w-3 h-3" />
-            <Link href="/blog" className="hover:text-orange-500 transition-colors">Blog</Link>
-            <ChevronRight className="w-3 h-3" />
-            <span className="text-gray-800 font-medium truncate max-w-[200px]">{post.title}</span>
-          </nav>
-        </div>
-      </div>
-
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
-
-        {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-orange-100 text-orange-700">
-              <Tag className="w-3 h-3" />{post.category}
-            </span>
-            <span className="flex items-center gap-1 text-xs text-gray-400">
-              <Clock className="w-3 h-3" />{post.readingTimeMinutes} min read
-            </span>
-            <span className="text-xs text-gray-400">{publishedFormatted}</span>
+      <div className="bg-white text-ink">
+        <section className="bg-paper border-b border-line">
+          <div className="max-w-[760px] mx-auto px-4 md:px-6 pt-5 md:pt-7 pb-8 md:pb-10 flex flex-col gap-4">
+            <nav className="flex items-center gap-1.5 text-[13.5px] text-[#667085] overflow-x-auto whitespace-nowrap scrollbar-hide" aria-label="Breadcrumb">
+              <Link href="/" className="hover:text-primary-dark">Home</Link><ChevronRight className="w-3.5 h-3.5 shrink-0" />
+              <Link href="/blog" className="hover:text-primary-dark">Blog</Link><ChevronRight className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-[#344054]">{post.category}</span>
+            </nav>
+            <p className="text-[13px] text-[#667085]">
+              <span className="h-[22px] inline-flex items-center px-2 rounded-full bg-primary-tint text-primary-dark text-[11.5px] font-medium mr-2">{post.category}</span>
+              {publishedFormatted} · {post.readingTimeMinutes} min read
+            </p>
+            <h1 className="text-[28px] leading-[1.15] md:text-[40px] md:leading-[1.1] font-bold tracking-[-0.02em]">{post.title}</h1>
+            <p className="text-base md:text-lg leading-relaxed text-[#475467]">{post.excerpt}</p>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight mb-4">
-            {post.title}
-          </h1>
-          <p className="text-gray-500 text-sm leading-relaxed border-l-4 border-orange-400 pl-4">
-            {post.excerpt}
-          </p>
-        </header>
+        </section>
 
-        {/* Article body */}
-        <article
-          className="
-            text-gray-700
-            [&_h2]:text-xl [&_h2]:font-extrabold [&_h2]:text-gray-900 [&_h2]:mt-10 [&_h2]:mb-3
-            [&_h3]:text-base [&_h3]:font-bold [&_h3]:text-gray-800 [&_h3]:mt-6 [&_h3]:mb-2
-            [&_p]:text-sm [&_p]:leading-relaxed [&_p]:mb-4 [&_p]:text-gray-600
-            [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ul]:space-y-1.5
-            [&_li]:text-sm [&_li]:text-gray-600 [&_li]:leading-relaxed
-            [&_strong]:font-semibold [&_strong]:text-gray-800
-          "
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+        <div className="max-w-[760px] mx-auto px-4 md:px-6 py-8 md:py-10">
+          <article
+            className="
+              text-[#344054]
+              [&_h2]:text-[22px] md:[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-ink [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:leading-snug
+              [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-ink [&_h3]:mt-7 [&_h3]:mb-2
+              [&_p]:text-[16.5px] [&_p]:leading-[1.75] [&_p]:mb-4
+              [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-5 [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-5 [&_ol]:space-y-2
+              [&_li]:text-[16.5px] [&_li]:leading-[1.7]
+              [&_strong]:font-semibold [&_strong]:text-ink
+              [&_a]:text-primary-dark [&_a]:font-medium [&_a]:underline
+              [&_table]:w-full [&_table]:text-sm [&_table]:my-5 [&_table]:border [&_table]:border-line
+              [&_th]:bg-[#f9fafb] [&_th]:text-left [&_th]:px-3 [&_th]:py-2 [&_td]:px-3 [&_td]:py-2 [&_td]:border-t [&_td]:border-line
+              [&_.table-wrap]:overflow-x-auto
+            "
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
 
-        {/* FAQ section */}
-        {post.faqs.length > 0 && (
-          <section className="mt-12 border-t border-gray-200 pt-8">
-            <h2 className="text-xl font-extrabold text-gray-900 mb-5">Frequently Asked Questions</h2>
-            <dl className="divide-y divide-gray-100">
-              {post.faqs.map(({ question, answer }) => (
-                <details key={question} className="group py-4 cursor-pointer">
-                  <summary className="flex items-center justify-between gap-3 font-semibold text-sm text-gray-800 marker:hidden list-none">
-                    {question}
-                    <span className="shrink-0 text-gray-400 group-open:rotate-180 transition-transform">▾</span>
-                  </summary>
-                  <p className="mt-2 text-sm text-gray-600 leading-relaxed">{answer}</p>
-                </details>
-              ))}
-            </dl>
-          </section>
-        )}
-
-        {/* Author Bio - E-E-A-T Signal */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <div className="flex gap-4">
-            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
-              <span className="text-xl font-bold text-orange-600">GA</span>
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold text-gray-900">GridAcademy Team</span>
-                <span className="text-xs text-gray-500">Content & Research</span>
+          {post.downloadCta && (
+            <div className="mt-10 rounded-xl border border-line bg-paper p-5 md:p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1">
+                <p className="font-semibold text-lg">Get the printable study tracker</p>
+                <p className="text-[15px] text-[#475467] mt-1">Day-by-day targets, formula sheet reminders and MCQ counts — one page, print-ready.</p>
               </div>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <a href={post.downloadCta.url} className="h-11 shrink-0 inline-flex items-center gap-2 px-5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-dark">
+                <Download className="w-4 h-4" />{post.downloadCta.label}
+              </a>
+            </div>
+          )}
+
+          {post.faqs.length > 0 && (
+            <section className="mt-12 flex flex-col gap-3.5">
+              <h2 className="text-xl md:text-2xl font-semibold">Frequently asked questions</h2>
+              <div className="border border-line rounded-xl divide-y divide-line">
+                {post.faqs.map(({ question, answer }) => (
+                  <details key={question} className="group px-5">
+                    <summary className="min-h-[56px] flex items-center justify-between gap-3 font-semibold text-[15px] cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                      {question}
+                      <ChevronRight className="w-4 h-4 text-[#667085] shrink-0 transition-transform group-open:rotate-90" />
+                    </summary>
+                    <p className="pb-4 text-[15px] leading-relaxed text-[#475467]">{answer}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <div className="mt-12 pt-8 border-t border-line flex gap-4">
+            <span className="w-12 h-12 rounded-full bg-primary-tint text-primary-dark flex items-center justify-center font-semibold shrink-0">GA</span>
+            <div>
+              <p className="font-semibold">GridAcademy Team <span className="font-normal text-sm text-[#667085]">· Content &amp; Research</span></p>
+              <p className="text-sm leading-relaxed text-[#475467] mt-1">
                 Expert-curated content from GridAcademy&apos;s team of educators and competitive exam specialists.
                 100+ coaching partners. 50,000+ students. Transparent, verified, exam-aligned.
               </p>
-              <div className="flex gap-3 mt-2">
-                <Link href="/about" className="text-xs text-gray-400 hover:text-orange-500 transition-colors">About GridAcademy</Link>
-              </div>
+              <Link href="/about" className="inline-block text-sm font-semibold text-primary-dark hover:underline mt-2">About GridAcademy</Link>
             </div>
           </div>
-        </div>
 
-        {/* Download CTA */}
-        {post.downloadCta && (
-          <div className="mt-12 rounded-xl border-2 border-orange-400 bg-orange-50 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="mt-8 rounded-xl bg-ink text-white p-6 md:p-7 flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex-1">
-              <p className="font-extrabold text-gray-900 text-base mb-0.5">Get the printable study tracker</p>
-              <p className="text-sm text-gray-600">Day-by-day targets, formula sheet reminders and MCQ counts — one page, print-ready.</p>
+              <p className="font-semibold text-lg">Ready to practise?</p>
+              <p className="text-[15px] text-ink-muted mt-1">Take a free mock test on the real exam interface, with a solution for every question.</p>
             </div>
-            <a
-              href={post.downloadCta.url}
-              className="shrink-0 inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors"
-            >
-              <Download className="w-4 h-4" />
-              {post.downloadCta.label}
-            </a>
+            <Link href="/exams" className="h-11 shrink-0 inline-flex items-center px-5 rounded-lg bg-primary font-semibold hover:bg-primary-dark">Browse mock tests</Link>
           </div>
-        )}
 
-        {/* CTA */}
-        <div className="mt-8 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 p-6 text-white">
-          <p className="font-extrabold text-lg mb-1">Ready to practice?</p>
-          <p className="text-orange-100 text-sm mb-4">
-            Take a free mock test on GridAcademy — latest 2026 exam pattern, instant results and detailed analysis.
-          </p>
-          <Link
-            href="/exams"
-            className="inline-block bg-white text-orange-600 font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-orange-50 transition-colors"
-          >
-            Browse Free Mock Tests
-          </Link>
-        </div>
-
-        {/* Back link */}
-        <div className="mt-8">
-          <Link href="/blog" className="text-sm font-semibold text-gray-500 hover:text-orange-500 transition-colors">
-            ← Back to Blog
+          <Link href="/blog" className="inline-flex items-center gap-1 mt-8 text-[15px] font-semibold text-primary-dark hover:underline">
+            <ChevronRight className="w-4 h-4 rotate-180" /> All articles
           </Link>
         </div>
       </div>

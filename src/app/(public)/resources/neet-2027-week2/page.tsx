@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { FileText, Download, BookOpen, Calendar } from 'lucide-react';
+import { Download } from 'lucide-react';
+import PageIntro from '@/components/ui/PageIntro';
 
 export const metadata: Metadata = {
   title: 'NEET 2027 Week 2 Target — Study Material',
@@ -9,60 +10,35 @@ export const metadata: Metadata = {
 
 export default function NeetWeek2DownloadPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-16 px-4">
-      <div className="max-w-md w-full">
-
-        {/* File card */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-
-          {/* Coloured header */}
-          <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-7 text-white">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-                <FileText className="w-5 h-5" />
+    <div className="bg-white text-ink">
+      <PageIntro
+        narrow
+        crumbs={[{ label: 'Home', href: '/' }, { label: 'Resources', href: '/blog' }, { label: 'NEET 2027 Week 2' }]}
+        eyebrow="Free study material · PDF"
+        title="NEET 2027 — Week 2 target"
+        description="Revision pack for 8–14 July: day-by-day targets for Physics, Chemistry and Biology."
+      />
+      <div className="max-w-[880px] mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div className="border border-line rounded-xl p-5 md:p-7 flex flex-col sm:flex-row sm:items-center gap-5">
+          <dl className="flex-1 grid grid-cols-3 gap-4">
+            {[['Week', '8–14 July'], ['For', 'NEET 2027'], ['Format', 'PDF']].map(([k, v]) => (
+              <div key={k}>
+                <dt className="text-[13px] text-[#667085]">{k}</dt>
+                <dd className="font-semibold mt-0.5">{v}</dd>
               </div>
-              <span className="text-xs font-bold text-orange-100 uppercase tracking-widest">
-                Study Material · PDF
-              </span>
-            </div>
-            <h1 className="text-xl font-extrabold leading-snug mb-1">
-              NEET 2027 — Week 2 Target
-            </h1>
-            <p className="text-orange-100 text-sm">8–14 July 2026 Revision Pack</p>
-          </div>
-
-          {/* Meta chips */}
-          <div className="px-6 py-4 border-b border-gray-100 flex flex-wrap gap-3 text-xs text-gray-500">
-            <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-orange-400" />Week 2 · Jul 8–14
-            </span>
-            <span className="flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-orange-400" />NEET 2027 Prep
-            </span>
-            <span className="flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-orange-400" />PDF Format
-            </span>
-          </div>
-
-          {/* CTA area */}
-          <div className="px-6 py-6">
-            <a
-              href="/api/download/neet-week2"
-              className="flex items-center justify-center gap-2 w-full
-                bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm
-                py-3.5 rounded-xl transition-colors"
-            >
-              <Download className="w-4 h-4" />
-              Download PDF
-            </a>
-          </div>
+            ))}
+          </dl>
+          <a href="/api/download/neet-week2"
+            className="h-12 inline-flex items-center justify-center gap-2 px-6 rounded-lg bg-primary text-white font-semibold hover:bg-primary-dark">
+            <Download className="w-[18px] h-[18px]" /> Download PDF
+          </a>
         </div>
-
-        <p className="text-center mt-6 text-sm text-gray-400">
-          <Link href="/exams" className="hover:text-orange-500 transition-colors">
-            ← Browse mock tests
+        <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl bg-paper border border-line p-5">
+          <p className="flex-1 text-[15px] text-[#344054]">Test what you’ve revised with a full-length NEET mock on the real exam interface.</p>
+          <Link href="/exams?stream=neet" className="h-11 inline-flex items-center justify-center px-5 rounded-lg border border-[#d0d5dd] bg-white font-semibold hover:bg-[#f2f4f7]">
+            NEET mock tests
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );
