@@ -270,9 +270,6 @@ export default async function ExamsPage({
     if (e.examTypeName) counts[e.examTypeName] = (counts[e.examTypeName] ?? 0) + 1;
   });
 
-  // Live totals from /api/exam-pages — no hard-coded marketing numbers
-  const totalTests = allExams.reduce((n, e) => n + (e.testCount ?? 0), 0);
-  const totalFreeExams = allExams.filter(e => e.priceInr === 0 && e.testCount > 0).length;
   const categoryLabel = activeCategory || 'All Exams';
   const isFiltered = !!activeCategory || !!searchQuery;
 
@@ -280,7 +277,7 @@ export default async function ExamsPage({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Mock Tests & Practice Sets | GridAcademy',
-    description: `Browse ${totalTests} free & paid mock tests across ${allExams.length} exams for SSC, Banking, Railway, NEET, UPSC, CUET and more on GridAcademy.`,
+    description: 'Browse free & paid mock tests for SSC, Banking, Railway, NEET, UPSC, CUET and more on GridAcademy.',
     url: 'https://www.gridacademy.in/exams',
     provider: { '@type': 'Organization', name: 'GridAcademy', url: 'https://www.gridacademy.in' },
   };
@@ -334,10 +331,11 @@ export default async function ExamsPage({
                     {/* Stats row */}
                     <div className="flex flex-wrap gap-4 md:gap-6">
                       {[
-                        { icon: FileText,   val: String(allExams.length), label: 'Exams'       },
-                        { icon: Users,      val: String(totalTests),      label: 'Mock Tests'  },
-                        { icon: Zap,        val: String(totalFreeExams),  label: 'Free Exams'  },
-                        { icon: TrendingUp, val: 'Instant',             label: 'Results'     },
+                        // Platform totals stay hidden until the numbers are substantial
+                        { icon: Zap,        val: 'Free',                label: 'Tests to start'  },
+                        { icon: FileText,   val: 'Real',                label: 'Exam interface'  },
+                        { icon: Users,      val: 'Every',               label: 'Question solved' },
+                        { icon: TrendingUp, val: 'Instant',             label: 'Results'         },
                       ].map(s => (
                         <div key={s.label} className="flex items-center gap-2">
                           <div className="w-8 h-8 bg-white/15 rounded-xl flex items-center justify-center shrink-0">
