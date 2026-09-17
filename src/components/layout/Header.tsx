@@ -1,168 +1,153 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { useState } from 'react';
 import { Search, Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { getInitials } from '@/lib/utils';
+import Logo from './Logo';
+
+const NAV = [
+  { label: 'IIT JEE',         href: '/exams?q=jee' },
+  { label: 'NEET',            href: '/exams?q=neet' },
+  { label: 'CUET',            href: '/exams?q=cuet' },
+  { label: 'Govt Jobs',       href: '/#govt-jobs' },
+  { label: 'Current Affairs', href: '/current-affairs' },
+  { label: 'Resources',       href: '/blog' },
+];
 
 export default function Header() {
   const { data: session } = useSession();
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const user = session?.user as any;
+  const loginHref = `/login?callbackUrl=${encodeURIComponent(pathname ?? '/')}`;
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200"
-      style={{ height: 'var(--topbar-h, 56px)' }}>
+    <header className="sticky top-0 z-50 bg-white border-b border-line" style={{ height: 'var(--topbar-h, 56px)' }}>
+      <div className="h-full max-w-[1328px] mx-auto flex items-center gap-6 px-4 md:px-6 lg:px-8">
+        <Logo size={28} />
 
-      <div className="h-full flex items-center gap-3 px-4 md:px-6 lg:px-8">
-
-        {/* Logo */}
-        <Link href="/" className="shrink-0 flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#1760f4] rounded-lg flex items-center justify-center flex-shrink-0">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="1" y="1" width="6" height="6" rx="1.5" fill="white"/>
-              <rect x="11" y="1" width="6" height="6" rx="1.5" fill="white" fillOpacity="0.7"/>
-              <rect x="1" y="11" width="6" height="6" rx="1.5" fill="white" fillOpacity="0.7"/>
-              <rect x="11" y="11" width="6" height="6" rx="1.5" fill="white"/>
-            </svg>
-          </div>
-          <span className="text-lg font-extrabold tracking-tight text-gray-900 leading-none">
-            GridAcademy
-          </span>
-        </Link>
-
-        {/* Search bar */}
-        <div className="flex-1 max-w-lg relative hidden sm:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search exams, topics, tests…"
-            className="w-full pl-9 pr-4 py-2 text-sm bg-gray-100 rounded-lg border border-transparent
-              focus:outline-none focus:ring-2 focus:ring-[#1760f4]/20 focus:bg-white focus:border-[#1760f4]/40 transition-all"
-          />
-        </div>
-
-        {/* Right side */}
-        <div className="ml-auto flex items-center gap-2">
-
-          {/* Become a Provider — guests only, desktop */}
-          {!session && (
-            <Link href="/provider/register"
-              className="hidden md:block text-sm font-medium text-gray-600 border border-gray-200 hover:border-gray-300
-                hover:bg-gray-50 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap">
-              Become a Provider
+        <nav className="hidden xl:flex items-center gap-1 text-[15px] font-medium text-[#344054]" aria-label="Main">
+          {NAV.map(item => (
+            <Link key={item.label} href={item.href}
+              className="px-3 py-2 rounded-md whitespace-nowrap hover:text-primary-dark hover:bg-primary-tint/60 transition-colors">
+              {item.label}
             </Link>
-          )}
+          ))}
+        </nav>
 
-          {/* Auth */}
+        <form action="/exams" method="GET" role="search" className="hidden md:flex flex-1 xl:flex-none xl:w-64 ml-auto relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#667085] pointer-events-none" />
+          <input
+            type="search"
+            name="q"
+            placeholder="Search exams, e.g. SSC CGL"
+            aria-label="Search exams"
+            className="w-full h-10 pl-9 pr-3 text-sm bg-white rounded-lg border border-[#d0d5dd]
+              focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"
+          />
+        </form>
+
+        <div className="ml-auto md:ml-0 flex items-center gap-3">
           {session ? (
             <div className="relative hidden md:block">
               <button
                 onClick={() => setProfileOpen(o => !o)}
-                className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-[#1760f4] transition-colors"
+                className="flex items-center gap-2 text-sm font-semibold text-ink hover:text-primary-dark transition-colors"
+                aria-expanded={profileOpen}
               >
-                <div className="w-8 h-8 rounded-full bg-[#1760f4] flex items-center justify-center text-white text-xs font-bold">
+                <span className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">
                   {getInitials(user?.name ?? 'U')}
-                </div>
-                <span className="hidden lg:block max-w-[100px] truncate">{user?.name}</span>
-                <ChevronDown className="w-3 h-3" />
+                </span>
+                <span className="hidden xl:block max-w-[120px] truncate">{user?.name}</span>
+                <ChevronDown className="w-3.5 h-3.5" />
               </button>
               {profileOpen && (
-                <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
-                  <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-sm font-semibold text-gray-800 truncate">{user?.name}</p>
-                    <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-line py-2 z-50">
+                  <div className="px-4 py-2 border-b border-line">
+                    <p className="text-sm font-semibold text-ink truncate">{user?.name}</p>
+                    <p className="text-xs text-[#667085] truncate">{user?.email}</p>
                   </div>
                   <Link href="/dashboard" onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                    <User className="w-4 h-4" /> My Dashboard
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#344054] hover:bg-paper">
+                    <User className="w-4 h-4" /> My dashboard
                   </Link>
                   <button
                     onClick={() => signOut({ callbackUrl: '/' })}
-                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                    <LogOut className="w-4 h-4" /> Sign Out
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-[#b42318] hover:bg-red-50">
+                    <LogOut className="w-4 h-4" /> Sign out
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <div className="hidden md:flex items-center gap-2">
-              <Link href="/login"
-                className="text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-1.5 transition-colors">
-                Login
+            <div className="hidden md:flex items-center gap-3">
+              <Link href={loginHref} className="text-[15px] font-semibold text-ink hover:text-primary-dark px-1 whitespace-nowrap">
+                Log in
               </Link>
               <Link href="/register"
-                className="text-sm font-semibold bg-[#1760f4] text-white px-4 py-2 rounded-lg hover:bg-[#0e4dd4] transition-colors">
-                Sign Up Free
+                className="h-9 inline-flex items-center px-3.5 rounded-[7px] bg-primary text-white text-sm font-semibold whitespace-nowrap hover:bg-primary-dark transition-colors">
+                Register free
               </Link>
             </div>
           )}
 
-          {/* Mobile hamburger */}
-          <button className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100"
+          <button
+            className="xl:hidden w-11 h-11 flex items-center justify-center rounded-lg hover:bg-paper"
             onClick={() => setMobileMenuOpen(o => !o)}
-            aria-label="Open menu">
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile dropdown menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-3">
-          {/* Mobile search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input type="text" placeholder="Search exams, tests…"
-              className="w-full pl-10 pr-4 py-2 text-sm bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1760f4]/20" />
-          </div>
+        <div className="xl:hidden border-t border-line bg-white px-4 py-4 space-y-4 shadow-lg">
+          <form action="/exams" method="GET" role="search" className="relative md:hidden">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#667085]" />
+            <input type="search" name="q" placeholder="Search exams" aria-label="Search exams"
+              className="w-full h-11 pl-10 pr-3 text-[15px] rounded-lg border border-[#d0d5dd] focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </form>
 
-          {/* Nav links */}
-          <div className="flex flex-wrap gap-2">
-            <Link href="/exams" onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-1 text-sm bg-[#1760f4] text-white rounded-full font-semibold">
-              All Exams
-            </Link>
-            <Link href="/tests" onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full font-semibold">
-              All Tests
-            </Link>
-            {['Railway', 'UPSC', 'Banking', 'SSC', 'Defence'].map(cat => (
-              <Link key={cat} href={`/?category=${cat}`} onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200">
-                {cat}
+          <nav className="grid grid-cols-2 gap-1" aria-label="Main">
+            {NAV.map(item => (
+              <Link key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
+                className="min-h-[44px] flex items-center px-3 rounded-lg text-[15px] font-medium text-[#344054] hover:bg-paper">
+                {item.label}
               </Link>
             ))}
-          </div>
+          </nav>
 
-          {/* Auth buttons */}
           {!session ? (
-            <div className="flex gap-2 pt-1">
-              <Link href="/login" onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-semibold">
-                Login
+            <div className="grid grid-cols-2 gap-2 md:hidden">
+              <Link href={loginHref} onClick={() => setMobileMenuOpen(false)}
+                className="h-11 flex items-center justify-center border border-[#d0d5dd] text-ink rounded-lg text-[15px] font-semibold">
+                Log in
               </Link>
               <Link href="/register" onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2 bg-[#1760f4] text-white rounded-lg text-sm font-semibold">
-                Sign Up Free
+                className="h-11 flex items-center justify-center bg-primary text-white rounded-lg text-[15px] font-semibold">
+                Register free
               </Link>
             </div>
           ) : (
-            <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#1760f4] flex items-center justify-center text-white text-xs font-bold">
+            <div className="flex items-center justify-between md:hidden">
+              <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+                <span className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">
                   {getInitials(user?.name ?? 'U')}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-800">{user?.name}</p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
-                </div>
-              </div>
+                </span>
+                <span>
+                  <span className="block text-sm font-semibold text-ink">{user?.name}</span>
+                  <span className="block text-xs text-[#667085]">My dashboard</span>
+                </span>
+              </Link>
               <button onClick={() => signOut({ callbackUrl: '/' })}
-                className="text-sm text-red-600 font-medium px-3 py-1.5 rounded-lg hover:bg-red-50">
-                Sign Out
+                className="h-11 px-3 text-sm text-[#b42318] font-semibold rounded-lg hover:bg-red-50">
+                Sign out
               </button>
             </div>
           )}

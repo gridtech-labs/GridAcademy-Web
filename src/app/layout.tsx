@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Sans_Devanagari, IBM_Plex_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 // KaTeX 0.16.11 CSS — the exam question/option HTML from the API contains
@@ -9,11 +9,28 @@ import './globals.css';
 import 'katex/dist/katex.min.css';
 import SessionProvider from '@/components/providers/SessionProvider';
 
-const inter = Inter({
+// Exam Hall type system: Plex Sans for UI, its Devanagari cut for Hindi text,
+// Plex Mono for timers and numbers. Only the Latin face is preloaded — the others
+// load on first use so slow connections don't pay for them up front.
+const plexSans = IBM_Plex_Sans({
   subsets: ['latin', 'latin-ext'],
-  weight: ['300', '400', '500', '600', '700', '800'],
-  variable: '--font-inter',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
   display: 'swap',
+});
+const plexDeva = IBM_Plex_Sans_Devanagari({
+  subsets: ['devanagari'],
+  weight: ['400', '500', '600'],
+  variable: '--font-deva',
+  display: 'swap',
+  preload: false,
+});
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['500', '600'],
+  variable: '--font-mono',
+  display: 'swap',
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -94,7 +111,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${plexSans.variable} ${plexDeva.variable} ${plexMono.variable}`}>
       <head>
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />

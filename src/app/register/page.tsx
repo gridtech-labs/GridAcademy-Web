@@ -13,7 +13,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
 const PERKS = [
   { icon: Star,       text: 'Expert-crafted questions by top educators' },
   { icon: BarChart2,  text: 'Detailed performance & accuracy analysis'  },
-  { icon: ShieldCheck,text: 'All-India rank with every test attempt'     },
+  { icon: ShieldCheck,text: 'Worked solution for every question'         },
   { icon: Clock,      text: 'Practice anytime — mobile-friendly'        },
 ];
 

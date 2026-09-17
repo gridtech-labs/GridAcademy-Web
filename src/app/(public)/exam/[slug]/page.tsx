@@ -2,25 +2,20 @@
 export const dynamic = 'force-dynamic';
 
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { ArrowRight, Check, ChevronRight, FileText, Globe } from 'lucide-react';
 import { api } from '@/lib/api-client';
-import { ExamDetail, ExamFaq, ImportantDate } from '@/types/exam';
+import { ExamDetail, ExamFaq } from '@/types/exam';
 import ExamDetailTabs from '@/components/exam/ExamDetailTabs';
-import FreeTestButton from '@/components/exam/FreeTestButton';
 import ExamBuyButton from '@/components/exam/ExamBuyButton';
 import ExamFaqSection from '@/components/exam/ExamFaqSection';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
-import {
-  Globe, Bell, Clock, FileText, Calendar,
-  ChevronRight, BookOpen, Building2,
-  Tag, ExternalLink, Users, Lock,
-} from 'lucide-react';
+import ExamTestList from '@/components/exam/ExamTestList';
+import FreeTestButton from '@/components/exam/FreeTestButton';
 import { stripHtml } from '@/lib/utils';
 import { getStaticFaqs } from '@/lib/static-faqs';
 import { getStaticMeta, isHindi, buildExamDescription, buildExamTitle } from '@/lib/static-meta';
 import { getAllPosts } from '@/lib/blog-posts';
+import { getExamPageData } from '@/lib/exam-page-data';
 
 interface PageProps { params: { slug: string }; searchParams?: { tab?: string } }
 
@@ -104,61 +99,39 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   } catch { return { title: "Exam Details" }; }
 }
 
+const PREVIEW_TESTS = 5;
+
 export default async function ExamDetailPage({ params, searchParams }: PageProps) {
-  const session = await getServerSession(authOptions);
-  const token   = (session?.user as any)?.accessToken as string | undefined;
+  const {
+    exam, session, token, hasAccess, offers, tests, freeCount, paidCount,
+    showUnlock, importantDates, conductingBody, totalAttempts,
+  } = await getExamPageData(params.slug);
 
-  let exam: ExamDetail;
-  try {
-    const data = await api.get<ExamDetail>(`/api/exam-pages/${params.slug}`);
-    if (!data) notFound();
-    exam = data;
-  } catch { notFound(); }
-
-  let hasAccess = false;
-  let examOffers: any[] = [];
-  if (exam.priceInr > 0) {
-    const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
-    if (session && token) {
-      try {
-        const r = await fetch(`${API_BASE}/api/exam-payment/access/${exam.id}`, {
-          headers: { Authorization: `Bearer ${token}` }, cache: 'no-store',
-        });
-        if (r.ok) hasAccess = ((await r.json()).data ?? {})?.hasAccess === true;
-      } catch { /* ignore */ }
-    }
-    try {
-      const r = await fetch(`${API_BASE}/api/exam-payment/offers/${exam.id}`, { cache: 'no-store' });
-      if (r.ok) examOffers = (await r.json()).data ?? [];
-    } catch { /* ignore */ }
-  }
-
-  let importantDates: ImportantDate[] = [];
-  if (exam.importantDates) { try { importantDates = JSON.parse(exam.importantDates); } catch { /* ignore */ } }
-
-  const faqs: ExamFaq[] = getStaticFaqs(params.slug);
   const staticMeta = getStaticMeta(params.slug);
-  const displayConductingBody = staticMeta?.conductingBody ?? exam.conductingBody;
-  const effectiveDates = importantDates.length > 0 ? importantDates : (staticMeta?.importantDates ?? []);
+  const faqs: ExamFaq[] = getStaticFaqs(params.slug);
+  const fallbackOfficial = getFallbackOfficial(conductingBody ?? null);
+  const officialUrl = exam.officialWebsite ?? fallbackOfficial?.url ?? null;
+  const callbackUrl = `/exam/${exam.slug}`;
+  const firstStartable = tests.find(t => t.isFree || hasAccess || exam.priceInr <= 0) ?? null;
 
   const tabs = [
-    { id: 'overview',    label: 'Overview',        icon: 'BookOpen',  content: exam.overview ?? staticMeta?.overview ?? null },
-    { id: 'eligibility', label: 'Eligibility',     icon: 'Users',     content: exam.eligibility },
-    { id: 'syllabus',    label: 'Syllabus',         icon: 'FileText',  content: exam.syllabus },
-    { id: 'pattern',     label: 'Exam Pattern',     icon: 'Trophy',    content: exam.examPattern },
-    { id: 'dates',       label: 'Important Dates',  icon: 'Calendar',  content: null },
-    { id: 'apply',       label: 'How To Apply',     icon: 'Bell',      content: exam.howToApply },
-    { id: 'result',      label: 'Result & Cut-off', icon: 'Tag',       content: (exam.resultInfo ?? '') + (exam.cutOff ? `\n\n${exam.cutOff}` : '') },
-  ].filter(t => t.id === 'dates' ? effectiveDates.length > 0 : !!t.content);
+    { id: 'overview',    label: 'Overview',         icon: 'BookOpen', content: exam.overview ?? staticMeta?.overview ?? null },
+    { id: 'pattern',     label: 'Exam pattern',     icon: 'Trophy',   content: exam.examPattern },
+    { id: 'syllabus',    label: 'Syllabus',         icon: 'FileText', content: exam.syllabus },
+    { id: 'eligibility', label: 'Eligibility',      icon: 'Users',    content: exam.eligibility },
+    { id: 'dates',       label: 'Important dates',  icon: 'Calendar', content: null },
+    { id: 'admit',       label: 'Admit card',       icon: 'FileText', content: exam.admitCard },
+    { id: 'result',      label: 'Result & cut-off', icon: 'Tag',      content: [exam.resultInfo, exam.cutOff].filter(Boolean).join('\n\n') || null },
+    { id: 'apply',       label: 'How to apply',     icon: 'Bell',     content: exam.howToApply },
+  ].filter(t => t.id === 'dates' ? importantDates.length > 0 : !!t.content);
 
-  const sortedTests = [...exam.tests].sort((a, b) => a.sortOrder - b.sortOrder);
-  const fallbackOfficial = getFallbackOfficial(displayConductingBody ?? null);
-  const officialUrl = exam.officialWebsite ?? fallbackOfficial?.url ?? null;
-  const officialName = displayConductingBody ?? fallbackOfficial?.name ?? 'Official Website';
-
-  const freeTests     = sortedTests.filter(t => t.isFree);
-  const freeTestCount = freeTests.length;
-  const firstFreeTest = freeTests[0] ?? null;
+  const breadcrumbCategory = exam.examCategoryName ?? exam.examLevelName;
+  const related = (() => {
+    const cats = ['SSC', 'Banking', 'Railway', 'NEET', 'CUET', 'UPSC'];
+    const hay = `${exam.examTypeName ?? ''} ${exam.title}`.toLowerCase();
+    const cat = cats.find(c => hay.includes(c.toLowerCase()));
+    return getAllPosts().filter(p => (cat ? p.category === cat : true)).slice(0, 3);
+  })();
 
   return (
     <>
@@ -176,7 +149,7 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
         },
         hasCourseInstance: {
           "@type": "CourseInstance", courseMode: "online",
-          courseWorkload: `PT${exam.tests[0]?.durationMinutes || 60}M`
+          courseWorkload: `PT${tests[0]?.durationMinutes || 60}M`
         },
         educationalLevel: exam.examLevelName,
         teaches: exam.examTypeName
@@ -201,330 +174,169 @@ export default async function ExamDetailPage({ params, searchParams }: PageProps
         ],
       })}} />
 
-      <div className="min-h-screen bg-gray-50">
-
-        {/* ── Breadcrumb ───────────────────────────────────────────────── */}
-        <div className="bg-white border-b border-gray-100">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400 overflow-x-auto whitespace-nowrap"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-              <Link href="/" className="hover:text-[#1760f4] transition-colors shrink-0">Home</Link>
-              <ChevronRight className="w-3 h-3 shrink-0 text-gray-300" />
-              <Link href="/exams" className="hover:text-[#1760f4] transition-colors shrink-0">Exams</Link>
-              {exam.examLevelName && (
-                <><ChevronRight className="w-3 h-3 shrink-0 text-gray-300" />
-                <span className="shrink-0 text-gray-500">{exam.examLevelName}</span></>
+      <div className="bg-white text-ink">
+        {/* ── Hero ───────────────────────────────────────────────────────── */}
+        <section className="bg-paper border-b border-line">
+          <div className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 pt-5 md:pt-7 pb-6 md:pb-9 grid lg:grid-cols-[1fr_420px] gap-6 lg:gap-12">
+            <div className="flex flex-col gap-4 min-w-0">
+              <nav className="flex items-center gap-1.5 text-[13.5px] text-[#667085] overflow-x-auto whitespace-nowrap scrollbar-hide" aria-label="Breadcrumb">
+                <Link href="/exams" className="hover:text-primary-dark">Exams</Link>
+                {breadcrumbCategory && <><ChevronRight className="w-3.5 h-3.5 shrink-0" /><span>{breadcrumbCategory}</span></>}
+                {exam.examSubCategoryName && <><ChevronRight className="w-3.5 h-3.5 shrink-0" /><span>{exam.examSubCategoryName}</span></>}
+              </nav>
+              <div className="flex gap-2 flex-wrap">
+                {exam.examLevelName && <span className="h-[26px] inline-flex items-center px-2.5 rounded-full bg-primary-tint text-primary-dark text-[12.5px] font-medium">{exam.examLevelName}</span>}
+                {exam.examTypeName && <span className="h-[26px] inline-flex items-center px-2.5 rounded-full bg-[#f2f4f7] text-[#344054] text-[12.5px] font-medium">{exam.examTypeName}</span>}
+                {conductingBody && <span className="h-[26px] inline-flex items-center px-2.5 rounded-full bg-[#f2f4f7] text-[#344054] text-[12.5px] font-medium">{conductingBody}</span>}
+              </div>
+              <h1 className="exam-hero-title text-[28px] leading-[1.15] md:text-[42px] md:leading-[1.1] font-bold tracking-[-0.02em]">{exam.title}</h1>
+              {exam.shortDescription && (
+                <p className="text-base md:text-[17.5px] leading-relaxed text-[#475467] max-w-[720px]">{stripHtml(exam.shortDescription)}</p>
               )}
-              <ChevronRight className="w-3 h-3 shrink-0 text-gray-300" />
-              <span className="text-gray-700 font-semibold shrink-0 truncate max-w-xs">{exam.title}</span>
-            </nav>
-          </div>
-        </div>
-
-        {/* ── Hero ─────────────────────────────────────────────────────── */}
-        <div className="bg-gradient-to-br from-[#1760f4] via-[#1250d0] to-[#0a3ba8] relative overflow-hidden">
-          <div className="absolute -top-16 -right-16 w-72 h-72 bg-white/5 rounded-full" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4" />
-          <div className="absolute top-1/2 right-1/3 w-20 h-20 bg-white/5 rounded-full" />
-
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 relative z-10">
-            <div className="flex flex-col lg:flex-row gap-8 items-start lg:items-center">
-
-              {/* Left: title + meta */}
-              <div className="flex-1 min-w-0 text-white">
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {exam.examLevelName && (
-                    <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 text-white border border-white/30">
-                      {exam.examLevelName}
-                    </span>
-                  )}
-                  {exam.examTypeName && (
-                    <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/10 text-blue-100 border border-white/20">
-                      {exam.examTypeName}
-                    </span>
-                  )}
-                  {freeTestCount > 0 && (
-                    <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-emerald-500/25 text-emerald-200 border border-emerald-400/30">
-                      ✓ Free Test Available
-                    </span>
-                  )}
-                </div>
-
-                <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight mb-3 text-white">
-                  {exam.title}
-                </h1>
-
-                {exam.shortDescription && (
-                  <p className="text-blue-100 text-sm md:text-base max-w-2xl mb-5 leading-relaxed opacity-90 line-clamp-2">
-                    {stripHtml(exam.shortDescription)}
-                  </p>
-                )}
-
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-blue-200">
-                  {displayConductingBody && (
-                    <span className="flex items-center gap-1.5">
-                      <Building2 className="w-3.5 h-3.5 shrink-0" />{displayConductingBody}
-                    </span>
-                  )}
-                  <span className="flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 shrink-0" />{exam.testCount ?? sortedTests.length} Mock Test{(exam.testCount ?? sortedTests.length) !== 1 ? 's' : ''}
-                  </span>
-                  {sortedTests[0]?.durationMinutes && (
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 shrink-0" />{sortedTests[0].durationMinutes} min / test
-                    </span>
-                  )}
+              <dl className="flex gap-6 md:gap-7 mt-1 key-facts">
+                <div><dd className="font-mono font-semibold text-xl md:text-[22px]">{tests.length}</dd><dt className="text-sm text-[#667085]">mock tests</dt></div>
+                {freeCount > 0 && <div><dd className="font-mono font-semibold text-xl md:text-[22px]">{freeCount}</dd><dt className="text-sm text-[#667085]">free</dt></div>}
+                {totalAttempts > 0 && <div><dd className="font-mono font-semibold text-xl md:text-[22px]">{totalAttempts.toLocaleString('en-IN')}</dd><dt className="text-sm text-[#667085]">attempts so far</dt></div>}
+              </dl>
+              {(officialUrl || exam.notificationUrl) && (
+                <div className="flex flex-wrap gap-x-5 gap-y-2 text-[14.5px]">
                   {officialUrl && (
-                    <a href={officialUrl} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 hover:text-white transition-colors underline underline-offset-2">
-                      <Globe className="w-3.5 h-3.5 shrink-0" />Official Site
+                    <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-primary-dark hover:underline min-h-[32px]">
+                      <Globe className="w-4 h-4" /> Official website
+                    </a>
+                  )}
+                  {exam.notificationUrl && (
+                    <a href={exam.notificationUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-primary-dark hover:underline min-h-[32px]">
+                      <FileText className="w-4 h-4" /> Official notification
                     </a>
                   )}
                 </div>
-              </div>
+              )}
+            </div>
 
-              {/* Right: CTA card */}
-              <div className="shrink-0 w-full lg:w-60 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5">
-                <div className="text-center mb-4">
-                  <p className="text-4xl font-extrabold text-white">
-                    {exam.priceInr === 0 ? 'Free' : `₹${exam.priceInr.toLocaleString('en-IN')}`}
-                  </p>
-                  <p className="text-blue-200 text-xs mt-1">
-                    {exam.priceInr === 0 ? 'No credit card required' : 'One-time access'}
-                  </p>
-                </div>
-                {firstFreeTest && (
-                  <div className="mb-3">
-                    <FreeTestButton
-                      testId={firstFreeTest.testId}
-                      isLoggedIn={!!session}
-                      callbackUrl={`/exam/${exam.slug}`}
-                      token={token}
-                      variant="ctaCard"
+            {/* ── Purchase / start card ──────────────────────────────────── */}
+            <aside id="unlock" className={`scroll-mt-20 relative z-10 ${showUnlock ? 'lg:-mb-40' : ''}`}>
+              <div className="bg-white border border-line rounded-xl p-5 md:p-[22px] flex flex-col gap-3.5 shadow-[0_12px_32px_-14px_rgba(14,23,38,.18)]">
+                {showUnlock ? (
+                  <>
+                    {freeCount > 0 && (
+                      <span className="self-start h-[26px] inline-flex items-center px-2.5 rounded-full bg-[#e7f6ec] text-[#0b6b31] text-[12.5px] font-medium">
+                        {freeCount} free test{freeCount === 1 ? '' : 's'} — no payment
+                      </span>
+                    )}
+                    <div>
+                      <p className="text-[13.5px] text-[#667085]">All {paidCount} paid test{paidCount === 1 ? '' : 's'}</p>
+                      <p className="text-[34px] font-bold leading-tight mt-0.5">
+                        ₹{exam.priceInr.toLocaleString('en-IN')} <span className="text-[15px] font-medium text-[#475467]">one-time</span>
+                      </p>
+                    </div>
+                    <ExamBuyButton
+                      examPageId={exam.id} examTitle={exam.title} examSlug={exam.slug}
+                      priceInr={exam.priceInr} paidTestCount={paidCount} token={token} offers={offers}
                     />
-                  </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="flex items-center gap-2 text-[15px] font-semibold text-[#0b6b31]">
+                      <Check className="w-[18px] h-[18px]" strokeWidth={2.4} />
+                      {exam.priceInr > 0 && hasAccess
+                        ? 'You own this exam · lifetime access'
+                        : `All ${tests.length} test${tests.length === 1 ? '' : 's'} are free`}
+                    </p>
+                    <p className="text-sm text-[#475467]">Every test in this exam is open to you. Start with the first one or pick from the list.</p>
+                    {firstStartable && (
+                      <FreeTestButton
+                        testId={firstStartable.testId} isLoggedIn={!!session} token={token} callbackUrl={callbackUrl}
+                        testTitle={firstStartable.title} variant="primary" size="lg"
+                        label={firstStartable.isFree ? 'Take Free Test' : 'Start Test'}
+                      />
+                    )}
+                  </>
                 )}
-                <div className="grid grid-cols-2 gap-2 text-center">
-                  <div className="bg-white/10 rounded-xl py-2">
-                    <p className="text-white font-extrabold text-lg leading-none">{exam.testCount ?? sortedTests.length}</p>
-                    <p className="text-blue-200 text-[10px] font-medium mt-0.5">Tests</p>
-                  </div>
-                  <div className="bg-white/10 rounded-xl py-2">
-                    <p className="text-white font-extrabold text-lg leading-none">{freeTestCount}</p>
-                    <p className="text-blue-200 text-[10px] font-medium mt-0.5">Free</p>
-                  </div>
-                </div>
               </div>
-            </div>
+            </aside>
           </div>
-        </div>
+        </section>
 
-        {/* ── Quick Facts strip ─────────────────────────────────────────── */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 -mt-5 mb-8 z-10 relative" itemScope itemType="https://schema.org/ItemList">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-xl overflow-hidden">
-            <div className="h-1 bg-gradient-to-r from-[#1760f4] to-[#0a3ba8]" />
-            <div className="p-5 sm:p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-1 h-5 rounded-full bg-[#1760f4]" />
-                <h3 className="font-bold text-gray-800 text-sm" itemProp="name">Quick Facts</h3>
-              </div>
-              <dl className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {[
-                  displayConductingBody && { emoji: '🏛️', label: 'Conducting Body', value: displayConductingBody, bg: 'bg-blue-50', val: 'text-gray-800' },
-                  exam.examLevelName    && { emoji: '🎓', label: 'Exam Level',       value: exam.examLevelName,       bg: 'bg-indigo-50', val: 'text-gray-800' },
-                  sortedTests.length > 0 && { emoji: '📋', label: 'Mock Tests',     value: `${exam.testCount ?? sortedTests.length} Tests`, bg: 'bg-sky-50', val: 'text-gray-800' },
-                  sortedTests.length > 0 && { emoji: '⏱️', label: 'Duration',       value: `${sortedTests[0]?.durationMinutes} min`, bg: 'bg-cyan-50', val: 'text-gray-800' },
-                  sortedTests.length > 0 && { emoji: '❓', label: 'Questions',      value: `${sortedTests[0]?.totalQuestions} Qs`,   bg: 'bg-blue-50', val: 'text-gray-800' },
-                  { emoji: '💰', label: 'Price',      value: exam.priceInr === 0 ? 'FREE' : `₹${exam.priceInr.toLocaleString('en-IN')}`, bg: 'bg-emerald-50', val: exam.priceInr === 0 ? 'text-emerald-600' : 'text-gray-800' },
-                  freeTestCount > 0      && { emoji: '🆓', label: 'Free Tests',     value: `${freeTestCount} Available`, bg: 'bg-green-50', val: 'text-green-700' },
-                  exam.examTypeName      && { emoji: '🏷️', label: 'Category',       value: exam.examTypeName,           bg: 'bg-violet-50', val: 'text-gray-800' },
-                ].filter(Boolean).slice(0, 4).map((item: any, i) => (
-                  <div key={i} className={`${item.bg} rounded-xl p-3.5`} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                    <span className="text-xl leading-none block mb-2">{item.emoji}</span>
-                    <dt className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-0.5">{item.label}</dt>
-                    <dd className={`text-sm font-extrabold ${item.val} leading-tight`} itemProp="name">{item.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Main content ─────────────────────────────────────────────── */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 space-y-6">
-
-          {/* ── Test Cards ────────────────────────────────────────────── */}
-          {sortedTests.length > 0 && (
-            <section>
-              <h2 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <div className="w-1 h-5 rounded-full bg-[#1760f4]" />
-                Available Mock Tests
-              </h2>
-              <div className="space-y-3">
-                {sortedTests.map(test => (
-                  <div key={test.testId}
-                    className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-100 transition-all px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        {test.isFree ? (
-                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500 text-white uppercase tracking-wide">
-                            FREE
-                          </span>
-                        ) : (
-                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#1760f4] text-white uppercase tracking-wide flex items-center gap-1">
-                            <Lock className="w-2.5 h-2.5" />PAID
-                          </span>
-                        )}
-                        {test.attemptCount > 0 && (
-                          <span className="text-xs text-gray-400 flex items-center gap-1">
-                            <Users className="w-3 h-3" />{test.attemptCount.toLocaleString('en-IN')} Attempts
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-base font-bold text-gray-900 mb-2">{test.title}</p>
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
-                        <span className="flex items-center gap-1.5">
-                          <FileText className="w-3.5 h-3.5 text-[#1760f4]" />{test.totalQuestions} Questions
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-[#1760f4]" />{test.durationMinutes} Minutes
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="shrink-0 w-full sm:w-36">
-                      {test.isFree ? (
-                        <FreeTestButton testId={test.testId} isLoggedIn={!!session} callbackUrl={`/exam/${exam.slug}`} token={token} />
-                      ) : exam.priceInr > 0 ? (
-                        hasAccess ? (
-                          <FreeTestButton testId={test.testId} isLoggedIn={!!session} callbackUrl={`/exam/${exam.slug}`} token={token} />
-                        ) : (
-                          <ExamBuyButton examPageId={exam.id} examTitle={exam.title} examSlug={exam.slug} priceInr={exam.priceInr} hasAccess={hasAccess} token={token} offers={examOffers} />
-                        )
-                      ) : (
-                        <Link href={`/test/${exam.slug}`}
-                          className="flex items-center justify-center gap-2 w-full text-sm font-bold bg-[#1760f4] text-white py-2.5 rounded-xl hover:bg-[#0e4dd4] transition-colors shadow-sm">
-                          Start Test
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* ── Tabs ─────────────────────────────────────────────────── */}
-          {tabs.length > 0 ? (
-            <ExamDetailTabs tabs={tabs} importantDates={effectiveDates} slug={exam.slug} defaultTab={searchParams?.tab} />
-          ) : (
-            <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center text-gray-400">
-              <BookOpen className="w-10 h-10 mx-auto mb-3 opacity-40" />
-              <p className="font-medium">Detailed information coming soon.</p>
-            </div>
-          )}
-
-          {/* ── Important Dates standalone ───────────────────────────── */}
-          {effectiveDates.length > 0 && !tabs.some(t => t.id === 'dates') && (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="flex items-center gap-2.5 px-5 py-4 border-b border-gray-100 bg-blue-50/60">
-                <Calendar className="w-4 h-4 text-[#1760f4]" />
-                <h3 className="font-bold text-gray-800 text-sm">Key Dates</h3>
-              </div>
-              <ul className="divide-y divide-gray-50">
-                {effectiveDates.map((d, i) => (
-                  <li key={i} className="flex items-center justify-between gap-3 px-5 py-3.5 hover:bg-blue-50/40 transition-colors">
-                    <span className="text-sm text-gray-600">{d.label}</span>
-                    <span className="text-sm font-bold text-[#1760f4] whitespace-nowrap">{d.date}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* ── Official links ───────────────────────────────────────── */}
-          {(officialUrl || exam.notificationUrl) && (
-            <div className="flex flex-wrap gap-3">
-              {officialUrl && (
-                <a href={officialUrl} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#1760f4] bg-white border border-blue-200 hover:border-[#1760f4] hover:bg-blue-50 px-4 py-2.5 rounded-xl transition-colors">
-                  <Globe className="w-4 h-4" />{officialName}<ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              )}
-              {exam.notificationUrl && (
-                <a href={exam.notificationUrl} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 bg-white border border-gray-200 hover:border-[#1760f4] hover:text-[#1760f4] px-4 py-2.5 rounded-xl transition-colors">
-                  <Bell className="w-4 h-4" />Official Notification<ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* ── FAQ ──────────────────────────────────────────────────────── */}
-        {faqs.length > 0 && <ExamFaqSection faqs={faqs} />}
-
-        {/* ── Related Blog Posts ────────────────────────────────────────── */}
-        {(() => {
-          const EXAM_TO_CATEGORY: Record<string, string> = {
-            SSC: 'SSC', Banking: 'Banking', Railway: 'Railway',
-            NEET: 'NEET', CUET: 'CUET', UPSC: 'UPSC',
-          };
-          const blogCategory = exam.examTypeName
-            ? Object.entries(EXAM_TO_CATEGORY).find(([k]) =>
-                exam.examTypeName!.toLowerCase().includes(k.toLowerCase())
-              )?.[1]
-            : null;
-          const related = getAllPosts()
-            .filter(p => blogCategory ? p.category === blogCategory : true)
-            .slice(0, 3);
-          if (related.length === 0) return null;
-
-          const CAT_COLORS: Record<string, string> = {
-            SSC: 'bg-blue-100 text-blue-700', CUET: 'bg-violet-100 text-violet-700',
-            Railway: 'bg-green-100 text-green-700', NEET: 'bg-red-100 text-red-700',
-            Banking: 'bg-amber-100 text-amber-700', UPSC: 'bg-slate-100 text-slate-700',
-          };
-
-          return (
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
-                  <div className="w-1 h-5 rounded-full bg-[#1760f4]" />
-                  Related Articles
-                </h2>
-                <Link href="/blog" className="text-sm font-semibold text-[#1760f4] hover:text-[#0e4dd4] flex items-center gap-1">
-                  View all <ChevronRight className="w-4 h-4" />
-                </Link>
-              </div>
-              <div className="grid sm:grid-cols-3 gap-4">
-                {related.map(post => {
-                  const catCls = CAT_COLORS[post.category] ?? 'bg-blue-100 text-blue-700';
-                  const date = new Date(post.publishedAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
-                  return (
-                    <Link key={post.slug} href={`/blog/${post.slug}`}
-                      className="group flex flex-col bg-white rounded-2xl border border-gray-100 hover:border-blue-200 hover:shadow-md hover:shadow-blue-50 transition-all duration-200 p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${catCls}`}>
-                          <Tag className="w-2.5 h-2.5" />{post.category}
-                        </span>
-                        <span className="text-[11px] text-gray-400 ml-auto flex items-center gap-1">
-                          <Clock className="w-2.5 h-2.5" />{post.readingTimeMinutes} min
-                        </span>
-                      </div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-snug group-hover:text-[#1760f4] transition-colors line-clamp-3 flex-1">
-                        {post.title}
-                      </h3>
-                      <p className="text-xs text-gray-400 mt-2">{date}</p>
+        {/* ── Body ───────────────────────────────────────────────────────── */}
+        <div className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-10 grid lg:grid-cols-[1fr_420px] gap-10 lg:gap-12">
+          <div className="flex flex-col gap-10 min-w-0">
+            {tests.length > 0 && (
+              <section id="tests" className="flex flex-col gap-3.5 scroll-mt-20">
+                <div className="flex items-center justify-between gap-3">
+                  <h2 className="text-xl md:text-2xl font-semibold">Mock tests</h2>
+                  {tests.length > PREVIEW_TESTS && (
+                    <Link href={`/exam/${exam.slug}/tests`} className="inline-flex items-center gap-1 font-semibold text-[14.5px] text-primary-dark hover:underline">
+                      See all {tests.length} tests <ArrowRight className="w-4 h-4" />
                     </Link>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })()}
+                  )}
+                </div>
+                <ExamTestList
+                  tests={tests.slice(0, PREVIEW_TESTS)} examPrice={exam.priceInr} hasAccess={hasAccess}
+                  isLoggedIn={!!session} token={token} callbackUrl={callbackUrl}
+                />
+              </section>
+            )}
 
+            {tabs.length > 0 && (
+              <section className="flex flex-col gap-3.5">
+                <h2 className="text-xl md:text-2xl font-semibold">About the exam</h2>
+                <ExamDetailTabs tabs={tabs} importantDates={importantDates} slug={exam.slug} defaultTab={searchParams?.tab} />
+              </section>
+            )}
+
+            {faqs.length > 0 && <ExamFaqSection faqs={faqs} />}
+          </div>
+
+          {/* Clears the purchase card, which overlaps down from the hero on desktop */}
+          <aside className={`flex flex-col gap-5 ${showUnlock ? 'lg:pt-40' : ''}`}>
+            {importantDates.length > 0 && (
+              <div className="border border-line rounded-xl p-5">
+                <p className="text-base font-semibold mb-3">Important dates</p>
+                <ol>
+                  {importantDates.map((d, i) => (
+                    <li key={i} className="flex gap-3.5">
+                      <span className="flex flex-col items-center w-3">
+                        <span className="w-2.5 h-2.5 rounded-full bg-primary mt-[6px]" />
+                        {i < importantDates.length - 1 && <span className="w-0.5 flex-1 bg-line" />}
+                      </span>
+                      <span className="pb-3.5">
+                        <span className="block text-[14.5px] font-medium">{d.label}</span>
+                        <span className="block font-mono text-[13px] text-[#667085] mt-0.5">{d.date}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
+            <div className="border border-line rounded-xl p-5 flex flex-col gap-2.5">
+              <p className="text-base font-semibold">Exam at a glance</p>
+              {[
+                ['Conducting body', conductingBody],
+                ['Level', exam.examLevelName],
+                ['Type', exam.examTypeName],
+                ['Category', [exam.examCategoryName, exam.examSubCategoryName].filter(Boolean).join(' · ') || null],
+              ].filter(([, v]) => !!v).map(([k, v]) => (
+                <div key={k} className="flex justify-between gap-3 text-sm pt-2 border-t border-[#eef0f3]">
+                  <span className="text-[#667085]">{k}</span><span className="text-right">{v}</span>
+                </div>
+              ))}
+            </div>
+
+            {related.length > 0 && (
+              <div className="border border-line rounded-xl p-5 flex flex-col gap-1">
+                <p className="text-base font-semibold mb-1">Related articles</p>
+                {related.map(post => (
+                  <Link key={post.slug} href={`/blog/${post.slug}`} className="group py-2.5 border-t border-[#eef0f3]">
+                    <span className="block text-[14.5px] leading-snug group-hover:text-primary-dark">{post.title}</span>
+                    <span className="block text-[12.5px] text-[#667085] mt-1">{post.readingTimeMinutes} min read</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </aside>
+        </div>
       </div>
     </>
   );

@@ -18,6 +18,7 @@ export default async function InstructionsPage({ params }: PageProps) {
   }
 
   const token = (session.user as any).accessToken as string;
+  const candidateName = (session.user as any).name as string | undefined;
 
   let info: AttemptInfo | null = null;
   try {
@@ -37,8 +38,6 @@ export default async function InstructionsPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <InstructionsClient info={info} token={token} />
-    </div>
+    <InstructionsClient info={info} token={token} candidateName={candidateName} />
   );
 }

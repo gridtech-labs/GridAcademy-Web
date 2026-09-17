@@ -27,7 +27,7 @@ input, textarea, select { outline: none; }
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-inter), Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans), var(--font-deva), system-ui, -apple-system, sans-serif;
 }
 
 @layer utilities {
@@ -244,3 +244,10 @@ body {
 /* Wide formulas scroll inside their container instead of breaking the
    page width on mobile. */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+
+/* ── Question / option / solution HTML from the API ─────────────────────────
+   Keeps KaTeX display math and images inside narrow phone screens. */
+.q-html img { max-width: 100%; height: auto; }
+.q-html .katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+.q-html table { display: block; max-width: 100%; overflow-x: auto; }
+.q-html p + p { margin-top: 0.6em; }

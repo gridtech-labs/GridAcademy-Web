@@ -1,16 +1,14 @@
 export const dynamic = 'force-dynamic';
 
 import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { AlertTriangle } from 'lucide-react';
 import { authOptions } from '@/lib/auth-options';
 import { api } from '@/lib/api-client';
 import { AttemptResult } from '@/types/exam';
-import { redirect } from 'next/navigation';
-import Link from 'next/link';
+import Header from '@/components/layout/Header';
 import ResultAnswerKey from '@/components/exam/ResultAnswerKey';
-import {
-  CheckCircle, XCircle, Clock, Trophy,
-  BarChart2, Target, Home, RefreshCw,
-} from 'lucide-react';
 
 interface PageProps { params: { attemptId: string } }
 
@@ -18,10 +16,12 @@ function formatDuration(seconds: number): string {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = seconds % 60;
-  if (h > 0) return `${h}h ${m}m ${s}s`;
-  if (m > 0) return `${m}m ${s}s`;
+  if (h > 0) return `${h}h ${String(m).padStart(2, '0')}m`;
+  if (m > 0) return `${m}m ${String(s).padStart(2, '0')}s`;
   return `${s}s`;
 }
+
+const num = (n: number) => Number(n.toFixed(2)).toLocaleString('en-IN');
 
 export default async function ResultPage({ params }: PageProps) {
   const session = await getServerSession(authOptions);
@@ -30,182 +30,121 @@ export default async function ResultPage({ params }: PageProps) {
   const token = (session.user as any).accessToken as string;
   let result: AttemptResult;
   try {
-    const data = await api.get<AttemptResult>(
-      `/api/assessment/attempts/${params.attemptId}/result`, token,
-    );
+    const data = await api.get<AttemptResult>(`/api/assessment/attempts/${params.attemptId}/result`, token);
     if (!data) redirect('/dashboard');
     result = data;
   } catch { redirect('/dashboard'); }
 
-  const pct         = Math.round(result.percentage);
-  const submittedAt = new Date(result.submittedAt).toLocaleString('en-IN', {
-    dateStyle: 'medium', timeStyle: 'short',
-  });
+  const submittedAt = new Date(result.submittedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+  const attempted = result.sections.reduce((n, s) => n + s.attempted, 0);
+  const correct = result.sections.reduce((n, s) => n + s.correct, 0);
+  const unattempted = result.sections.reduce((n, s) => n + s.unattempted, 0);
+  const totalQuestions = result.sections.reduce((n, s) => n + s.totalQuestions, 0) || result.questions.length;
+  const accuracy = attempted > 0 ? (correct / attempted) * 100 : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-
-      {/* ── Hero scorecard ─────────────────────────────────────────────── */}
-      <div style={{ background: 'linear-gradient(135deg,#0f0c29 0%,#1e1b4b 45%,#312e81 80%,#1e3a5f 100%)' }}>
-        {/* Decorative glow */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: result.isPassed
-              ? 'radial-gradient(ellipse at 50% 0%,rgba(34,197,94,.18),transparent 60%)'
-              : 'radial-gradient(ellipse at 50% 0%,rgba(249,115,22,.15),transparent 60%)' }} />
-
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-10 pb-12 text-center relative z-10">
-
-            {/* Test title */}
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <Trophy className="w-5 h-5 text-orange-400" />
-              <span className="text-orange-300 text-sm font-semibold uppercase tracking-wide">Test Completed</span>
+    <>
+      <Header />
+      <main className="min-h-screen bg-paper text-ink">
+        <div className="max-w-[1240px] mx-auto px-4 md:px-6 py-6 md:py-8 flex flex-col gap-5 md:gap-6">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+              <p className="text-[13.5px] text-[#667085]">Result · submitted {submittedAt}</p>
+              <h1 className="text-2xl md:text-[32px] font-bold leading-tight mt-1.5">{result.testTitle}</h1>
             </div>
-            <h1 className="text-xl md:text-2xl font-bold text-white mb-1 line-clamp-2">{result.testTitle}</h1>
-            <p className="text-indigo-300/70 text-sm mb-8">{result.studentName} · {submittedAt}</p>
-
-            {/* Score ring */}
-            <div className="inline-flex flex-col items-center justify-center w-36 h-36 rounded-full mb-6 relative"
-              style={{
-                background: result.isPassed
-                  ? 'linear-gradient(135deg,rgba(34,197,94,.25),rgba(16,185,129,.15))'
-                  : 'linear-gradient(135deg,rgba(249,115,22,.2),rgba(239,68,68,.15))',
-                border: `3px solid ${result.isPassed ? 'rgba(34,197,94,.4)' : 'rgba(249,115,22,.4)'}`,
-                boxShadow: result.isPassed
-                  ? '0 0 40px rgba(34,197,94,.2)'
-                  : '0 0 40px rgba(249,115,22,.2)',
-              }}>
-              <span className="text-5xl font-extrabold text-white leading-none">{pct}%</span>
-              <span className="text-xs text-white/60 mt-1">Score</span>
-            </div>
-
-            {/* Pass / Fail badge */}
-            <div className="flex items-center justify-center gap-3 mb-6">
-              {result.isPassed ? (
-                <span className="flex items-center gap-1.5 text-sm font-bold px-5 py-2 rounded-full"
-                  style={{ background: 'rgba(34,197,94,.2)', border: '1px solid rgba(34,197,94,.4)', color: '#86efac' }}>
-                  <CheckCircle className="w-4 h-4" /> Passed
-                </span>
-              ) : (
-                <span className="flex items-center gap-1.5 text-sm font-bold px-5 py-2 rounded-full"
-                  style={{ background: 'rgba(239,68,68,.2)', border: '1px solid rgba(239,68,68,.4)', color: '#fca5a5' }}>
-                  <XCircle className="w-4 h-4" /> Not Passed
-                </span>
-              )}
-              <span className="text-sm px-3 py-2 rounded-full text-indigo-200"
-                style={{ background: 'rgba(255,255,255,.08)' }}>
-                Passing: {result.passingPercent}%
-              </span>
-            </div>
-
-            {/* Quick stats */}
-            <div className="flex flex-wrap justify-center gap-3">
-              {[
-                { label: 'Marks', value: `${result.totalMarksObtained} / ${result.totalMarksPossible}` },
-                { label: 'Time Taken', value: formatDuration(result.durationSecondsUsed), icon: Clock },
-                ...(result.violationCount > 0 ? [{ label: 'Violations', value: String(result.violationCount), warn: true }] : []),
-              ].map((s: any) => (
-                <div key={s.label} className="rounded-2xl px-5 py-3 text-center"
-                  style={{ background: s.warn ? 'rgba(239,68,68,.2)' : 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.1)' }}>
-                  <p className="text-white font-bold text-lg flex items-center justify-center gap-1">
-                    {s.icon && <s.icon className="w-4 h-4 text-indigo-300" />}
-                    {s.value}
-                  </p>
-                  <p className="text-indigo-300/70 text-xs mt-0.5">{s.label}</p>
-                </div>
-              ))}
+            <div className="flex gap-2.5">
+              <Link href="/dashboard" className="h-11 inline-flex items-center px-[18px] rounded-lg border border-[#d0d5dd] bg-white font-semibold text-[15px] hover:bg-paper">
+                My dashboard
+              </Link>
+              <Link href="/dashboard/available" className="h-11 inline-flex items-center px-[18px] rounded-lg bg-primary text-white font-semibold text-[15px] hover:bg-primary-dark">
+                Find next test
+              </Link>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* ── Details ────────────────────────────────────────────────────── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-
-        {/* Section breakdown */}
-        {result.sections.length > 0 && (
-          <section className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
-              <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
-                <BarChart2 className="w-4 h-4 text-indigo-600" />
+          {/* Summary */}
+          <div className="grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr] gap-3 md:gap-4">
+            <div className="col-span-2 lg:col-span-1 rounded-xl bg-ink text-white p-5 md:p-[22px] flex flex-col gap-2">
+              <p className="text-[13.5px] text-ink-muted">Score</p>
+              <p className="font-mono font-semibold leading-none text-[40px] md:text-[44px]">
+                {num(result.totalMarksObtained)}<span className="text-[22px] text-ink-muted"> / {num(result.totalMarksPossible)}</span>
+              </p>
+              <div className="flex items-center gap-2 flex-wrap mt-1">
+                <span className={`h-[26px] inline-flex items-center px-2.5 rounded-full text-[12.5px] font-semibold ${result.isPassed ? 'bg-[#12803c] text-white' : 'bg-[#d92d20] text-white'}`}>
+                  {result.isPassed ? 'Passed' : 'Not passed'}
+                </span>
+                <span className="text-[13.5px] text-ink-muted">{num(result.percentage)}% · pass mark {num(result.passingPercent)}%</span>
               </div>
-              <h2 className="font-bold text-gray-900">Section-wise Breakdown</h2>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wide border-b border-gray-100">
-                    <th className="text-left py-3 px-5 font-semibold">Section</th>
-                    <th className="text-center py-3 px-3 font-semibold">Attempted</th>
-                    <th className="text-center py-3 px-3 font-semibold text-green-700">Correct</th>
-                    <th className="text-center py-3 px-3 font-semibold text-red-600">Wrong</th>
-                    <th className="text-center py-3 px-3 font-semibold text-gray-400">Skipped</th>
-                    <th className="text-center py-3 px-3 font-semibold">Score</th>
-                    <th className="text-center py-3 px-3 font-semibold">Accuracy</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {result.sections.map((sec, i) => {
-                    const accuracy = sec.attempted > 0
-                      ? Math.round((sec.correct / sec.attempted) * 100) : 0;
-                    return (
-                      <tr key={i} className="hover:bg-orange-50/30 transition-colors">
-                        <td className="py-3.5 px-5 font-medium text-gray-900">{sec.sectionName}</td>
-                        <td className="py-3.5 px-3 text-center text-gray-700">{sec.attempted}</td>
-                        <td className="py-3.5 px-3 text-center text-green-700 font-semibold">{sec.correct}</td>
-                        <td className="py-3.5 px-3 text-center text-red-600 font-semibold">{sec.incorrect}</td>
-                        <td className="py-3.5 px-3 text-center text-gray-400">{sec.unattempted}</td>
-                        <td className="py-3.5 px-3 text-center font-bold text-gray-900">
-                          {sec.marksObtained} / {sec.maxMarks}
-                        </td>
-                        <td className="py-3.5 px-3 text-center">
-                          <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                            accuracy >= 70 ? 'bg-green-100 text-green-700'
-                            : accuracy >= 40 ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-red-100 text-red-700'
-                          }`}>
-                            {accuracy}%
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        )}
-
-        {/* Answer key */}
-        {result.questions.length > 0 && (
-          <section className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
-              <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
-                <Target className="w-4 h-4 text-indigo-600" />
+            {[
+              ['Accuracy', `${accuracy.toFixed(1)}%`, `${correct} correct of ${attempted} attempted`],
+              ['Attempted', `${attempted}/${totalQuestions}`, `${unattempted} left unattempted`],
+              ['Time used', formatDuration(result.durationSecondsUsed), result.negativeMarkingEnabled ? 'Negative marking applied' : 'No negative marking'],
+            ].map(([k, v, s]) => (
+              <div key={k} className="rounded-xl bg-white border border-line p-4 md:p-[22px] flex flex-col gap-1.5 md:gap-2">
+                <p className="text-[13.5px] text-[#667085]">{k}</p>
+                <p className="font-mono font-semibold text-2xl md:text-[32px] leading-tight">{v}</p>
+                <p className="text-[12.5px] md:text-[13.5px] text-[#475467]">{s}</p>
               </div>
-              <h2 className="font-bold text-gray-900">Answer Key</h2>
-              <span className="ml-auto text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-medium">
-                {result.questions.filter(q => q.isCorrect).length} / {result.questions.length} correct
-              </span>
-            </div>
-            <ResultAnswerKey questions={result.questions} />
-          </section>
-        )}
+            ))}
+          </div>
 
-        {/* Action buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center pb-6">
-          <Link href="/dashboard"
-            className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors">
-            <Home className="w-4 h-4" />
-            Dashboard
-          </Link>
-          <Link href="/"
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition-colors">
-            <RefreshCw className="w-4 h-4" />
-            Browse More Tests
-          </Link>
+          {result.violationCount > 0 && (
+            <p className="flex items-center gap-2.5 text-sm text-[#8a5200] bg-[#fef3dc] rounded-lg px-4 py-3">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              {result.violationCount} tab switch{result.violationCount === 1 ? ' was' : 'es were'} recorded during this test.
+            </p>
+          )}
+
+          {/* Section-wise */}
+          {result.sections.length > 0 && (
+            <section className="bg-white border border-line rounded-xl overflow-hidden">
+              <h2 className="px-5 py-[18px] text-[17px] font-semibold">Section-wise</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-[14.5px] min-w-[640px]">
+                  <thead>
+                    <tr className="bg-[#f9fafb] border-y border-line text-[12.5px] text-[#475467] text-left">
+                      <th className="font-semibold px-5 py-2.5">Section</th>
+                      <th className="font-semibold px-3 py-2.5">Marks</th>
+                      <th className="font-semibold px-3 py-2.5 w-[200px]"><span className="sr-only">Marks bar</span></th>
+                      <th className="font-semibold px-3 py-2.5">Correct</th>
+                      <th className="font-semibold px-3 py-2.5">Incorrect</th>
+                      <th className="font-semibold px-3 py-2.5">Unattempted</th>
+                      <th className="font-semibold px-3 py-2.5">Accuracy</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.sections.map(sec => {
+                      const pct = sec.maxMarks > 0 ? Math.max(0, Math.min(100, (sec.marksObtained / sec.maxMarks) * 100)) : 0;
+                      return (
+                        <tr key={sec.sectionIndex} className="border-b border-[#eef0f3] last:border-0">
+                          <td className="px-5 py-3.5 font-semibold">{sec.sectionName}</td>
+                          <td className="px-3 py-3.5 font-mono whitespace-nowrap">{num(sec.marksObtained)}/{num(sec.maxMarks)}</td>
+                          <td className="px-3 py-3.5">
+                            <div className="h-2 rounded bg-[#eef1f5] overflow-hidden"><div className="h-2 bg-primary" style={{ width: `${pct}%` }} /></div>
+                          </td>
+                          <td className="px-3 py-3.5 font-mono text-[#0b6b31]">{sec.correct}</td>
+                          <td className="px-3 py-3.5 font-mono text-[#b42318]">{sec.incorrect}</td>
+                          <td className="px-3 py-3.5 font-mono text-[#475467]">{sec.unattempted}</td>
+                          <td className="px-3 py-3.5 font-mono">{sec.attempted > 0 ? `${Math.round((sec.correct / sec.attempted) * 100)}%` : '—'}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+
+          {/* Answers & solutions */}
+          {result.questions.length > 0 && (
+            <section className="bg-white border border-line rounded-xl overflow-hidden">
+              <h2 className="px-5 pt-[18px] pb-1 text-[17px] font-semibold">Answers &amp; solutions</h2>
+              <ResultAnswerKey questions={result.questions} />
+            </section>
+          )}
         </div>
-      </div>
-    </div>
+      </main>
+    </>
   );
 }

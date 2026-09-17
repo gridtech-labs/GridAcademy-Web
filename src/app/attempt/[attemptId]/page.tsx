@@ -23,6 +23,7 @@ export default async function AttemptPage({ params }: PageProps) {
   }
 
   const token = (session.user as any).accessToken as string;
+  const candidateName = (session.user as any).name as string | undefined;
 
   // ── Instructions gate ────────────────────────────────────────────────────
   // Check InstructionsAcknowledged BEFORE loading the full exam state.
@@ -65,8 +66,6 @@ export default async function AttemptPage({ params }: PageProps) {
 
   return (
     // Full-screen attempt — no header/footer
-    <div className="min-h-screen bg-gray-100">
-      <AttemptEngine attempt={attemptState} token={token} />
-    </div>
+    <AttemptEngine attempt={attemptState} token={token} candidateName={candidateName} />
   );
 }

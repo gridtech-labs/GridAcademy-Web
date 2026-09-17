@@ -23,6 +23,8 @@ export interface ExamCard {
   examTypeName: string | null;
   conductingBody: string | null;
   category: string | null;
+  examCategoryName?: string | null;
+  examSubCategoryName?: string | null;
   testCount: number;
   isFeatured: boolean;
   priceInr: number;
@@ -64,6 +66,25 @@ export interface ExamDetail extends ExamCard {
   faqs: string | null; // JSON string: ExamFaq[]
   viewCount: number;
   tests: ExamTest[];
+}
+
+// ── Exam notifications (GET /api/notifications) ──────────────────────────────
+
+/** Matches backend ExamNotificationType: 1=Notification 2=AdmitCard 3=Result 4=Syllabus */
+export type ExamNotificationType = 1 | 2 | 3 | 4;
+
+export interface ExamNotification {
+  id: string;
+  examId: string;
+  examName: string;
+  title: string;
+  slug: string;
+  summary: string | null;
+  notificationType: ExamNotificationType;
+  importantDates: string | null;
+  sourceUrl: string;
+  publishedAt: string | null;
+  createdAt: string;
 }
 
 export interface ExamFaq {
@@ -111,6 +132,8 @@ export interface SavedAnswer {
   selectedOptionIds: number[];
   numericalValue?: number;
   isClear: boolean;
+  isMarkedForReview?: boolean;
+  isVisited?: boolean;
 }
 
 export interface AttemptStart {
