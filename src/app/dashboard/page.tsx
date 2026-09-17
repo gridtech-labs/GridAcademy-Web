@@ -2,16 +2,11 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import { api, UnauthorizedError } from '@/lib/api-client';
 import { redirect } from 'next/navigation';
-import { formatDate } from '@/lib/utils';
-import {
-  BookOpen, Clock, BarChart2, CheckCircle2,
-  Play, RotateCcw, Eye, AlertCircle, CalendarClock,
-  Trophy,
-} from 'lucide-react';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
 import DashboardStartButton from '@/components/exam/DashboardStartButton';
 
-// ── Types mirroring StudentTestCardDto from the backend ──────────────────────
+// Mirrors StudentTestCardDto from the backend
 interface TestCard {
   assignmentId: string;
   testId: string;
@@ -32,15 +27,12 @@ interface TestCard {
   lastCompletedAttemptId?: string;
 }
 
-// Status helper
 function getStatus(t: TestCard, now: Date) {
-  const from  = new Date(t.availableFrom);
-  const to    = new Date(t.availableTo);
-  if (now < from)  return { label: 'Scheduled',    cls: 'bg-yellow-100 text-yellow-700 border-yellow-200'  };
-  if (now > to)    return { label: 'Expired',       cls: 'bg-gray-100    text-gray-500   border-gray-200'    };
-  if (t.hasInProgressAttempt) return { label: 'In Progress', cls: 'bg-orange-100 text-orange-700 border-orange-200' };
-  if (t.attemptsRemaining === 0) return { label: 'Completed', cls: 'bg-blue-100   text-blue-700   border-blue-200'   };
-  return { label: 'Available', cls: 'bg-green-100 text-green-700 border-green-200' };
+  if (now < new Date(t.availableFrom)) return { label: 'Scheduled',   cls: 'bg-[#fef3dc] text-[#8a5200]' };
+  if (now > new Date(t.availableTo))   return { label: 'Expired',     cls: 'bg-[#f2f4f7] text-[#475467]' };
+  if (t.hasInProgressAttempt)          return { label: 'In progress', cls: 'bg-primary-tint text-primary-dark' };
+  if (t.attemptsRemaining === 0)       return { label: 'Completed',   cls: 'bg-[#e7f6ec] text-[#0b6b31]' };
+  return { label: 'Available', cls: 'bg-[#e7f6ec] text-[#0b6b31]' };
 }
 
 export default async function DashboardPage() {
@@ -52,144 +44,81 @@ export default async function DashboardPage() {
   try {
     tests = await api.get<TestCard[]>('/api/assessment/my-tests', token);
   } catch (e: any) {
-    if (e instanceof UnauthorizedError) {
-      redirect('/api/auth/signout?callbackUrl=/login');
-    }
+    if (e instanceof UnauthorizedError) redirect('/api/auth/signout?callbackUrl=/login');
     console.error('[dashboard] my-tests fetch error:', e?.message);
   }
 
   const now = new Date();
-
-  const totalAssigned = tests.length;
-  const completed     = tests.filter(t => t.attemptsUsed > 0 && !t.hasInProgressAttempt && t.attemptsRemaining === 0).length;
-  const inProgress    = tests.filter(t => t.hasInProgressAttempt).length;
-  const totalAttempts = tests.reduce((sum, t) => sum + t.attemptsUsed, 0);
+  const stats = [
+    { label: 'Tests',        value: tests.length },
+    { label: 'Completed',    value: tests.filter(t => t.attemptsUsed > 0 && !t.hasInProgressAttempt && t.attemptsRemaining === 0).length },
+    { label: 'In progress',  value: tests.filter(t => t.hasInProgressAttempt).length },
+    { label: 'Attempts',     value: tests.reduce((sum, t) => sum + t.attemptsUsed, 0) },
+  ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-
-      {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { icon: BookOpen,     label: 'Tests Assigned', value: totalAssigned,  color: 'text-indigo-600 bg-indigo-50' },
-          { icon: CheckCircle2, label: 'Completed',       value: completed,      color: 'text-green-600  bg-green-50'  },
-          { icon: Play,         label: 'In Progress',     value: inProgress,     color: 'text-orange-600 bg-orange-50' },
-          { icon: BarChart2,    label: 'Total Attempts',  value: totalAttempts,  color: 'text-purple-600 bg-purple-50' },
-        ].map(({ icon: Icon, label, value, color }) => (
-          <div key={label} className="bg-white rounded-2xl border border-gray-200 p-4">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-2.5 ${color}`}>
-              <Icon className="w-4.5 h-4.5" />
-            </div>
-            <div className="text-2xl font-extrabold text-gray-900">{value}</div>
-            <div className="text-xs text-gray-500 mt-0.5">{label}</div>
+    <div className="flex flex-col gap-6">
+      <dl className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        {stats.map(s => (
+          <div key={s.label} className="bg-white border border-line rounded-xl p-4 md:p-5">
+            <dt className="text-[13.5px] text-[#667085]">{s.label}</dt>
+            <dd className="font-mono font-semibold text-[26px] md:text-[30px] leading-tight mt-1">{s.value}</dd>
           </div>
         ))}
-      </div>
+      </dl>
 
-      {/* My Tests list */}
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="font-bold text-gray-900 flex items-center gap-2">
-            <Trophy className="w-4 h-4 text-indigo-500" />
-            My Tests
-          </h2>
-          <span className="text-xs text-gray-400">{totalAssigned} assigned</span>
-        </div>
+      <section className="bg-white border border-line rounded-xl overflow-hidden">
+        <h2 className="px-5 py-4 text-[17px] font-semibold border-b border-line">My tests</h2>
 
-        {!tests.length ? (
-          <div className="text-center py-16">
-            <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-600 font-medium">No tests assigned yet</p>
-            <p className="text-sm text-gray-400 mt-1">Your instructor hasn&apos;t assigned any tests yet</p>
-            <Link
-              href="/dashboard/available"
-              className="inline-block mt-4 bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700"
-            >
-              Browse Available Tests
+        {tests.length === 0 ? (
+          <div className="px-6 py-14 text-center flex flex-col items-center gap-3">
+            <p className="text-lg font-semibold">No tests yet</p>
+            <p className="text-[15px] text-[#475467] max-w-sm">Tests you start or unlock appear here, so you can continue them and see your results.</p>
+            <Link href="/dashboard/available" className="h-11 inline-flex items-center px-5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-dark mt-1">
+              Find a mock test
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <ul className="divide-y divide-[#eef0f3]">
             {tests.map(t => {
-              const from      = new Date(t.availableFrom);
-              const to        = new Date(t.availableTo);
-              const status    = getStatus(t, now);
-              const isExpired    = now > to;
-              const isScheduled  = now < from;
-              const canStart     = !isExpired && !isScheduled && t.attemptsRemaining > 0 && !t.hasInProgressAttempt;
-
+              const to = new Date(t.availableTo);
+              const status = getStatus(t, now);
+              const isExpired = now > to;
+              const canStart = !isExpired && now >= new Date(t.availableFrom) && t.attemptsRemaining > 0 && !t.hasInProgressAttempt;
               return (
-                <div
-                  key={t.assignmentId}
-                  className={`flex flex-col sm:flex-row sm:items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors ${isExpired ? 'opacity-60' : ''}`}
-                >
-                  {/* Icon */}
-                  <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center shrink-0">
-                    <BookOpen className="w-5 h-5 text-indigo-600" />
-                  </div>
-
-                  {/* Info */}
+                <li key={t.assignmentId} className={`px-5 py-4 flex flex-col md:flex-row md:items-center gap-3 md:gap-5 ${isExpired ? 'opacity-60' : ''}`}>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                      <p className="font-semibold text-gray-800 text-sm truncate">{t.title}</p>
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${status.cls}`}>
-                        {status.label}
-                      </span>
-                      {t.examTypeName && (
-                        <span className="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
-                          {t.examTypeName}
-                        </span>
-                      )}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="font-semibold text-[15.5px] leading-snug">{t.title}</p>
+                      <span className={`h-[22px] inline-flex items-center px-2 rounded-full text-[11.5px] font-medium ${status.cls}`}>{status.label}</span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 mt-1">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />{t.durationMinutes} min
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />{t.totalQuestions} Q
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <RotateCcw className="w-3 h-3" />{t.attemptsUsed}/{t.maxAttempts} attempts
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <CalendarClock className="w-3 h-3" />
-                        {/* Exam tests are lifetime access — the API sends a year-9999 end date */}
-                        {to.getUTCFullYear() >= 9999
-                          ? 'Lifetime access'
-                          : <>{formatDate(t.availableFrom)} – {formatDate(t.availableTo)}</>}
-                      </span>
-                    </div>
+                    <p className="font-mono text-[12.5px] text-[#667085] mt-1.5">
+                      {t.totalQuestions} Q · {t.durationMinutes} min · {t.attemptsUsed}/{t.maxAttempts} attempts ·{' '}
+                      {/* Exam tests are lifetime access — the API sends a year-9999 end date */}
+                      <span className="font-sans">{to.getUTCFullYear() >= 9999 ? 'Lifetime access' : `${formatDate(t.availableFrom)} – ${formatDate(t.availableTo)}`}</span>
+                    </p>
                   </div>
-
-                  {/* Actions */}
                   <div className="flex items-center gap-2 shrink-0">
                     {t.lastCompletedAttemptId && (
-                      <Link
-                        href={`/attempt/${t.lastCompletedAttemptId}/result`}
-                        className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
-                      >
-                        <Eye className="w-3.5 h-3.5" />Result
+                      <Link href={`/attempt/${t.lastCompletedAttemptId}/result`}
+                        className="h-9 inline-flex items-center px-3.5 rounded-[7px] border border-[#d0d5dd] text-sm font-semibold hover:bg-paper">
+                        View result
                       </Link>
                     )}
                     {t.hasInProgressAttempt && t.inProgressAttemptId && (
-                      <Link
-                        href={`/attempt/${t.inProgressAttemptId}`}
-                        className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-orange-500 text-white hover:bg-orange-600 transition-colors"
-                      >
-                        <Play className="w-3.5 h-3.5" />Continue
+                      <Link href={`/attempt/${t.inProgressAttemptId}`}
+                        className="h-9 inline-flex items-center px-3.5 rounded-[7px] bg-primary text-white text-sm font-semibold hover:bg-primary-dark">
+                        Continue test
                       </Link>
                     )}
-                    {canStart && (
-                      <DashboardStartButton assignmentId={t.assignmentId} token={token} />
-                    )}
+                    {canStart && <DashboardStartButton assignmentId={t.assignmentId} token={token} />}
                   </div>
-                </div>
+                </li>
               );
             })}
-          </div>
+          </ul>
         )}
-      </div>
-
+      </section>
     </div>
   );
 }
