@@ -101,7 +101,7 @@ export default async function TestDetailPage({ params }: { params: { slug: strin
           <dl className="grid grid-cols-3 border-y border-line">
             {[
               ['Tests', String(series.testCount)],
-              ['Per test', `${series.durationMinutes} min`],
+              ['Per test', series.durationMinutes > 0 ? `${series.durationMinutes} min` : '—'],
               ['Language', series.language || 'English'],
             ].map(([k, v], i) => (
               <div key={k} className={`py-4 ${i ? 'pl-4 md:pl-6 border-l border-line' : ''}`}>

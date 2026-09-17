@@ -28,7 +28,7 @@ export default function TestCard({ series, className }: TestCardProps) {
           <span className="h-[26px] inline-flex items-center px-2.5 rounded-full bg-primary-tint text-primary-dark text-[12.5px] font-medium">{series.examType}</span>
         )}
         <span className="h-[26px] inline-flex items-center px-2.5 rounded-full bg-[#f2f4f7] text-[#344054] text-[12.5px] font-medium">
-          {series.testCount} test{series.testCount === 1 ? '' : 's'} · {formatDuration(series.durationMinutes * 60)}
+          {series.testCount} test{series.testCount === 1 ? '' : 's'}{series.durationMinutes > 0 ? ` · ${formatDuration(series.durationMinutes * 60)}` : ''}
         </span>
       </div>
       {series.reviewCount > 0 && (

@@ -111,7 +111,7 @@ export default async function ExamListingPage({
         ) : (
           <div className="rounded-xl border border-dashed border-[#d0d5dd] px-6 py-14 text-center flex flex-col items-center gap-3">
             <p className="text-lg font-semibold">No test series here yet</p>
-            <p className="text-[15px] text-[#475467] max-w-md">Coaching institutes haven&apos;t published {cleanTitle.toLowerCase()} on GridAcademy yet.</p>
+            <p className="text-[15px] text-[#475467] max-w-md">No coaching institute has published tests for this exam yet. Check back soon, or browse other exams.</p>
             <div className="flex gap-2 mt-1">
               <Link href="/exams" className="h-11 inline-flex items-center px-5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-dark">Browse exams</Link>
               <Link href="/provider/register" className="h-11 inline-flex items-center px-5 rounded-lg border border-[#d0d5dd] font-semibold hover:bg-paper">Publish as a provider</Link>

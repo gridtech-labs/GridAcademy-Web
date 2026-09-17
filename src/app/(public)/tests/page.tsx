@@ -25,8 +25,8 @@ async function fetchTests(searchParams: PageProps['searchParams']) {
   qs.set('pageSize', '20');
 
   try {
-    const res = await api.get<{ items: TestSeries[]; total: number }>(`/api/storefront/tests?${qs}`);
-    return { items: res?.items ?? [], total: res?.total ?? 0 };
+    const res = await api.get<{ items: TestSeries[]; totalCount?: number; total?: number }>(`/api/storefront/tests?${qs}`);
+    return { items: res?.items ?? [], total: res?.totalCount ?? res?.total ?? res?.items?.length ?? 0 };
   } catch {
     return { items: [], total: 0 };
   }
