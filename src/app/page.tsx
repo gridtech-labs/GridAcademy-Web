@@ -148,7 +148,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section className="bg-gradient-to-b from-paper to-white">
           <div className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 pt-7 pb-6 md:pt-16 md:pb-14 grid lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-16">
-            <div className="flex flex-col gap-4 md:gap-5 lg:pt-3">
+            <div className="flex flex-col gap-4 md:gap-5 lg:pt-3 min-w-0">
               <p className="text-[11.5px] md:text-[12.5px] font-semibold uppercase tracking-[0.08em] text-primary-dark">
                 Mock tests on the real exam interface
               </p>
@@ -182,7 +182,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
               </ul>
             </div>
 
-            <div className="bg-white md:border md:border-line md:rounded-xl md:p-6 md:shadow-[0_12px_32px_-12px_rgba(14,23,38,.14)] flex flex-col gap-2.5 md:gap-3">
+            <div className="min-w-0 bg-white md:border md:border-line md:rounded-xl md:p-6 md:shadow-[0_12px_32px_-12px_rgba(14,23,38,.14)] flex flex-col gap-2.5 md:gap-3">
               <div>
                 <h2 className="text-[17px] md:text-lg font-semibold">What are you preparing for?</h2>
                 <p className="hidden md:block text-sm text-[#667085] mt-1">Pick a stream to see its exams and tests.</p>
@@ -206,11 +206,6 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
                           : s.key === 'gov' ? s.sub : 'New tests coming soon'}
                       </span>
                     </span>
-                    {list.length > 0 && (
-                      <span className="hidden sm:inline-flex h-[26px] items-center px-2.5 rounded-full bg-[#e7f6ec] text-[#0b6b31] text-[12.5px] font-medium whitespace-nowrap">
-                        {list.reduce((n, e) => n + e.testCount, 0)} tests
-                      </span>
-                    )}
                     <ChevronRight className="w-[18px] h-[18px] text-[#98a2b3] group-hover:text-primary shrink-0" />
                   </Link>
                 );
@@ -263,7 +258,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
               <h2 className="text-2xl md:text-[34px] font-bold tracking-[-0.015em] leading-tight">Mocks, notifications and daily current affairs</h2>
             </div>
 
-            <div className="grid lg:grid-cols-[1fr_1.25fr_1fr] gap-4 md:gap-5">
+            <div className="grid lg:grid-cols-[1fr_1.25fr_1fr] gap-4 md:gap-5 [&>*]:min-w-0">
               <div className="bg-white border border-line rounded-xl py-2">
                 <p className="text-[15px] font-semibold px-5 py-3">Exams</p>
                 {govExams.length > 0 ? govExams.map(e => (
@@ -335,7 +330,7 @@ export default async function HomePage({ searchParams }: { searchParams?: { stre
         </section>
 
         {/* ── How the test screen works ────────────────────────────────── */}
-        <section className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 py-10 md:py-16 grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-16 items-center">
+        <section className="max-w-[1328px] mx-auto px-4 md:px-6 lg:px-8 py-10 md:py-16 grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-16 items-center [&>*]:min-w-0">
           <div className="flex flex-col gap-4">
             <p className="text-[12.5px] font-semibold uppercase tracking-[0.08em] text-primary-dark">Before your first attempt</p>
             <h2 className="text-2xl md:text-[34px] font-bold tracking-[-0.015em] leading-tight">The palette you’ll see on exam day</h2>

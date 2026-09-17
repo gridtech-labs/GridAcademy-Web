@@ -10,7 +10,7 @@ import ExamCardLink from '@/components/exam/ExamCardLink';
 import PageIntro from '@/components/ui/PageIntro';
 
 export const metadata: Metadata = {
-  title: 'Mock Tests & Practice Sets for SSC, Banking, Railway, NEET 2026 | GridAcademy',
+  title: 'Mock Tests & Practice Sets for SSC, Banking, Railway, NEET 2026',
   description: 'Practice free & paid mock tests for SSC CGL, IBPS PO, RRB NTPC, NEET, UPSC, CUET 2026. Instant results, section-wise scores and a solution for every question. Start free today.',
   keywords: 'mock test, free mock test, SSC CGL mock test, IBPS PO mock test, NEET mock test 2026, RRB NTPC mock test, UPSC mock test, CUET mock test 2026, online test series, practice test',
   alternates: { canonical: 'https://www.gridacademy.in/exams' },
