@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, ChevronLeft, Loader2 } from 'lucide-react';
 import { AttemptInfo } from '@/types/exam';
 import { StatusLegend } from '@/components/exam/PaletteStatus';
+import { GridMark } from '@/components/layout/Logo';
+import RichContent from '@/components/ui/RichContent';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
 
@@ -55,13 +57,13 @@ export default function InstructionsClient({ info, token, candidateName }: Props
         <button onClick={leave} className="w-10 h-10 -ml-2 flex items-center justify-center rounded-lg hover:bg-ink-soft" aria-label="Back to dashboard">
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <span className="w-7 h-7 rounded-[7px] bg-primary flex items-center justify-center font-bold shrink-0">G</span>
+        <GridMark size={28} />
         <span className="font-semibold text-[15px] md:text-base truncate">{info.testTitle}</span>
         {candidateName && <span className="ml-auto hidden sm:block text-sm text-ink-muted">{candidateName}</span>}
       </div>
 
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-6 md:py-9 grid lg:grid-cols-[1fr_400px] lg:grid-rows-[auto_1fr] gap-5 lg:gap-x-8 lg:gap-y-5 items-start">
-        <div className="bg-white border border-line rounded-xl p-5 md:px-9 md:py-8 flex flex-col gap-6 order-2 lg:order-none lg:col-start-1 lg:row-start-1 lg:row-span-2">
+        <div className="min-w-0 bg-white border border-line rounded-xl p-5 md:px-9 md:py-8 flex flex-col gap-6 order-2 lg:order-none lg:col-start-1 lg:row-start-1 lg:row-span-2">
           <h1 className="text-[22px] md:text-[28px] font-bold leading-tight">Read the instructions carefully</h1>
           <ol className="list-decimal pl-5 flex flex-col gap-3 text-[15px] md:text-base leading-relaxed text-[#344054]">
             <li>The countdown at the top right shows the time left. The test submits itself when it reaches zero.</li>
@@ -78,14 +80,14 @@ export default function InstructionsClient({ info, token, candidateName }: Props
           </div>
 
           {info.instructions && (
-            <div className="text-[15px] leading-relaxed text-[#344054]">
+            <div className="min-w-0 text-[15px] leading-relaxed text-[#344054]">
               <p className="font-semibold text-ink mb-1.5">From the test author</p>
-              <div className="exam-rich-content" dangerouslySetInnerHTML={{ __html: info.instructions }} />
+              <RichContent html={info.instructions} />
             </div>
           )}
         </div>
 
-          <div className="bg-white border border-line rounded-xl p-5 md:p-6 flex flex-col gap-3.5 order-1 lg:order-none lg:col-start-2 lg:row-start-1">
+          <div className="min-w-0 bg-white border border-line rounded-xl p-5 md:p-6 flex flex-col gap-3.5 order-1 lg:order-none lg:col-start-2 lg:row-start-1">
             <p className="text-[17px] font-semibold">Test summary</p>
             <dl className="grid grid-cols-2 gap-2.5">
               {[
@@ -128,7 +130,7 @@ export default function InstructionsClient({ info, token, candidateName }: Props
             {!info.negativeMarkingEnabled && <p className="text-[13px] text-[#475467]">No negative marking in this test.</p>}
           </div>
 
-          <div className="bg-white border border-line rounded-xl p-5 flex flex-col gap-4 order-3 lg:order-none lg:col-start-2 lg:row-start-2 lg:sticky lg:top-6">
+          <div className="min-w-0 bg-white border border-line rounded-xl p-5 flex flex-col gap-4 order-3 lg:order-none lg:col-start-2 lg:row-start-2 lg:sticky lg:top-6">
             <label className="flex gap-3 items-start cursor-pointer">
               <input
                 type="checkbox"
