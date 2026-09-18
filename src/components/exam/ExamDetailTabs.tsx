@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import RichContent from '@/components/ui/RichContent';
 import { ImportantDate } from '@/types/exam';
 import {
   BookOpen, Users, FileText, Trophy,
@@ -118,29 +118,6 @@ export default function ExamDetailTabs({ tabs, importantDates, slug, defaultTab 
         )}
       </div>
     </div>
-  );
-}
-
-function RichContent({ html }: { html: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    ref.current.querySelectorAll('table').forEach(table => {
-      if (table.parentElement?.classList.contains('table-scroll-wrapper')) return;
-      const wrapper = document.createElement('div');
-      wrapper.className = 'table-scroll-wrapper';
-      table.parentNode?.insertBefore(wrapper, table);
-      wrapper.appendChild(table);
-    });
-  }, [html]);
-
-  return (
-    <div
-      ref={ref}
-      className="exam-rich-content"
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
   );
 }
 
